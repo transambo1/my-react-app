@@ -1,0 +1,24 @@
+{
+  "title": "XÁC NHẬN THAM DỰ",
+  "subtitle": "Vui lòng để lại thông tin để Nghi chuẩn bị đón tiếp chu đáo nhất nhé!",
+  "fields": {
+    "nameLabel": "Họ và tên của bạn *",
+    "namePlaceholder": "Nhập họ và tên...",
+    "emailLabel": "Email nhận vé/QR check-in *",
+    "emailPlaceholder": "example@gmail.com",
+    "phoneLabel": "Số điện thoại",
+    "phonePlaceholder": "09xxxxxxxx",
+    "attendanceLabel": "Bạn sẽ đến chung vui chứ? *",
+    "options": [
+      { "value": "attending", "label": "Chắc chắn tham dự ✨" },
+      { "value": "declined", "label": "Tiếc quá, mình bận mất rồi 🥺" }
+    ],
+    "wishesLabel": "Lời chúc gửi đến tân cử nhân",
+    "wishesPlaceholder": "Gửi vài lời nhắn nhủ yêu thương..."
+  },
+  "submitButton": "Gửi xác nhận & Nhận mã QR",
+  "successModal": {
+    "title": "Xác nhận thành công!",
+    "message": "Cảm ơn bạn đã gửi phản hồi. Hãy lưu lại mã QR này để check-in tại buổi lễ nhé!"
+  }
+}

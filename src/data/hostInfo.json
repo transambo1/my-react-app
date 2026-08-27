@@ -1,0 +1,14 @@
+{
+  "name": "Xuân Nghi",
+  "phone": "090",
+  "school": "Trường Đại học Y dược TP.HCM",
+  "event": {
+    "title": "LỄ TỐT NGHIỆP",
+    "location": "Hội trường A, Tòa nhà Trung tâm, 268 Lý Thường Kiệt, Q.10, TP.HCM",
+    "mapUrl": "https://maps.google.com/?q=...",
+    "date": "2026-09-05",
+    "dayOfWeek": "Thứ Bảy",
+    "time": "08:30"
+  },
+  "message": "Sự hiện diện của bạn là niềm vinh hạnh lớn của tôi!"
+}

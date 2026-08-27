@@ -1,0 +1,23 @@
+[
+  {
+    "slug": "anh-tuan",
+    "name": "Anh Tuấn",
+    "gender": "male",
+    "greeting": "Kính mời Anh",
+    "customNote": "Rất mong được đón tiếp anh tại buổi lễ."
+  },
+  {
+    "slug": "chi-lan",
+    "name": "Chị Lan",
+    "gender": "female",
+    "greeting": "Kính mời Chị",
+    "customNote": ""
+  },
+  {
+    "slug": "ban-minh",
+    "name": "Bạn Minh",
+    "gender": "other",
+    "greeting": "Thân mời Bạn",
+    "customNote": "Tới chụp với tao vài bô ảnh kỷ niệm nha!"
+  }
+]
