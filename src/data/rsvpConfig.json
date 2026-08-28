@@ -16,7 +16,7 @@
     "wishesLabel": "Lời chúc gửi đến tân cử nhân",
     "wishesPlaceholder": "Gửi vài lời nhắn nhủ yêu thương..."
   },
-  "submitButton": "Gửi xác nhận & Nhận mã QR",
+  "submitButton": "Xác nhận",
   "successModal": {
     "title": "Xác nhận thành công!",
     "message": "Cảm ơn bạn đã gửi phản hồi. Hãy lưu lại mã QR này để check-in tại buổi lễ nhé!"

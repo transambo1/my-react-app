@@ -1,14 +1,30 @@
 {
   "name": "Xuân Nghi",
-  "phone": "090",
+  "phone": "0932059063",
   "school": "Trường Đại học Y dược TP.HCM",
+  "campus": "Cơ sở chính",
   "event": {
     "title": "LỄ TỐT NGHIỆP",
-    "location": "Hội trường A, Tòa nhà Trung tâm, 268 Lý Thường Kiệt, Q.10, TP.HCM",
-    "mapUrl": "https://maps.google.com/?q=...",
-    "date": "2026-09-05",
+    "location": "217 Đ. Hồng Bàng, Chợ Lớn, Hồ Chí Minh ",
+    "mapUrl": "https://www.google.com/maps/place/%C4%90%E1%BA%A1i+H%E1%BB%8Dc+Y+D%C6%B0%E1%BB%A3c+Th%C3%A0nh+Ph%E1%BB%91+H%E1%BB%93+Ch%C3%AD+Minh+(UMP)/@10.755046,106.6603906,17z/data=!4m15!1m8!3m7!1s0x31752ef0ed477bb3:0x3f9d1ea5b5942b8e!2zMjE3IMSQLiBI4buTbmcgQsOgbmcsIENo4bujIEzhu5tuLCBI4buTIENow60gTWluaCA3MDAwMDAsIFZp4buHdCBOYW0!3b1!8m2!3d10.7550407!4d106.6629655!16s%2Fg%2F11w7qg3zz0!3m5!1s0x31752ef09222b00b:0xb02f0a86479b4d8f!8m2!3d10.7552565!4d106.6629317!16s%2Fm%2F02pz1f3?entry=ttu&g_ep=EgoyMDI2MDgyNS4wIKXMDSoASAFQAw%3D%3D",
+    "date": "2026-09-09",
+    "day": "09",
+    "month": "THÁNG 09",
+    "year": "2026",
     "dayOfWeek": "Thứ Bảy",
     "time": "08:30"
   },
-  "message": "Sự hiện diện của bạn là niềm vinh hạnh lớn của tôi!"
+  "contacts": [
+    {
+      "name": "Xuân Nghi",
+      "phone": "0932059063"
+    },
+    {
+   
+      "name": "Thành Lâm",
+      "phone": "0933445566"
+    }
+  ],
+  "message": "Sự hiện diện của bạn là niềm vinh hạnh lớn của tôi!",
+  "contacst-message": " Liên hệ nếu bạn cần hướng dẫn đường đi hoặc đã tới nhé!"
 }

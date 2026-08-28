@@ -1,114 +1,342 @@
-import hostInfo from '../data/hostInfo.json';
-import logoPng from '../assets/logo.png';
+import hostInfo from "../data/hostInfo.json";
+import logoPng from "../assets/logo.png";
+import heroPng from "../assets/hero.png";
+import ribbonPng from "../assets/ribbon.svg";
 
 export default function HeroSection() {
-  // Lấy tên cuối để làm chữ ký (VD: Xuân Nghi -> Nghi)
-  const nameParts = hostInfo.name.split(' ');
-  const firstName = nameParts[nameParts.length - 1];
+  const nameParts = hostInfo.name.split(" ");
+  const lastName =
+    nameParts.length > 1
+      ? `${nameParts[nameParts.length - 2]} ${nameParts[nameParts.length - 1]}`
+      : hostInfo.name;
 
   return (
-    <section className="relative w-full flex flex-col items-center bg-white min-h-[90vh] overflow-hidden pb-10">
-      {/* Background lụa mờ (Bạn có thể thay bằng ảnh nền lụa của bạn) */}
-      <div 
-        className="absolute inset-0 z-0 bg-cover bg-center opacity-40"
-        style={{ backgroundImage: 'url(https://www.transparenttextures.com/patterns/white-diamond.png)' }}
-      />
-      <div className="absolute inset-0 z-0 bg-gradient-to-b from-[#f8f9fa] via-white to-[#f4f5f6] opacity-80" />
+    <section
+      style={{
+        position: "relative",
+        width: "100%",
+        overflow: "hidden",
 
-      {/* Dải băng (Ribbon) bên trái */}
-      <div 
-        className="absolute top-2 left-4 sm:left-6 z-20 w-16 sm:w-20 bg-gradient-to-b from-[#8a151b] to-[#6a0d12] shadow-xl flex flex-col items-center pb-8"
-        style={{ clipPath: 'polygon(0 0, 100% 0, 100% 100%, 50% 90%, 0 100%)' }}
+        boxSizing: "border-box",
+      }}
+    >
+      {/* Keyframe hiệu ứng gió thổi đưa ra ngoài cùng section */}
+      <style>{`
+        @keyframes windSwayStrong {
+          0% {
+            transform: rotate(0deg) skewX(0deg);
+          }
+          20% {
+            transform: rotate(5deg) skewX(2.5deg);
+          }
+          45% {
+            transform: rotate(-4.2deg) skewX(-2deg);
+          }
+          70% {
+            transform: rotate(3.5deg) skewX(1.8deg);
+          }
+          85% {
+            transform: rotate(-2deg) skewX(-1deg);
+          }
+          100% {
+            transform: rotate(0deg) skewX(0deg);
+          }
+        }
+      `}</style>
+
+      <div
+        style={{
+          position: "relative",
+          margin: "0 auto",
+          width: "100%",
+          maxWidth: "420px",
+          overflow: "hidden",
+          borderRadius: "16px",
+          backgroundColor: "#f8f5f3",
+          boxShadow: "0 18px 40px rgba(86,42,43,0.12)",
+        }}
       >
-        {/* Viền trong của dải băng */}
-        <div 
-          className="absolute inset-1 border border-white/20 bottom-8"
-          style={{ clipPath: 'polygon(0 0, 100% 0, 100% 100%, 50% 90%, 0 100%)' }}
+        {/* Background Layers */}
+        <div
+          style={{
+            position: "absolute",
+            inset: 0,
+            zIndex: 0,
+            opacity: 0.4,
+            background:
+              "radial-gradient(circle, rgba(255,255,255,1) 0%, rgba(240,240,245,0.5) 100%)",
+          }}
         />
-        
-        {/* Nội dung chữ trên dải băng */}
-        <div className="mt-12 flex items-center justify-center gap-1 sm:gap-2 h-64 text-white">
-          <span 
-            className="text-[8px] sm:text-[10px] tracking-widest uppercase opacity-80"
-            style={{ writingMode: 'vertical-rl' }}
-          >
-            Khoa Dược
-          </span>
-          <span 
-            className="text-sm sm:text-base font-serif tracking-widest font-medium"
-            style={{ writingMode: 'vertical-rl' }}
-          >
-            {hostInfo.name.toUpperCase()}
-          </span>
-        </div>
-        
-        <div className="w-8 h-[1px] bg-white/40 my-4" />
-        <span className="text-white text-[10px] sm:text-xs font-serif tracking-widest">K28</span>
-      </div>
+        <div
+          style={{
+            position: "absolute",
+            inset: 0,
+            zIndex: 0,
+            background: "linear-gradient(to bottom, #f9f6f4, #ffffff, #f3f1ee)",
+          }}
+        />
 
-      <div className="relative z-10 flex flex-col items-center w-full px-8 pt-8">
-        
-{/* Logo & Tên trường */}
-<div className="flex flex-col items-center mb-6 pl-12 sm:pl-16 w-full">
-  <div style={{ width: '80px', minWidth: '80px', maxWidth: '80px' }} className="mb-2"> 
-    <img 
-      src={logoPng}
-      alt="University Logo" 
-      width={80}
-      height={80}
-      style={{ width: '80px', height: '80px', objectFit: 'contain', alignContent: 'center' }}
-    />
-  </div>
-  
-  <span className="text-[#cc1f27] text-[11px] font-black tracking-[0.15em] leading-tight uppercase text-center max-w-[180px] block">
-    {hostInfo.school}
-  </span>
-</div>
-
-
-
-        {/* Tiêu đề Graduation Ceremony */}
-        <div className="relative flex flex-col items-center mb-8 pl-8 sm:pl-12 w-full text-center">
-          <h1 className="text-3xl sm:text-4xl font-serif text-[#6a0d12] tracking-[0.15em] uppercase font-light relative z-10">
-            Graduation
-          </h1>
-          <span 
-            className="text-5xl sm:text-6xl text-[#9a8a81] absolute top-5 sm:top-6 z-0 opacity-80"
-            style={{ fontFamily: "'Great Vibes', cursive" }}
-          >
-            Ceremony
-          </span>
-        </div>
-        
-        {/* Khung ảnh chính (Hình chữ nhật bo góc) */}
-        <div className="relative w-full max-w-[280px] sm:max-w-[320px] aspect-[3/4] bg-white rounded-3xl sm:rounded-[2.5rem] shadow-2xl p-0.5 mb-10 z-10">
-          <img 
-            src="../assets/hero.png" 
-            alt="Graduation Portrait" 
-            className="w-full h-full object-cover rounded-3xl sm:rounded-[2.5rem]" 
+        {/* 1. DẢI RUY-BĂNG ĐÍNH TUYỆT ĐỐI SÁT MÉP TRÊN CÙNG */}
+        <div
+          style={{
+            position: "absolute",
+            top: 0, // Dính tuyệt đối đỉnh trên
+            left: "14px",
+            width: "clamp(55px, 15vw, 68px)",
+            height: "clamp(260px, 68vw, 320px)",
+            zIndex: 30,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            filter: "drop-shadow(2px 6px 10px rgba(70,8,23,0.35))",
+            transformOrigin: "top center",
+            animation:
+              "windSwayStrong 6.2s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite",
+            margin: 0,
+            padding: 0,
+          }}
+        >
+          <img
+            src={ribbonPng}
+            alt="Ribbon decoration"
+            style={{
+              position: "absolute",
+              top: 0,
+              left: 0,
+              width: "100%",
+              height: "100%",
+              objectFit: "fill",
+              display: "block",
+              verticalAlign: "top", // Loại bỏ khoảng trống thừa mặc định của inline img
+            }}
           />
-          
-          {/* Chữ ký đè lên dưới cùng của ảnh */}
-          <div className="absolute -bottom-4 left-0 right-0 flex justify-center drop-shadow-lg">
-            <span 
-              className="text-white text-5xl sm:text-6xl"
-              style={{ fontFamily: "'Great Vibes', cursive" }}
+        </div>
+
+        {/* 2. KHU VỰC HEADER & TYPOGRAPHY */}
+        <div
+          style={{
+            position: "relative",
+            zIndex: 10,
+            paddingLeft: "clamp(55px, 15vw, 68px)",
+            paddingRight: "8px",
+            paddingTop: "24px",
+            paddingBottom: "8px",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+          }}
+        >
+          {/* Logo Trường */}
+          <div
+            style={{
+              marginBottom: "6px",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              gap: "10px",
+            }}
+          >
+            <img
+              src={logoPng}
+              alt="University Logo"
+              style={{
+                width: "46px",
+                height: "46px",
+                objectFit: "contain",
+              }}
+            />
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "flex-start",
+                lineHeight: 1.15,
+                color: "#c3182b",
+              }}
             >
-              {hostInfo.name}
+              <span
+                style={{
+                  fontSize: "19px",
+                  fontWeight: 900,
+                  letterSpacing: "0.18em",
+                  textTransform: "uppercase",
+                }}
+              >
+                Ydược
+              </span>
+              <span
+                style={{
+                  fontSize: "11px",
+                  fontWeight: 700,
+                  letterSpacing: "0.22em",
+                  textTransform: "uppercase",
+                }}
+              >
+                University
+              </span>
+            </div>
+          </div>
+
+          {/* Typography: Graduation + Ceremony */}
+          <div
+            style={{
+              position: "relative",
+              width: "100%",
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              justifyContent: "center",
+              textAlign: "center",
+              padding: "14px 0 20px",
+            }}
+          >
+            <h1
+              style={{
+                position: "relative",
+                zIndex: 2,
+                margin: 0,
+                fontWeight: 500,
+                textTransform: "uppercase",
+                color: "#460817",
+                fontFamily: '"Cinzel Decorative", "Bodoni MT", "Didot", serif',
+                fontSize: "clamp(1.25rem, 4.2vw, 1.75rem)",
+                letterSpacing: "0.22em",
+                paddingLeft: "0.22em",
+                textShadow: "0 0.5px 1px rgba(70,8,23,0.15)",
+              }}
+            >
+              Graduation
+            </h1>
+
+            <span
+              style={{
+                position: "absolute",
+                zIndex: 1,
+                top: "68%",
+                left: "52%",
+                transform: "translate(-50%, -20%)",
+                whiteSpace: "nowrap",
+                fontStyle: "italic",
+                fontWeight: 400,
+                color: "#b09e99",
+                opacity: 0.85,
+                pointerEvents: "none",
+                userSelect: "none",
+                fontFamily: '"Alex Brush", "Great Vibes", "Playball", cursive',
+                fontSize: "clamp(2.4rem, 8.5vw, 3.4rem)",
+              }}
+            >
+              Ceremony
             </span>
           </div>
         </div>
 
-        {/* Trích dẫn Footer */}
-        <div className="flex flex-col items-center text-[#6a0d12] mt-4">
-          <p className="text-xs sm:text-sm font-serif tracking-[0.2em] uppercase mb-1">
+        {/* 3. KHUNG ẢNH CHÂN DUNG */}
+        <div
+          style={{
+            position: "relative",
+            zIndex: 10,
+            marginTop: "20px",
+            padding: "0 24px 10px",
+          }}
+        >
+          <div
+            style={{
+              position: "relative",
+              margin: "0 auto",
+              width: "100%",
+              overflow: "hidden",
+              borderRadius: "24px",
+              backgroundColor: "#ffffff",
+              boxShadow: "0 12px 24px rgba(70,8,23,0.14)",
+            }}
+          >
+            <img
+              src={heroPng}
+              alt="Graduation portrait"
+              style={{
+                width: "100%",
+                height: "clamp(400px, 100vw, 500px)",
+                objectFit: "cover",
+                objectPosition: "center top",
+                display: "block",
+              }}
+            />
+
+            <div
+              style={{
+                position: "absolute",
+                left: 0,
+                right: 0,
+                bottom: 0,
+                height: "90px",
+                background:
+                  "linear-gradient(to top, rgba(15,8,9,0.5), transparent)",
+              }}
+            />
+
+            <div
+              style={{
+                position: "absolute",
+                left: 0,
+                right: 0,
+                bottom: "30px",
+                display: "flex",
+                justifyContent: "center",
+              }}
+            >
+              <span
+                style={{
+                  color: "#ffffff",
+                  lineHeight: 1,
+                  fontSize: "clamp(1.8rem, 6vw, 2.4rem)",
+                  fontFamily: '"Monsieur La Doulaise", "Segoe Script", cursive',
+                  textShadow: "0 2px 4px rgba(0,0,0,0.7)",
+                }}
+              >
+                {lastName}
+              </span>
+            </div>
+          </div>
+        </div>
+
+        {/* 4. FOOTER */}
+        <div
+          style={{
+            position: "relative",
+            zIndex: 10,
+            padding: "16px 8px 24px",
+            textAlign: "center",
+            color: "#6d1115",
+          }}
+        >
+          <p
+            style={{
+              margin: 0,
+              fontSize: "clamp(12px, 3.2vw, 14px)", // Tăng kích thước chữ
+              fontWeight: 400,
+              textTransform: "uppercase",
+              letterSpacing: "0.22em",
+              paddingLeft: "0.32em", // Cân bằng khoảng cách căn giữa
+              lineHeight: 1.4,
+            }}
+          >
             Every end is
           </p>
-          <p className="text-xs sm:text-sm font-serif tracking-[0.2em] uppercase">
+          <p
+            style={{
+              margin: "6px 0 0 0",
+              fontSize: "clamp(12px, 3.2vw, 14px)", // Tăng kích thước chữ
+              fontWeight: 400,
+              textTransform: "uppercase",
+              letterSpacing: "0.22em",
+              paddingLeft: "0.32em", // Cân bằng khoảng cách căn giữa
+              lineHeight: 1.4,
+            }}
+          >
             A new beginning...
           </p>
         </div>
-
       </div>
     </section>
   );

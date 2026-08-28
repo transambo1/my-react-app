@@ -1,25 +1,169 @@
-import letterData from '../data/letter.json';
+import letterData from "../data/letter.json";
+import hostInfo from "../data/hostInfo.json";
 
 export default function LetterSection() {
-  return (
-    <section className="relative px-6 py-10 bg-[#f8f5f2] flex flex-col items-center">
-      <div className="w-full bg-white rounded-3xl p-7 shadow-sm border border-[#e5e0dc] text-center flex flex-col items-center">
-        
-        {/* Tiêu đề chữ viết tay nghệ thuật */}
-        <h2 className="font-serif italic text-2xl sm:text-3xl text-[#5c2d25] tracking-wide mb-6">
-          {letterData.title}
-        </h2>
+  const hostName = hostInfo?.name || "Kim Ngân";
+  const nameParts = hostName.split(" ");
+  const signatureName =
+    nameParts.length > 1
+      ? `${nameParts[nameParts.length - 2]} ${nameParts[nameParts.length - 1]}`
+      : hostName;
 
-        {/* Các đoạn tâm thư */}
-        <div className="space-y-4 text-xs sm:text-[13px] leading-relaxed text-[#4a2e2b] font-light">
+  return (
+    <section
+      style={{
+        position: "relative",
+        width: "100%",
+        backgroundColor: "#f7f4f1",
+        padding: "0 8px 30px",
+        boxSizing: "border-box",
+      }}
+    >
+      <div
+        style={{
+          position: "relative",
+          margin: "0 auto",
+          width: "100%",
+          maxWidth: "420px",
+          borderRadius: "20px",
+          backgroundColor: "#ffffff",
+          boxShadow: "0 18px 40px rgba(86,42,43,0.12)",
+          padding: "36px 22px 32px",
+          boxSizing: "border-box",
+          overflow: "hidden",
+        }}
+      >
+        {/* HỌA TIẾT NỀN NƯỚC MỜ TRANG TRÍ GÓC BỨC THƯ */}
+        <div
+          style={{
+            position: "absolute",
+            top: "-40px",
+            right: "-40px",
+            width: "140px",
+            height: "140px",
+            borderRadius: "50%",
+            background:
+              "radial-gradient(circle, rgba(181,165,161,0.2) 0%, transparent 70%)",
+            pointerEvents: "none",
+          }}
+        />
+
+        {/* 1. TIÊU ĐỀ BỨC THƯ (Chữ Serif nghiêng mộc mạc) */}
+        <div style={{ textAlign: "center", marginBottom: "22px" }}>
+          <h2
+            style={{
+              margin: "0 0 6px 0",
+              fontSize: "clamp(1.5rem, 5vw, 1.85rem)",
+              fontWeight: 500,
+              fontStyle: "italic",
+              color: "#460817",
+              fontFamily: '"Cormorant Garamond", "Cinzel", "Georgia", serif',
+              letterSpacing: "0.02em",
+              lineHeight: 1.25,
+            }}
+          >
+            {letterData.title}
+          </h2>
+          {/* Đường gạch trang trí ngắn ở giữa */}
+          <div
+            style={{
+              margin: "0 auto",
+              width: "36px",
+              height: "1px",
+              backgroundColor: "#c5b6b2",
+            }}
+          />
+        </div>
+
+        {/* 2. CÁC ĐOẠN TÂM THƯ */}
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            gap: "14px",
+            textAlign: "justify",
+            color: "#4a3536",
+            fontFamily: '"Cormorant Garamond", "Times New Roman", serif',
+            fontSize: "14.5px",
+            lineHeight: 1.65,
+            padding: "0 4px",
+          }}
+        >
           {letterData.paragraphs.map((para, idx) => (
-            <p key={idx}>{para}</p>
+            <p
+              key={idx}
+              style={{
+                margin: 0,
+                textIndent: "1.2em", // Thụt đầu dòng mỗi đoạn như thư tay
+              }}
+            >
+              {para}
+            </p>
           ))}
         </div>
 
-        {/* Chữ ký */}
-        <p className="font-serif italic text-xl text-[#5c2d25] mt-8">Kim Ngân</p>
+        {/* 3. KHU VỰC CHỮ KÝ DƯỚI CÙNG (Căn lề phải nghệ thuật) */}
+        <div
+          style={{
+            marginTop: "24px",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "flex-end",
+            paddingRight: "10px",
+          }}
+        >
+          <span
+            style={{
+              fontSize: "12px",
+              fontStyle: "italic",
+              color: "#8c7572",
+              fontFamily: '"Cormorant Garamond", serif',
+              marginBottom: "2px",
+            }}
+          >
+            Thương mến,
+          </span>
 
+          {/* CHỮ KÝ NGHỆ THUẬT */}
+          <div
+            style={{
+              position: "relative",
+              display: "inline-block",
+            }}
+          >
+            <span
+              style={{
+                display: "block",
+                fontSize: "clamp(2.4rem, 8vw, 3.2rem)",
+                lineHeight: 1,
+                fontWeight: 400,
+                color: "#460817",
+                fontFamily:
+                  '"Monsieur La Doulaise", "Alex Brush", "Great Vibes", cursive',
+                transform: "rotate(-3deg)", // Xoay nhẹ tạo cảm giác ký tay thật
+                userSelect: "none",
+                textShadow: "0 1px 2px rgba(70,8,23,0.15)",
+                paddingRight: "6px",
+              }}
+            >
+              {signatureName}
+            </span>
+
+            {/* Trái tim nhỏ đính cạnh chữ ký */}
+            <span
+              style={{
+                position: "absolute",
+                top: "-4px",
+                right: "-12px",
+                fontSize: "13px",
+                color: "#ff5e7e",
+                transform: "rotate(12deg)",
+              }}
+            >
+              💕
+            </span>
+          </div>
+        </div>
       </div>
     </section>
   );

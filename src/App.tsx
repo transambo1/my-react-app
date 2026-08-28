@@ -6,8 +6,8 @@ import RsvpForm from './components/RsvpForm';
 
 export default function App() {
   return (
-    <main className="min-h-screen bg-[#faf7f2] text-slate-800 font-sans flex justify-center">
-      <div className="w-full max-w-[480px] bg-[#f8f5f2] min-h-screen flex flex-col pb-8">
+    <main className="min-h-screen bg-[linear-gradient(to bottom, #f9f6f4, #ffffff, #f3f1ee)] text-slate-800 font-sans flex justify-center">
+      <div className="w-full max-w-[480px] bg-[linear-gradient(to bottom, #f9f6f4, #ffffff, #f3f1ee)] min-h-screen flex flex-col pb-8">
         <HeroSection />
         <InvitationCard />
         <LetterSection />

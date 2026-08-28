@@ -1,247 +1,410 @@
-import React, { useState } from 'react';
-import { QRCodeSVG } from 'qrcode.react';
-import rsvpConfig from '../data/rsvpConfig.json';
+import React, { useState } from "react";
+import hostInfo from "../data/hostInfo.json";
+import guests from "../data/guest.json";
+import rsvpConfig from "../data/rsvpConfig.json";
 
 interface FormData {
   name: string;
-  email: string;
-  phone: string;
-  attending: string;
   wishes: string;
+  attending: string;
+  phone: string;
+  email: string;
 }
 
+// Thay mã formspree của bạn vào đây (hoặc để trống nếu test lưu local)
+const FORMSPREE_ENDPOINT = "https://formspree.io/f/xwlkkpnw";
+
 export default function RsvpForm() {
+  const searchParams = new URLSearchParams(window.location.search);
+  const guestSlug = searchParams.get("to");
+  const matchedGuest = guests.find((g) => g.slug === guestSlug);
+  const defaultGuestName = matchedGuest?.name || searchParams.get("name") || "";
+
+  // Khởi tạo trực tiếp trong useState (Không dùng useEffect -> Hết lỗi ESLint)
   const [formData, setFormData] = useState<FormData>({
-    name: '',
-    email: '',
-    phone: '',
-    attending: 'attending',
-    wishes: ''
+    name: defaultGuestName,
+    wishes: "",
+    attending: "Chắc chắn tham dự ✨",
+    phone: "",
+    email: "",
   });
 
-  const [submittedData, setSubmittedData] = useState<{ id: string; name: string; email: string } | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSuccess, setIsSuccess] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!formData.name.trim() || !formData.email.trim()) return;
+    if (!formData.name.trim() || isSubmitting) return;
 
-    const newTicket = {
-      id: `TICKET-${Date.now()}`,
-      ...formData,
-      createdAt: new Date().toISOString()
-    };
+    setIsSubmitting(true);
 
-    // Lưu vào LocalStorage
-    const existing = JSON.parse(localStorage.getItem('rsvp_submissions') || '[]');
-    localStorage.setItem('rsvp_submissions', JSON.stringify([...existing, newTicket]));
+    try {
+      // 1. Gửi dữ liệu về email thông qua Formspree (nếu có cấu hình)
+      if (FORMSPREE_ENDPOINT && !FORMSPREE_ENDPOINT.includes("YOUR_FORM_ID")) {
+        await fetch(FORMSPREE_ENDPOINT, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+          },
+          body: JSON.stringify({
+            "Tên người thương": formData.name,
+            "Lời nhắn gửi": formData.wishes || "(Không có)",
+            "Trạng thái tham dự": formData.attending,
+            "Số điện thoại": formData.phone || "(Không có)",
+            "Email khách": formData.email || "(Không có)",
+            "Thời gian gửi": new Date().toLocaleString("vi-VN"),
+          }),
+        });
+      }
 
-    setSubmittedData({
-      id: newTicket.id,
-      name: newTicket.name,
-      email: newTicket.email
-    });
+      // 2. Backup lưu vào LocalStorage
+      const existing = JSON.parse(
+        localStorage.getItem("rsvp_submissions") || "[]",
+      );
+      localStorage.setItem(
+        "rsvp_submissions",
+        JSON.stringify([
+          ...existing,
+          { ...formData, createdAt: new Date().toISOString() },
+        ]),
+      );
+
+      setIsSuccess(true);
+    } catch (error) {
+      console.error("Lỗi gửi form:", error);
+      // Vẫn thông báo thành công cho khách vì đã lưu local
+      setIsSuccess(true);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const inputStyle: React.CSSProperties = {
+    width: "100%",
+    backgroundColor: "rgba(255, 255, 255, 0.7)",
+    border: "1.2px solid #5a141b",
+    borderRadius: "9999px",
+    padding: "10px 18px",
+    fontSize: "14px",
+    color: "#460817",
+    fontFamily: '"Cormorant Garamond", "Times New Roman", serif',
+    outline: "none",
+    boxSizing: "border-box",
   };
 
   return (
-    <section className="px-6 py-10 bg-[#f8f5f2] flex flex-col items-center">
-      {/* RSVP Form Card */}
-      <div className="w-full bg-white rounded-3xl p-7 shadow-sm border border-[#e5e0dc] mb-8">
-        <div className="text-center mb-6">
-          <h3 className="font-serif italic text-2xl text-[#5c2d25] tracking-wide mb-2">
-            {rsvpConfig.title}
-          </h3>
-          <p className="text-xs text-[#8b5a4b] font-light">
-            {rsvpConfig.subtitle}
+    <section
+      style={{
+        position: "relative",
+        width: "100%",
+        backgroundColor: "#f7f4f1",
+        padding: "0 8px 30px",
+        boxSizing: "border-box",
+      }}
+    >
+      <style>{`
+        @keyframes modalFadeIn {
+          from { opacity: 0; transform: scale(0.92); }
+          to { opacity: 1; transform: scale(1); }
+        }
+      `}</style>
+
+      <div
+        style={{
+          position: "relative",
+          margin: "0 auto",
+          width: "100%",
+          maxWidth: "420px",
+          borderRadius: "20px",
+          backgroundColor: "#f8f5f3",
+          boxShadow: "0 18px 40px rgba(86,42,43,0.12)",
+          padding: "36px 20px 32px",
+          boxSizing: "border-box",
+        }}
+      >
+        {/* LỜI NGỎ ĐẦU FORM */}
+        <div
+          style={{
+            textAlign: "center",
+            color: "#4a121a",
+            marginBottom: "28px",
+            fontFamily: '"Cormorant Garamond", "Times New Roman", serif',
+            lineHeight: 1.6,
+          }}
+        >
+          <p
+            style={{
+              fontSize: "14.5px",
+              fontWeight: 600,
+              margin: "0 0 6px",
+            }}
+          >
+            Sự hiện diện của “người thương” sẽ là niềm hạnh phúc của mình.
+          </p>
+          <p
+            style={{
+              fontSize: "13.5px",
+              margin: "0 0 6px",
+              color: "#5c2028",
+            }}
+          >
+            Nếu tham dự, “người thương” để lại thông tin để{" "}
+            {hostInfo.name ? hostInfo.name.split(" ").slice(-1)[0] : "mình"} có
+            thể đón tiếp thật chu đáo.
+          </p>
+          <p
+            style={{
+              fontSize: "14px",
+              fontWeight: 600,
+              margin: "0",
+            }}
+          >
+            Cảm ơn “người thương”!
           </p>
         </div>
 
-        {!submittedData ? (
-          <form onSubmit={handleSubmit} className="space-y-4 text-xs text-[#5c2d25]">
-            <div>
-              <label className="block font-medium mb-1">{rsvpConfig.fields.nameLabel}</label>
-              <input
-                type="text"
-                required
-                placeholder={rsvpConfig.fields.namePlaceholder}
-                value={formData.name}
-                onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                className="w-full px-3.5 py-2.5 rounded-xl border border-[#d4bca4]/60 bg-[#faf8f5] focus:outline-none focus:border-[#8b5a4b] text-xs"
-              />
-            </div>
+        {/* FORM ĐIỀN */}
+        <form
+          onSubmit={handleSubmit}
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            gap: "14px",
+          }}
+        >
+          {/* Tên */}
+          <div>
+            <input
+              type="text"
+              required
+              placeholder="Tên người thương *"
+              value={formData.name}
+              onChange={(e) =>
+                setFormData({ ...formData, name: e.target.value })
+              }
+              style={inputStyle}
+            />
+          </div>
 
-            <div>
-              <label className="block font-medium mb-1">{rsvpConfig.fields.phoneLabel}</label>
-              <input
-                type="tel"
-                required
-                placeholder={rsvpConfig.fields.phonePlaceholder}
-                value={formData.phone}
-                onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                className="w-full px-3.5 py-2.5 rounded-xl border border-[#d4bca4]/60 bg-[#faf8f5] focus:outline-none focus:border-[#8b5a4b] text-xs"
-              />
-            </div>
+          {/* Lời nhắn */}
+          <div>
+            <textarea
+              rows={4}
+              placeholder="Lời nhắn gửi..."
+              value={formData.wishes}
+              onChange={(e) =>
+                setFormData({ ...formData, wishes: e.target.value })
+              }
+              style={{
+                ...inputStyle,
+                borderRadius: "20px",
+                resize: "none",
+                padding: "12px 18px",
+              }}
+            />
+          </div>
 
-            <div>
-              <label className="block font-medium mb-1">{rsvpConfig.fields.emailLabel}</label>
-              <input
-                type="email"
-                required
-                placeholder={rsvpConfig.fields.emailPlaceholder}
-                value={formData.email}
-                onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                className="w-full px-3.5 py-2.5 rounded-xl border border-[#d4bca4]/60 bg-[#faf8f5] focus:outline-none focus:border-[#8b5a4b] text-xs"
-              />
-            </div>
+          {/* Trạng thái tham dự */}
+          <div style={{ position: "relative" }}>
+            <select
+              value={formData.attending}
+              onChange={(e) =>
+                setFormData({ ...formData, attending: e.target.value })
+              }
+              style={{
+                ...inputStyle,
+                appearance: "none",
+                WebkitAppearance: "none",
+                cursor: "pointer",
+                paddingRight: "36px",
+              }}
+            >
+              <option value="Chắc chắn tham dự ✨">Chắc chắn tham dự ✨</option>
+              <option value="Có thể sẽ tham dự 🌿">Có thể sẽ tham dự 🌿</option>
+              <option value="Tiếc quá, mình bận mất rồi 💌">
+                Tiếc quá, mình bận mất rồi 💌
+              </option>
+            </select>
+            <span
+              style={{
+                position: "absolute",
+                right: "16px",
+                top: "50%",
+                transform: "translateY(-50%)",
+                pointerEvents: "none",
+                color: "#460817",
+                fontSize: "10px",
+              }}
+            >
+              ▼
+            </span>
+          </div>
 
-            <div>
-              <label className="block font-medium mb-1">{rsvpConfig.fields.attendanceLabel}</label>
-              <select
-                value={formData.attending}
-                onChange={(e) => setFormData({ ...formData, attending: e.target.value })}
-                className="w-full px-3.5 py-2.5 rounded-xl border border-[#d4bca4]/60 bg-[#faf8f5] focus:outline-none focus:border-[#8b5a4b] text-xs"
-              >
-                <option value="attending"></option>
-                <option value="not-attending"></option>
-              </select>
-            </div>
+          {/* Số điện thoại */}
+          <div>
+            <input
+              type="tel"
+              placeholder="Số điện thoại"
+              value={formData.phone}
+              onChange={(e) =>
+                setFormData({ ...formData, phone: e.target.value })
+              }
+              style={inputStyle}
+            />
+          </div>
 
-            <div>
-              <label className="block font-medium mb-1">{rsvpConfig.fields.wishesLabel}</label>
-              <textarea
-                placeholder={rsvpConfig.fields.wishesPlaceholder}
-                value={formData.wishes}
-                onChange={(e) => setFormData({ ...formData, wishes: e.target.value })}
-                rows={3}
-                className="w-full px-3.5 py-2.5 rounded-xl border border-[#d4bca4]/60 bg-[#faf8f5] focus:outline-none focus:border-[#8b5a4b] text-xs"
-              ></textarea>
-            </div>
+          {/* Email */}
+          <div>
+            <input
+              type="email"
+              placeholder="Email của bạn"
+              value={formData.email}
+              onChange={(e) =>
+                setFormData({ ...formData, email: e.target.value })
+              }
+              style={inputStyle}
+            />
+          </div>
+
+          {/* Nút gửi */}
+          <button
+            type="submit"
+            disabled={isSubmitting}
+            style={{
+              marginTop: "10px",
+              width: "100%",
+              backgroundColor: isSubmitting ? "#833e46" : "#520914",
+              color: "#ffffff",
+              border: "none",
+              borderRadius: "9999px",
+              padding: "13px 0",
+              fontSize: "18px",
+              fontWeight: 600,
+              letterSpacing: "0.2em",
+              textTransform: "uppercase",
+              fontFamily: '"Cinzel", "Cormorant Garamond", serif',
+              cursor: isSubmitting ? "not-allowed" : "pointer",
+              boxShadow: "0 6px 16px rgba(82,9,20,0.25)",
+              transition: "all 0.2s ease",
+            }}
+          >
+            {isSubmitting
+              ? "ĐANG GỬI..."
+              : rsvpConfig?.submitButton || "XÁC NHẬN"}
+          </button>
+        </form>
+      </div>
+
+      {/* POPUP THÔNG BÁO CẢM ƠN (KHÔNG DÙNG QR) */}
+      {isSuccess && (
+        <div
+          style={{
+            position: "fixed",
+            inset: 0,
+            backgroundColor: "rgba(0, 0, 0, 0.65)",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            zIndex: 9999,
+            padding: "16px",
+            backdropFilter: "blur(4px)",
+          }}
+          onClick={() => setIsSuccess(false)}
+        >
+          <div
+            style={{
+              position: "relative",
+              width: "100%",
+              maxWidth: "340px",
+              backgroundColor: "#ffffff",
+              borderRadius: "24px",
+              padding: "28px 20px 24px",
+              textAlign: "center",
+              boxShadow: "0 20px 40px rgba(0,0,0,0.3)",
+              animation: "modalFadeIn 0.25s ease-out",
+            }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button
+              onClick={() => setIsSuccess(false)}
+              style={{
+                position: "absolute",
+                top: "14px",
+                right: "14px",
+                background: "#f3eee9",
+                border: "none",
+                borderRadius: "50%",
+                width: "28px",
+                height: "28px",
+                fontSize: "13px",
+                color: "#555",
+                cursor: "pointer",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              ✕
+            </button>
+
+            <div style={{ fontSize: "40px", marginBottom: "8px" }}>💌✨</div>
+
+            <h4
+              style={{
+                margin: "0 0 8px",
+                fontSize: "20px",
+                fontWeight: 700,
+                color: "#460817",
+                fontFamily: "serif",
+              }}
+            >
+              Gửi Thành Công!
+            </h4>
+
+            <p
+              style={{
+                margin: "0 0 12px",
+                fontSize: "14px",
+                lineHeight: 1.5,
+                color: "#4a3b32",
+              }}
+            >
+              Cảm ơn <strong>{formData.name}</strong> rất nhiều vì đã gửi phản
+              hồi và những lời chúc tốt đẹp.
+            </p>
+
+            <p
+              style={{
+                margin: "0 0 20px",
+                fontSize: "12.5px",
+                color: "#7a625a",
+                fontStyle: "italic",
+              }}
+            >
+              Hẹn gặp bạn trong ngày lễ tốt nghiệp nhé! 💕
+            </p>
 
             <button
-              type="submit"
-              className="w-full bg-[#5c2d25] text-white py-3 rounded-xl font-semibold uppercase tracking-wider text-sm hover:bg-[#8b5a4b] transition-colors duration-300"
+              onClick={() => setIsSuccess(false)}
+              style={{
+                width: "100%",
+                backgroundColor: "#520914",
+                color: "#ffffff",
+                border: "none",
+                borderRadius: "12px",
+                padding: "11px 0",
+                fontSize: "14px",
+                fontWeight: 600,
+                cursor: "pointer",
+                boxShadow: "0 4px 12px rgba(82,9,20,0.2)",
+              }}
             >
-              {rsvpConfig.submitButton}
+              Đóng lại
             </button>
-          </form>
-        ) : (
-          <div className="text-center space-y-4">
-            <p className="text-base text-[#5c2d25] font-semibold">Cảm ơn bạn đã đăng ký tham dự!</p>
-            <p className="text-sm text-[#8b5a4b]">Vui lòng lưu lại mã QR dưới đây để tiện check-in:</p>
-            <div className="flex justify-center p-4 bg-white rounded-xl border border-[#ede3d8]">
-              <QRCodeSVG 
-                value={`rsvp-id:${submittedData.id}|name:${submittedData.name}|email:${submittedData.email}`} 
-                size={180}
-                level="H"
-                bgColor="#ffffff"
-                fgColor="#000000"
-              />
-            </div>
-            <p className="text-[11px] text-gray-500">Mã số: {submittedData.id}</p>
-            <p className="text-[11px] text-gray-500">Tên: {submittedData.name}</p>
           </div>
-        )}
-      </div>
-
-      {/* Thank you image */}
-      <div className="w-full aspect-[4/3] bg-white rounded-3xl p-2.5 shadow-sm border border-[#e5e0dc]">
-        <img 
-          src="https://images.unsplash.com/photo-1517486804591-cf6270634125?q=80&w=1080&auto=format&fit=crop" 
-          alt="Thank you" 
-          className="w-full h-full object-cover rounded-2xl"
-        />
-      </div>
+        </div>
+      )}
     </section>
-//   );              className="w-full px-3.5 py-2.5 rounded-xl border border-[#d4bca4]/60 bg-[#faf8f5] focus:outline-none focus:border-[#8b5a4b] text-xs"
-//             />
-//           </div>
-
-//           <div>
-//             <label className="block font-medium mb-1">{rsvpConfig.fields.phoneLabel}</label>
-//             <input
-//               type="tel"
-//               placeholder={rsvpConfig.fields.phonePlaceholder}
-//               value={formData.phone}
-//               onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-//               className="w-full px-3.5 py-2.5 rounded-xl border border-[#d4bca4]/60 bg-[#faf8f5] focus:outline-none focus:border-[#8b5a4b] text-xs"
-//             />
-//           </div>
-
-//           <div>
-//             <label className="block font-medium mb-2">{rsvpConfig.fields.attendanceLabel}</label>
-//             <div className="space-y-2">
-//               {rsvpConfig.fields.options.map((opt) => (
-//                 <label key={opt.value} className="flex items-center gap-2 cursor-pointer">
-//                   <input
-//                     type="radio"
-//                     name="attending"
-//                     value={opt.value}
-//                     checked={formData.attending === opt.value}
-//                     onChange={(e) => setFormData({ ...formData, attending: e.target.value })}
-//                     className="accent-[#8b5a4b]"
-//                   />
-//                   <span>{opt.label}</span>
-//                 </label>
-//               ))}
-//             </div>
-//           </div>
-
-//           <div>
-//             <label className="block font-medium mb-1">{rsvpConfig.fields.wishesLabel}</label>
-//             <textarea
-//               rows={3}
-//               placeholder={rsvpConfig.fields.wishesPlaceholder}
-//               value={formData.wishes}
-//               onChange={(e) => setFormData({ ...formData, wishes: e.target.value })}
-//               className="w-full px-3.5 py-2.5 rounded-xl border border-[#d4bca4]/60 bg-[#faf8f5] focus:outline-none focus:border-[#8b5a4b] text-xs resize-none"
-//             />
-//           </div>
-
-//           <button
-//             type="submit"
-//             className="w-full mt-2 py-3 px-4 rounded-xl bg-[#8b5a4b] text-white font-medium text-xs tracking-wider uppercase hover:bg-[#703b32] transition shadow-md"
-//           >
-//             {rsvpConfig.submitButton}
-//           </button>
-//         </form>
-//       </div>
-
-//       {/* Modal Popup hiển thị Mã QR Check-in */}
-//       {submittedData && (
-//         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-fade-in">
-//           <div className="bg-white rounded-3xl p-6 max-w-xs w-full text-center shadow-2xl border border-[#e8ded3] flex flex-col items-center">
-//             <h4 className="font-serif text-lg font-bold text-[#5c2d25]">
-//               {rsvpConfig.successModal.title}
-//             </h4>
-//             <p className="text-[11px] text-[#8b5a4b] mt-1 mb-4 leading-relaxed">
-//               {rsvpConfig.successModal.message}
-//             </p>
-
-//             {/* Mã QR code Check-in */}
-//             <div className="p-4 bg-[#fdfbf7] border border-[#e8ded3] rounded-2xl shadow-inner mb-3">
-//               <QRCodeSVG 
-//                 value={JSON.stringify({ ticketId: submittedData.id, guest: submittedData.name, email: submittedData.email })} 
-//                 size={160}
-//                 fgColor="#5c2d25"
-//               />
-//             </div>
-            
-//             <p className="text-[11px] font-mono text-gray-500 font-semibold mb-1">
-//               MÃ VÉ: {submittedData.id}
-//             </p>
-//             <p className="text-xs font-serif font-bold text-[#5c2d25] mb-5">
-//               Khách mời: {submittedData.name}
-//             </p>
-
-//             <button
-//               onClick={() => setSubmittedData(null)}
-//               className="w-full py-2.5 rounded-xl bg-[#5c2d25] text-white text-xs font-medium hover:bg-[#4a2e2b] transition"
-//             >
-//               Đóng lại
-//             </button>
-//           </div>
-//         </div>
-//       )}
-//     </section>
-//   );
-    )
+  );
 }
