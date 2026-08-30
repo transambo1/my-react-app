@@ -1,7 +1,7 @@
 import hostInfo from "../data/hostInfo.json";
 import logoPng from "../assets/logo.png";
 import heroPng from "../assets/hero.png";
-import ribbonPng from "../assets/ribbon.svg";
+import ribbonPng from "../assets/sash.webp";
 
 export default function HeroSection() {
   const nameParts = hostInfo.name.split(" ");
@@ -16,7 +16,6 @@ export default function HeroSection() {
         position: "relative",
         width: "100%",
         overflow: "hidden",
-
         boxSizing: "border-box",
       }}
     >
@@ -76,13 +75,13 @@ export default function HeroSection() {
           }}
         />
 
-        {/* 1. DẢI RUY-BĂNG ĐÍNH TUYỆT ĐỐI SÁT MÉP TRÊN CÙNG */}
         <div
           style={{
             position: "absolute",
-            top: 0, // Dính tuyệt đối đỉnh trên
-            left: "14px",
-            width: "clamp(55px, 15vw, 68px)",
+            top: 0,
+            left: "14px", // Bạn có thể chỉnh lại thành "10px" hoặc "5px" nếu muốn nó sát lề trái hơn nữa
+            /* Tăng mạnh độ rộng của thẻ cha để tạo không gian cho ruy-băng béo lên */
+            width: "clamp(35px, 8vw, 55px)",
             height: "clamp(260px, 68vw, 320px)",
             zIndex: 30,
             display: "flex",
@@ -100,17 +99,20 @@ export default function HeroSection() {
             src={ribbonPng}
             alt="Ribbon decoration"
             style={{
-              position: "absolute",
+
               top: 0,
               left: 0,
-              width: "100%",
+
               height: "100%",
-              objectFit: "fill",
-              display: "block",
-              verticalAlign: "top", // Loại bỏ khoảng trống thừa mặc định của inline img
+              /* ĐỔI THÀNH contain để ảnh tự co giãn theo tỷ lệ gốc, không bị bóp dẹt */
+
+
+              verticalAlign: "top",
             }}
           />
         </div>
+
+
 
         {/* 2. KHU VỰC HEADER & TYPOGRAPHY */}
         <div
@@ -133,16 +135,18 @@ export default function HeroSection() {
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
-              gap: "10px",
+              gap: "12px", // Tăng nhẹ khoảng cách để bóng đổ không bị đè lên nhau
             }}
           >
             <img
               src={logoPng}
               alt="University Logo"
               style={{
-                width: "46px",
-                height: "46px",
+                width: "50px",
+                height: "50px",
                 objectFit: "contain",
+                /* Sử dụng drop-shadow để bóng đổ theo viền trong suốt của logo PNG */
+                filter: "drop-shadow(0px 4px 10px rgba(56, 149, 208, 0.35)) drop-shadow(0px 1px 2px rgba(0, 0, 0, 0.1))",
               }}
             />
             <div
@@ -151,7 +155,7 @@ export default function HeroSection() {
                 flexDirection: "column",
                 alignItems: "flex-start",
                 lineHeight: 1.15,
-                color: "#c3182b",
+                color: "#3895D0",
               }}
             >
               <span
@@ -160,9 +164,12 @@ export default function HeroSection() {
                   fontWeight: 900,
                   letterSpacing: "0.18em",
                   textTransform: "uppercase",
+                  paddingBottom: "4px",
+                  /* Hiệu ứng bóng đổ đa tầng giúp chữ nổi bật và mượt mà */
+                  textShadow: "0px 3px 6px rgba(56, 149, 208, 0.3), 0px 1px 2px rgba(0, 0, 0, 0.1)",
                 }}
               >
-                Ydược
+                Đại Học Y Dược
               </span>
               <span
                 style={{
@@ -170,12 +177,15 @@ export default function HeroSection() {
                   fontWeight: 700,
                   letterSpacing: "0.22em",
                   textTransform: "uppercase",
+                  /* Bóng nhẹ hơn cho dòng chữ nhỏ để tránh bị nhòe chữ */
+                  textShadow: "0px 2px 4px rgba(56, 149, 208, 0.25)",
                 }}
               >
-                University
+                Thanh pho Ho Chi Minh
               </span>
             </div>
           </div>
+
 
           {/* Typography: Graduation + Ceremony */}
           <div
@@ -195,14 +205,16 @@ export default function HeroSection() {
                 position: "relative",
                 zIndex: 2,
                 margin: 0,
-                fontWeight: 500,
+                fontWeight: 900,
                 textTransform: "uppercase",
                 color: "#460817",
-                fontFamily: '"Cinzel Decorative", "Bodoni MT", "Didot", serif',
-                fontSize: "clamp(1.25rem, 4.2vw, 1.75rem)",
+                fontFamily: '"Playlist Script"',
+                fontSize: "30px",
                 letterSpacing: "0.22em",
                 paddingLeft: "0.22em",
                 textShadow: "0 0.5px 1px rgba(70,8,23,0.15)",
+                /* Sử dụng text-stroke cùng màu để "đắp" thêm thịt cho nét chữ to ra */
+                WebkitTextStroke: "0.8px #460817",
               }}
             >
               Graduation
@@ -212,22 +224,24 @@ export default function HeroSection() {
               style={{
                 position: "absolute",
                 zIndex: 1,
-                top: "68%",
+                top: "87%",
                 left: "52%",
                 transform: "translate(-50%, -20%)",
                 whiteSpace: "nowrap",
-                fontStyle: "italic",
+                letterSpacing: "0.22em",
                 fontWeight: 400,
                 color: "#b09e99",
                 opacity: 0.85,
                 pointerEvents: "none",
                 userSelect: "none",
-                fontFamily: '"Alex Brush", "Great Vibes", "Playball", cursive',
+                fontFamily: '"Great Vibes", "Alex Brush", "Allura", cursive',
                 fontSize: "clamp(2.4rem, 8.5vw, 3.4rem)",
               }}
             >
-              Ceremony
+              Invitation
             </span>
+
+
           </div>
         </div>
 

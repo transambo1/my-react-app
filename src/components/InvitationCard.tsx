@@ -1,8 +1,11 @@
+import React from 'react';
 import portraitBottomPng from "../assets/logo.png";
-import topDecorationPng from "../assets/ribbon.svg";
+import topDecorationPng from "../assets/hero.png";
 import { useInvitationData } from "../hooks/useInvitationData";
 import ContactModal from "./ContactModal";
-
+import invitationPng from "../assets/invi.jpg";
+import mapPng from "../assets/map.jpg";
+import phonePng from "../assets/phone-call.svg"
 export default function InvitationCard() {
   const {
     guestName,
@@ -19,6 +22,7 @@ export default function InvitationCard() {
     handleCopyPhone,
     hostInfo,
   } = useInvitationData();
+  const [showMapModal, setShowMapModal] = React.useState(false);
 
   return (
     <section
@@ -26,6 +30,7 @@ export default function InvitationCard() {
         position: "relative",
         width: "100%",
         backgroundColor: "#f7f4f1",
+
         padding: "0 8px",
         boxSizing: "border-box",
       }}
@@ -121,6 +126,7 @@ export default function InvitationCard() {
         <div
           style={{
             position: "relative",
+            background: invitationPng,
             zIndex: 10,
             padding: "36px 16px 0",
             boxSizing: "border-box",
@@ -130,9 +136,13 @@ export default function InvitationCard() {
             style={{
               position: "relative",
               margin: "0 auto",
+              backgroundImage: `url(${invitationPng})`,
+              backgroundPosition: "center",
+              backgroundSize: "100% 100%",
+              backgroundRepeat: "no-repeat",
               width: "100%",
               maxWidth: "340px",
-              backgroundColor: "#ffffff",
+              minHeight: "450px",
               borderRadius: "28px",
               padding: "32px 18px 24px",
               boxSizing: "border-box",
@@ -140,34 +150,47 @@ export default function InvitationCard() {
               textAlign: "center",
             }}
           >
-            {/* Lời chào */}
-            <p
+            <div
+              className="flex"
               style={{
-                margin: "0 0 4px 0",
-                fontSize: "13px",
-                fontWeight: 700,
-                color: "#460817",
-                letterSpacing: "0.22em",
-                textTransform: "uppercase",
-                fontFamily: '"Cinzel", serif',
+                display: "flex",
+                flexDirection: "row",
+                alignItems: "center",
+                paddingTop: "40px",
+                justifyContent: "center",
+                gap: "10px",
+                flexWrap: "wrap"
               }}
             >
-              {greeting}
-            </p>
+              {/* Lời chào */}
+              <p
+                style={{
+                  margin: 0, // Đưa margin về 0 để không bị lệch hàng dòng với chữ bên cạnh
+                  fontSize: "13px",
+                  fontWeight: 700,
+                  color: "#460817",
+                  letterSpacing: "0.22em",
+                  textTransform: "uppercase",
+                  fontFamily: '"Cinzel", serif',
+                }}
+              >
+                {greeting}:
+              </p>
 
-            {/* Tên khách mời */}
-            <h2
-              style={{
-                margin: "0 0 16px 0",
-                fontSize: "clamp(2.4rem, 8.5vw, 3.2rem)",
-                fontWeight: 400,
-                color: "#7d706c",
-                fontFamily: '"Alex Brush", "Monsieur La Doulaise", cursive',
-                lineHeight: 1.15,
-              }}
-            >
-              {guestName}
-            </h2>
+              {/* Tên khách mời */}
+              <h2
+                style={{
+                  margin: 0, // Đưa margin về 0 để đồng bộ trục dọc chuẩn xác
+                  fontSize: "clamp(2.4rem, 8.5vw, 3.2rem)",
+                  fontWeight: 400,
+                  color: "#7d706c",
+                  fontFamily: '"Alex Brush", "Monsieur La Doulaise", cursive',
+                  lineHeight: 1.15,
+                }}
+              >
+                {guestName}
+              </h2>
+            </div>
 
             {/* Thời gian */}
             <p
@@ -207,7 +230,7 @@ export default function InvitationCard() {
                   whiteSpace: "nowrap",
                 }}
               >
-                 {eventMonth}
+                {eventMonth}
               </div>
 
               <div
@@ -289,42 +312,170 @@ export default function InvitationCard() {
               {hostInfo.event?.location ||
                 "217 Đ. Hồng Bàng, Chợ Lớn, Hồ Chí Minh"}
             </p>
-
-            {/* Nút Xem chỉ đường */}
-            <a
-              href={mapSearchUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              style={{
-                display: "inline-flex",
-                flexDirection: "column",
-                alignItems: "center",
-                textDecoration: "none",
-                color: "#460817",
-                animation: "pulseGlow 1.8s ease-in-out infinite",
-              }}
-            >
-              <svg
-                width="20"
-                height="20"
-                viewBox="0 0 24 24"
-                fill="currentColor"
-                style={{ marginBottom: "2px" }}
-              >
-                <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" />
-              </svg>
-              <span
+            <div>
+              <div
+                className="flex"
                 style={{
-                  fontSize: "13px",
-                  fontWeight: 700,
-                  letterSpacing: "0.18em",
-                  textTransform: "uppercase",
-                  fontFamily: "serif",
+                  display: "flex",
+                  flexDirection: "row",
+                  alignItems: "center",
+                  paddingTop: "10px",
+                  justifyContent: "center",
+                  gap: "40px",
+                  flexWrap: "wrap"
                 }}
               >
-                XEM CHỈ ĐƯỜNG
-              </span>
-            </a>
+                {/* 1. Nút Xem chỉ đường (Mở Google Maps link cũ của bạn) */}
+                <a
+                  href={mapSearchUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{
+                    display: "inline-flex",
+                    flexDirection: "column",
+                    alignItems: "center",
+                    textDecoration: "none",
+                    color: "#460817",
+                    animation: "pulseGlow 1.8s ease-in-out infinite",
+                  }}
+                >
+                  <svg
+                    width="20"
+                    height="20"
+                    viewBox="0 0 24 24"
+                    fill="currentColor"
+                    style={{ marginBottom: "2px" }}
+                  >
+                    <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" />
+                  </svg>
+                  <span
+                    style={{
+                      fontSize: "13px",
+                      fontWeight: 700,
+                      letterSpacing: "0.18em",
+                      textTransform: "uppercase",
+                      fontFamily: "serif",
+                    }}
+                  >
+                    Bản đồ
+                  </span>
+                </a>
+
+                {/* 2. NÚT MỚI: BẤM ĐỂ HIỆN ẢNH BẢN ĐỒ */}
+                <button
+                  onClick={() => setShowMapModal(true)} // Khi bấm sẽ kích hoạt hiện Modal
+                  style={{
+                    background: "none",
+                    border: "none",
+                    cursor: "pointer",
+                    display: "inline-flex",
+                    flexDirection: "column",
+                    alignItems: "center",
+                    color: "#460817",
+                    animation: "pulseGlow 1.8s ease-in-out infinite",
+                    padding: 0,
+                  }}
+                >
+                  <svg
+                    width="20"
+                    height="20"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    style={{ marginBottom: "2px" }}
+                  >
+                    <polygon points="3 6 9 3 15 6 21 3 21 18 15 21 9 18 3 21" />
+                    <line x1="9" y1="3" x2="9" y2="18" />
+                    <line x1="15" y1="6" x2="15" y2="21" />
+                  </svg>
+                  <span
+                    style={{
+                      fontSize: "13px",
+                      fontWeight: 700,
+                      letterSpacing: "0.18em",
+                      textTransform: "uppercase",
+                      fontFamily: "serif",
+                    }}
+                  >
+                    Bãi xe
+                  </span>
+                </button>
+              </div>
+
+              {/* MODAL POPUP HIỂN THỊ ẢNH BẢN ĐỒ (CHỈ HIỆN KHI STATE LÀ TRUE) */}
+              {showMapModal && (
+                <div
+                  style={{
+                    position: "fixed",
+                    top: 0,
+                    left: 0,
+                    width: "100vw",
+                    height: "100vh",
+                    borderColor: "#3895D0",
+                    backgroundColor: "rgba(0, 0, 0, 0.7)", // Làm tối nền phía sau tấm thiệp
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    zIndex: 9999, // Đảm bảo nổi lên trên cùng toàn bộ website
+                    backdropFilter: "blur(4px)", // Làm mờ nhẹ nền sau cho sang trọng
+                  }}
+                  onClick={() => setShowMapModal(false)} // Bấm ra ngoài vùng ảnh cũng sẽ tự đóng
+                >
+                  <div
+                    style={{
+                      position: "relative",
+                      maxWidth: "90%",
+                      maxHeight: "80%",
+                      backgroundColor: "#C6E2FF",
+                      padding: "5px",
+                      borderRadius: "12px",
+                      boxShadow: "0 10px 25px rgba(0,0,0,0.3)",
+                    }}
+                    onClick={(e) => e.stopPropagation()} // Ngăn sự kiện đóng khi bấm trực tiếp vào ảnh
+                  >
+                    {/* Nút X để đóng nhanh */}
+                    <button
+                      onClick={() => setShowMapModal(false)}
+                      style={{
+                        position: "absolute",
+                        top: "-15px",
+                        right: "-15px",
+                        width: "30px",
+                        height: "30px",
+                        borderRadius: "50%",
+                        backgroundColor: "#6C7B8B",
+                        color: "#fff",
+                        border: "none",
+                        cursor: "pointer",
+                        fontWeight: "bold",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        boxShadow: "0 2px 8px rgba(0,0,0,0.2)",
+                      }}
+                    >
+                      ✕
+                    </button>
+
+                    {/* ẢNH BẢN ĐỒ CỦA BẠN */}
+                    <img
+                      src={mapPng} // Bạn thay "heroPng" bằng biến ảnh sơ đồ/bản đồ thực tế của bạn nhé (Ví dụ: mapImagePng)
+                      alt="Sơ đồ đường đi"
+                      style={{
+                        width: "100%",
+                        maxHeight: "70vh",
+                        objectFit: "contain",
+                        borderRadius: "8px",
+                      }}
+                    />
+                  </div>
+                </div>
+              )}
+            </div>
+
           </div>
         </div>
 
@@ -379,14 +530,14 @@ export default function InvitationCard() {
           >
             <div
               style={{
-                backgroundColor: "#49a3f8",
-                border: "2.5px solid #ffffff",
+                backgroundColor: "#6495ED",
+                border: "2.5px solid #F0F8FF",
                 borderRadius: "26px",
                 padding: "8px 14px",
                 display: "flex",
                 alignItems: "center",
                 gap: "8px",
-                boxShadow: "0 0 0 2px #2583e6",
+                boxShadow: "0 0 0 1px #F0F8FF",
               }}
             >
               <div
@@ -401,15 +552,15 @@ export default function InvitationCard() {
                   style={{
                     fontSize: "13px",
                     fontWeight: 900,
-                    color: "#ff3366",
+                    color: "#F0F8FF",
                     textShadow:
-                      "1.2px 1.2px 0 #fff, -1.2px -1.2px 0 #fff, 1.2px -1.2px 0 #fff, -1.2px 1.2px 0 #fff",
+                      "1.2px 1.2px 0 #000000, -1.2px -1.2px 0 #000000, 1.2px -1.2px 0 #000000, -1.2px 1.2px 0 #000000",
                     letterSpacing: "0.02em",
                   }}
                 >
-                  bấm để gọi
+                  Contact us
                 </span>
-                <span
+                {/* <span
                   style={{
                     fontSize: "14px",
                     fontWeight: 900,
@@ -417,16 +568,16 @@ export default function InvitationCard() {
                     textShadow: "1px 1px 2px rgba(0,0,0,0.4)",
                   }}
                 >
-                  cho tui nhé
-                </span>
+                  If you arrived
+                </span> */}
               </div>
 
               <div
                 style={{
                   backgroundColor: "#ffffff",
                   borderRadius: "50%",
-                  width: "32px",
-                  height: "32px",
+                  width: "24px",
+                  height: "24px",
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
@@ -434,7 +585,19 @@ export default function InvitationCard() {
                   boxShadow: "0 2px 4px rgba(0,0,0,0.15)",
                 }}
               >
-                📱
+                <img
+                  src={phonePng}
+                  alt="Logo nền"
+                  style={{
+                    width: "100%",
+                    height: "100%",
+                    border: "none",
+                    objectFit: "contain",
+                    objectPosition: "center center",
+                    display: "block",
+                    backgroundColor: "#6495ED",
+                  }}
+                />
               </div>
             </div>
           </button>

@@ -4,6 +4,7 @@
     "name": "Anh Tuấn",
     "gender": "male",
     "greeting": "Kính mời Anh",
+    "adult": "1",
     "customNote": "Rất mong được đón tiếp anh tại buổi lễ."
   },
   {
@@ -11,6 +12,7 @@
     "name": "Chị Lan",
     "gender": "female",
     "greeting": "Kính mời Chị",
+     "adult": "1",
     "customNote": ""
   },
   {
@@ -18,6 +20,7 @@
     "name": "Bạn Minh",
     "gender": "other",
     "greeting": "Thân mời Bạn",
+     "adult": "0",
     "customNote": "Tới chụp với tao vài bô ảnh kỷ niệm nha!"
   }
 ]

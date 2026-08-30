@@ -1,8 +1,8 @@
 {
   "name": "Xuân Nghi",
   "phone": "0932059063",
-  "school": "Trường Đại học Y dược TP.HCM",
-  "campus": "Cơ sở chính",
+  "school": "Đại học Y dược TP.HCM",
+  "campus": "Sảnh tòa nhà 15 tầng",
   "event": {
     "title": "LỄ TỐT NGHIỆP",
     "location": "217 Đ. Hồng Bàng, Chợ Lớn, Hồ Chí Minh ",
@@ -11,8 +11,8 @@
     "day": "09",
     "month": "THÁNG 09",
     "year": "2026",
-    "dayOfWeek": "Thứ Bảy",
-    "time": "08:30"
+    "dayOfWeek": "Thứ Tư",
+    "time": "16:00 - 17:00"
   },
   "contacts": [
     {
