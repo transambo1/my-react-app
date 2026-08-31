@@ -1,11 +1,12 @@
-import React from 'react';
+import React from "react";
 import portraitBottomPng from "../assets/logo.png";
 import topDecorationPng from "../assets/hero.png";
 import { useInvitationData } from "../hooks/useInvitationData";
 import ContactModal from "./ContactModal";
 import invitationPng from "../assets/invi.jpg";
-import mapPng from "../assets/map.jpg";
-import phonePng from "../assets/phone-call.svg"
+import mapPng from "../assets/map1.jpeg";
+import phonePng from "../assets/phone-call.svg";
+
 export default function InvitationCard() {
   const {
     guestName,
@@ -159,13 +160,13 @@ export default function InvitationCard() {
                 paddingTop: "40px",
                 justifyContent: "center",
                 gap: "10px",
-                flexWrap: "wrap"
+                flexWrap: "wrap",
               }}
             >
               {/* Lời chào */}
               <p
                 style={{
-                  margin: 0, // Đưa margin về 0 để không bị lệch hàng dòng với chữ bên cạnh
+                  margin: 0,
                   fontSize: "13px",
                   fontWeight: 700,
                   color: "#460817",
@@ -180,7 +181,7 @@ export default function InvitationCard() {
               {/* Tên khách mời */}
               <h2
                 style={{
-                  margin: 0, // Đưa margin về 0 để đồng bộ trục dọc chuẩn xác
+                  margin: 0,
                   fontSize: "clamp(2.4rem, 8.5vw, 3.2rem)",
                   fontWeight: 400,
                   color: "#7d706c",
@@ -312,6 +313,7 @@ export default function InvitationCard() {
               {hostInfo.event?.location ||
                 "217 Đ. Hồng Bàng, Chợ Lớn, Hồ Chí Minh"}
             </p>
+
             <div>
               <div
                 className="flex"
@@ -322,10 +324,10 @@ export default function InvitationCard() {
                   paddingTop: "10px",
                   justifyContent: "center",
                   gap: "40px",
-                  flexWrap: "wrap"
+                  flexWrap: "wrap",
                 }}
               >
-                {/* 1. Nút Xem chỉ đường (Mở Google Maps link cũ của bạn) */}
+                {/* 1. Nút Xem chỉ đường */}
                 <a
                   href={mapSearchUrl}
                   target="_blank"
@@ -361,9 +363,9 @@ export default function InvitationCard() {
                   </span>
                 </a>
 
-                {/* 2. NÚT MỚI: BẤM ĐỂ HIỆN ẢNH BẢN ĐỒ */}
+                {/* 2. Nút bấm hiện ảnh bản đồ */}
                 <button
-                  onClick={() => setShowMapModal(true)} // Khi bấm sẽ kích hoạt hiện Modal
+                  onClick={() => setShowMapModal(true)}
                   style={{
                     background: "none",
                     border: "none",
@@ -404,78 +406,7 @@ export default function InvitationCard() {
                   </span>
                 </button>
               </div>
-
-              {/* MODAL POPUP HIỂN THỊ ẢNH BẢN ĐỒ (CHỈ HIỆN KHI STATE LÀ TRUE) */}
-              {showMapModal && (
-                <div
-                  style={{
-                    position: "fixed",
-                    top: 0,
-                    left: 0,
-                    width: "100vw",
-                    height: "100vh",
-                    borderColor: "#3895D0",
-                    backgroundColor: "rgba(0, 0, 0, 0.7)", // Làm tối nền phía sau tấm thiệp
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    zIndex: 9999, // Đảm bảo nổi lên trên cùng toàn bộ website
-                    backdropFilter: "blur(4px)", // Làm mờ nhẹ nền sau cho sang trọng
-                  }}
-                  onClick={() => setShowMapModal(false)} // Bấm ra ngoài vùng ảnh cũng sẽ tự đóng
-                >
-                  <div
-                    style={{
-                      position: "relative",
-                      maxWidth: "90%",
-                      maxHeight: "80%",
-                      backgroundColor: "#C6E2FF",
-                      padding: "5px",
-                      borderRadius: "12px",
-                      boxShadow: "0 10px 25px rgba(0,0,0,0.3)",
-                    }}
-                    onClick={(e) => e.stopPropagation()} // Ngăn sự kiện đóng khi bấm trực tiếp vào ảnh
-                  >
-                    {/* Nút X để đóng nhanh */}
-                    <button
-                      onClick={() => setShowMapModal(false)}
-                      style={{
-                        position: "absolute",
-                        top: "-15px",
-                        right: "-15px",
-                        width: "30px",
-                        height: "30px",
-                        borderRadius: "50%",
-                        backgroundColor: "#6C7B8B",
-                        color: "#fff",
-                        border: "none",
-                        cursor: "pointer",
-                        fontWeight: "bold",
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        boxShadow: "0 2px 8px rgba(0,0,0,0.2)",
-                      }}
-                    >
-                      ✕
-                    </button>
-
-                    {/* ẢNH BẢN ĐỒ CỦA BẠN */}
-                    <img
-                      src={mapPng} // Bạn thay "heroPng" bằng biến ảnh sơ đồ/bản đồ thực tế của bạn nhé (Ví dụ: mapImagePng)
-                      alt="Sơ đồ đường đi"
-                      style={{
-                        width: "100%",
-                        maxHeight: "70vh",
-                        objectFit: "contain",
-                        borderRadius: "8px",
-                      }}
-                    />
-                  </div>
-                </div>
-              )}
             </div>
-
           </div>
         </div>
 
@@ -488,121 +419,186 @@ export default function InvitationCard() {
             zIndex: 15,
           }}
         >
-          {/* Trái tim bay */}
-          <span
-            style={{
-              position: "absolute",
-              top: "35px",
-              right: "65px",
-              fontSize: "24px",
-              animation: "floatHeart 2.5s ease-in-out infinite",
-            }}
-          >
-            💖
-          </span>
-          <span
-            style={{
-              position: "absolute",
-              top: "75px",
-              right: "140px",
-              fontSize: "18px",
-              animation: "floatHeart 3.2s ease-in-out infinite 0.6s",
-            }}
-          >
-            💕
-          </span>
-
-          {/* Sticker bấm để gọi */}
-          <button
-            onClick={() => setShowCallModal(true)}
-            style={{
-              position: "absolute",
-              bottom: "35px",
-              right: "16px",
-              background: "transparent",
-              border: "none",
-              padding: 0,
-              cursor: "pointer",
-              filter: "drop-shadow(0 6px 14px rgba(0,0,0,0.25))",
-              animation: "bounceWobble 2.8s ease-in-out infinite",
-              outline: "none",
-            }}
-          >
-            <div
-              style={{
-                backgroundColor: "#6495ED",
-                border: "2.5px solid #F0F8FF",
-                borderRadius: "26px",
-                padding: "8px 14px",
-                display: "flex",
-                alignItems: "center",
-                gap: "8px",
-                boxShadow: "0 0 0 1px #F0F8FF",
-              }}
-            >
-              <div
+          {/* Ẩn tim và nút khi modal bản đồ mở */}
+          {!showMapModal && (
+            <>
+              {/* Trái tim bay */}
+              <span
                 style={{
-                  display: "flex",
-                  flexDirection: "column",
-                  alignItems: "center",
-                  lineHeight: 1.15,
+                  position: "absolute",
+                  top: "35px",
+                  right: "65px",
+                  fontSize: "24px",
+                  animation: "floatHeart 2.5s ease-in-out infinite",
                 }}
               >
-                <span
-                  style={{
-                    fontSize: "13px",
-                    fontWeight: 900,
-                    color: "#F0F8FF",
-                    textShadow:
-                      "1.2px 1.2px 0 #000000, -1.2px -1.2px 0 #000000, 1.2px -1.2px 0 #000000, -1.2px 1.2px 0 #000000",
-                    letterSpacing: "0.02em",
-                  }}
-                >
-                  Contact us
-                </span>
-                {/* <span
-                  style={{
-                    fontSize: "14px",
-                    fontWeight: 900,
-                    color: "#ffffff",
-                    textShadow: "1px 1px 2px rgba(0,0,0,0.4)",
-                  }}
-                >
-                  If you arrived
-                </span> */}
-              </div>
-
-              <div
+                💖
+              </span>
+              <span
                 style={{
-                  backgroundColor: "#ffffff",
-                  borderRadius: "50%",
-                  width: "24px",
-                  height: "24px",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  fontSize: "16px",
-                  boxShadow: "0 2px 4px rgba(0,0,0,0.15)",
+                  position: "absolute",
+                  top: "75px",
+                  right: "140px",
+                  fontSize: "18px",
+                  animation: "floatHeart 3.2s ease-in-out infinite 0.6s",
                 }}
               >
-                <img
-                  src={phonePng}
-                  alt="Logo nền"
+                💕
+              </span>
+
+              {/* Sticker bấm để gọi */}
+              <button
+                onClick={() => setShowCallModal(true)}
+                style={{
+                  position: "absolute",
+                  bottom: "35px",
+                  right: "16px",
+                  background: "transparent",
+                  border: "none",
+                  padding: 0,
+                  cursor: "pointer",
+                  filter: "drop-shadow(0 6px 14px rgba(0,0,0,0.25))",
+                  animation: "bounceWobble 2.8s ease-in-out infinite",
+                  outline: "none",
+                }}
+              >
+                <div
                   style={{
-                    width: "100%",
-                    height: "100%",
-                    border: "none",
-                    objectFit: "contain",
-                    objectPosition: "center center",
-                    display: "block",
                     backgroundColor: "#6495ED",
+                    border: "2.5px solid #F0F8FF",
+                    borderRadius: "26px",
+                    padding: "8px 14px",
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "8px",
+                    boxShadow: "0 0 0 1px #F0F8FF",
                   }}
-                />
-              </div>
-            </div>
-          </button>
+                >
+                  <div
+                    style={{
+                      display: "flex",
+                      flexDirection: "column",
+                      alignItems: "center",
+                      lineHeight: 1.15,
+                    }}
+                  >
+                    <span
+                      style={{
+                        fontSize: "13px",
+                        fontWeight: 900,
+                        color: "#F0F8FF",
+                        textShadow:
+                          "1.2px 1.2px 0 #000000, -1.2px -1.2px 0 #000000, 1.2px -1.2px 0 #000000, -1.2px 1.2px 0 #000000",
+                        letterSpacing: "0.02em",
+                      }}
+                    >
+                      Contact us
+                    </span>
+                  </div>
+
+                  <div
+                    style={{
+                      backgroundColor: "#ffffff",
+                      borderRadius: "50%",
+                      width: "24px",
+                      height: "24px",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      fontSize: "16px",
+                      boxShadow: "0 2px 4px rgba(0,0,0,0.15)",
+                    }}
+                  >
+                    <img
+                      src={phonePng}
+                      alt="Logo nền"
+                      style={{
+                        width: "100%",
+                        height: "100%",
+                        border: "none",
+                        objectFit: "contain",
+                        objectPosition: "center center",
+                        display: "block",
+                        backgroundColor: "#6495ED",
+                      }}
+                    />
+                  </div>
+                </div>
+              </button>
+            </>
+          )}
         </div>
       </div>
+
+      {/* MODAL POPUP HIỂN THỊ ẢNH BẢN ĐỒ (ĐƯA RA NGOÀI CÙNG SECTION) */}
+      {showMapModal && (
+        <div
+          style={{
+            position: "fixed",
+            top: 0,
+            left: 0,
+            width: "100vw",
+            height: "100vh",
+            borderColor: "#3895D0",
+            backgroundColor: "rgba(0, 0, 0, 0.7)",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            zIndex: 9999,
+            backdropFilter: "blur(4px)",
+          }}
+          onClick={() => setShowMapModal(false)}
+        >
+          <div
+            style={{
+              position: "relative",
+              maxWidth: "90%",
+              maxHeight: "80%",
+              backgroundColor: "#C6E2FF",
+              padding: "5px",
+              borderRadius: "12px",
+              boxShadow: "0 10px 25px rgba(0,0,0,0.3)",
+            }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Nút X để đóng nhanh */}
+            <button
+              onClick={() => setShowMapModal(false)}
+              style={{
+                position: "absolute",
+                top: "-15px",
+                right: "-15px",
+                width: "30px",
+                height: "30px",
+                borderRadius: "50%",
+                backgroundColor: "#6C7B8B",
+                color: "#fff",
+                border: "none",
+                cursor: "pointer",
+                fontWeight: "bold",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                boxShadow: "0 2px 8px rgba(0,0,0,0.2)",
+              }}
+            >
+              ✕
+            </button>
+
+            {/* ẢNH BẢN ĐỒ */}
+            <img
+              src={mapPng}
+              alt="Sơ đồ đường đi"
+              style={{
+                width: "100%",
+                maxHeight: "70vh",
+                objectFit: "contain",
+                borderRadius: "8px",
+              }}
+            />
+          </div>
+        </div>
+      )}
 
       {/* 5. POPUP MODAL TÁCH RIÊNG */}
       <ContactModal

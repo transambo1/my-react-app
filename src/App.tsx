@@ -3,7 +3,7 @@ import InvitationCard from './components/InvitationCard';
 import GallerySection from './components/GallerySection';
 import LetterSection from './components/LetterSection';
 import RsvpForm from './components/RsvpForm';
-
+import WishesSection from "./components/WishesSection";
 export default function App() {
   return (
     <main className="min-h-screen bg-[linear-gradient(to bottom, #f9f6f4, #ffffff, #f3f1ee)] text-slate-800 font-sans flex justify-center">
@@ -12,6 +12,7 @@ export default function App() {
         <InvitationCard />
         <LetterSection />
         <GallerySection />
+        <WishesSection />
         <RsvpForm />
       </div>
     </main>

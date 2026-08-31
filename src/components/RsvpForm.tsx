@@ -11,8 +11,9 @@ interface FormData {
   email: string;
 }
 
-// Thay mã formspree của bạn vào đây (hoặc để trống nếu test lưu local)
-const FORMSPREE_ENDPOINT = "https://formspree.io/f/xwlkkpnw";
+// Thay Web App URL Apps Script của bạn vào đây:
+const GOOGLE_SHEET_API_URL =
+  "https://script.google.com/macros/s/AKfycbyfYxboaLHgyD5F8KrfeD-hCRZsqgOxn3UguZvhC8Ek9EMZXEquZMfVHC1-pSJL1RkBIA/exec";
 
 export default function RsvpForm() {
   const searchParams = new URLSearchParams(window.location.search);
@@ -20,7 +21,6 @@ export default function RsvpForm() {
   const matchedGuest = guests.find((g) => g.slug === guestSlug);
   const defaultGuestName = matchedGuest?.name || searchParams.get("name") || "";
 
-  // Khởi tạo trực tiếp trong useState (Không dùng useEffect -> Hết lỗi ESLint)
   const [formData, setFormData] = useState<FormData>({
     name: defaultGuestName,
     wishes: "",
@@ -29,36 +29,74 @@ export default function RsvpForm() {
     email: "",
   });
 
+  const [errorMessage, setErrorMessage] = useState<string>("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
 
+  // LOGIC LỌC PHONE VÀ EMAIL
+  const validateForm = () => {
+    // 1. Kiểm tra Tên
+    if (!formData.name.trim()) {
+      setErrorMessage("Vui lòng điền tên của người thương nhé!");
+      return false;
+    }
+
+    // 2. Kiểm tra Số điện thoại (nếu có nhập)
+    const phoneRegex = /^(0|\+84)(3|5|7|8|9)[0-9]{8}$/;
+    const cleanPhone = formData.phone.replace(/\s+/g, ""); // Xoá khoảng trắng
+    if (cleanPhone && !phoneRegex.test(cleanPhone)) {
+      setErrorMessage("Số điện thoại không hợp lệ (Ví dụ: 0912345678)!");
+      return false;
+    }
+
+    // 3. Kiểm tra Email (nếu có nhập)
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (formData.email.trim() && !emailRegex.test(formData.email.trim())) {
+      setErrorMessage("Địa chỉ Email chưa đúng định dạng!");
+      return false;
+    }
+
+    setErrorMessage("");
+    return true;
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!formData.name.trim() || isSubmitting) return;
+    if (isSubmitting) return;
+
+    // Chạy kiểm tra dữ liệu trước khi gửi
+    if (!validateForm()) return;
 
     setIsSubmitting(true);
 
     try {
-      // 1. Gửi dữ liệu về email thông qua Formspree (nếu có cấu hình)
-      if (FORMSPREE_ENDPOINT && !FORMSPREE_ENDPOINT.includes("YOUR_FORM_ID")) {
-        await fetch(FORMSPREE_ENDPOINT, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Accept: "application/json",
-          },
-          body: JSON.stringify({
-            "Tên người thương": formData.name,
-            "Lời nhắn gửi": formData.wishes || "(Không có)",
-            "Trạng thái tham dự": formData.attending,
-            "Số điện thoại": formData.phone || "(Không có)",
-            "Email khách": formData.email || "(Không có)",
-            "Thời gian gửi": new Date().toLocaleString("vi-VN"),
-          }),
-        });
-      }
+      const formParams = new URLSearchParams();
+      formParams.append("timestamp", new Date().toLocaleString("vi-VN"));
+      formParams.append("name", formData.name.trim());
+      formParams.append("wishes", formData.wishes.trim() || "(Không có)");
+      formParams.append("attending", formData.attending);
+      formParams.append("phone", formData.phone.trim() || "(Không có)");
+      formParams.append("email", formData.email.trim() || "(Không có)");
 
-      // 2. Backup lưu vào LocalStorage
+      await fetch(GOOGLE_SHEET_API_URL, {
+        method: "POST",
+        mode: "no-cors",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
+        body: formParams.toString(),
+      });
+
+      window.dispatchEvent(
+        new CustomEvent("new_wish_submitted", {
+          detail: {
+            name: formData.name,
+            wishes: formData.wishes,
+          },
+        }),
+      );
+
+      // Backup LocalStorage
       const existing = JSON.parse(
         localStorage.getItem("rsvp_submissions") || "[]",
       );
@@ -73,7 +111,6 @@ export default function RsvpForm() {
       setIsSuccess(true);
     } catch (error) {
       console.error("Lỗi gửi form:", error);
-      // Vẫn thông báo thành công cho khách vì đã lưu local
       setIsSuccess(true);
     } finally {
       setIsSubmitting(false);
@@ -123,7 +160,6 @@ export default function RsvpForm() {
           boxSizing: "border-box",
         }}
       >
-        {/* LỜI NGỎ ĐẦU FORM */}
         <div
           style={{
             textAlign: "center",
@@ -133,45 +169,24 @@ export default function RsvpForm() {
             lineHeight: 1.6,
           }}
         >
-          <p
-            style={{
-              fontSize: "14.5px",
-              fontWeight: 600,
-              margin: "0 0 6px",
-            }}
-          >
+          <p style={{ fontSize: "14.5px", fontWeight: 600, margin: "0 0 6px" }}>
             Sự hiện diện của “người thương” sẽ là niềm hạnh phúc của mình.
           </p>
           <p
-            style={{
-              fontSize: "13.5px",
-              margin: "0 0 6px",
-              color: "#5c2028",
-            }}
+            style={{ fontSize: "13.5px", margin: "0 0 6px", color: "#5c2028" }}
           >
             Nếu tham dự, “người thương” để lại thông tin để{" "}
             {hostInfo.name ? hostInfo.name.split(" ").slice(-1)[0] : "mình"} có
             thể đón tiếp thật chu đáo.
           </p>
-          <p
-            style={{
-              fontSize: "14px",
-              fontWeight: 600,
-              margin: "0",
-            }}
-          >
+          <p style={{ fontSize: "14px", fontWeight: 600, margin: "0" }}>
             Cảm ơn “người thương”!
           </p>
         </div>
 
-        {/* FORM ĐIỀN */}
         <form
           onSubmit={handleSubmit}
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            gap: "14px",
-          }}
+          style={{ display: "flex", flexDirection: "column", gap: "14px" }}
         >
           {/* Tên */}
           <div>
@@ -180,9 +195,10 @@ export default function RsvpForm() {
               required
               placeholder="Tên người thương *"
               value={formData.name}
-              onChange={(e) =>
-                setFormData({ ...formData, name: e.target.value })
-              }
+              onChange={(e) => {
+                setFormData({ ...formData, name: e.target.value });
+                if (errorMessage) setErrorMessage("");
+              }}
               style={inputStyle}
             />
           </div>
@@ -245,11 +261,12 @@ export default function RsvpForm() {
           <div>
             <input
               type="tel"
-              placeholder="Số điện thoại"
+              placeholder="Số điện thoại (tuỳ chọn)"
               value={formData.phone}
-              onChange={(e) =>
-                setFormData({ ...formData, phone: e.target.value })
-              }
+              onChange={(e) => {
+                setFormData({ ...formData, phone: e.target.value });
+                if (errorMessage) setErrorMessage("");
+              }}
               style={inputStyle}
             />
           </div>
@@ -258,21 +275,37 @@ export default function RsvpForm() {
           <div>
             <input
               type="email"
-              placeholder="Email của bạn"
+              placeholder="Email nhận thông tin (tuỳ chọn)"
               value={formData.email}
-              onChange={(e) =>
-                setFormData({ ...formData, email: e.target.value })
-              }
+              onChange={(e) => {
+                setFormData({ ...formData, email: e.target.value });
+                if (errorMessage) setErrorMessage("");
+              }}
               style={inputStyle}
             />
           </div>
+
+          {/* HIỂN THỊ DÒNG BÁO LỖI NẾU NHẬP SAI PHONE/EMAIL */}
+          {errorMessage && (
+            <div
+              style={{
+                color: "#c0392b",
+                fontSize: "12px",
+                textAlign: "center",
+                fontWeight: 600,
+                fontFamily: "serif",
+              }}
+            >
+              ⚠️ {errorMessage}
+            </div>
+          )}
 
           {/* Nút gửi */}
           <button
             type="submit"
             disabled={isSubmitting}
             style={{
-              marginTop: "10px",
+              marginTop: "4px",
               width: "100%",
               backgroundColor: isSubmitting ? "#833e46" : "#520914",
               color: "#ffffff",
@@ -296,7 +329,6 @@ export default function RsvpForm() {
         </form>
       </div>
 
-      {/* POPUP THÔNG BÁO CẢM ƠN (KHÔNG DÙNG QR) */}
       {isSuccess && (
         <div
           style={{
@@ -347,9 +379,7 @@ export default function RsvpForm() {
             >
               ✕
             </button>
-
             <div style={{ fontSize: "40px", marginBottom: "8px" }}>💌✨</div>
-
             <h4
               style={{
                 margin: "0 0 8px",
@@ -361,19 +391,17 @@ export default function RsvpForm() {
             >
               Gửi Thành Công!
             </h4>
-
             <p
               style={{
                 margin: "0 0 12px",
                 fontSize: "14px",
                 lineHeight: 1.5,
-                color: "#4a3b32",
+                color: "#4a3536",
               }}
             >
               Cảm ơn <strong>{formData.name}</strong> rất nhiều vì đã gửi phản
               hồi và những lời chúc tốt đẹp.
             </p>
-
             <p
               style={{
                 margin: "0 0 20px",
@@ -384,7 +412,6 @@ export default function RsvpForm() {
             >
               Hẹn gặp bạn trong ngày lễ tốt nghiệp nhé! 💕
             </p>
-
             <button
               onClick={() => setIsSuccess(false)}
               style={{
