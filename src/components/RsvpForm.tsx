@@ -76,7 +76,7 @@ export default function RsvpForm() {
       formParams.append("wishes", formData.wishes.trim() || "(Không có)");
       formParams.append("attending", formData.attending);
       formParams.append("phone", formData.phone.trim() || "(Không có)");
-      formParams.append("email", formData.email.trim() || "(Không có)");
+      
 
       await fetch(GOOGLE_SHEET_API_URL, {
         method: "POST",
@@ -265,20 +265,6 @@ export default function RsvpForm() {
               value={formData.phone}
               onChange={(e) => {
                 setFormData({ ...formData, phone: e.target.value });
-                if (errorMessage) setErrorMessage("");
-              }}
-              style={inputStyle}
-            />
-          </div>
-
-          {/* Email */}
-          <div>
-            <input
-              type="email"
-              placeholder="Email nhận thông tin (tuỳ chọn)"
-              value={formData.email}
-              onChange={(e) => {
-                setFormData({ ...formData, email: e.target.value });
                 if (errorMessage) setErrorMessage("");
               }}
               style={inputStyle}
