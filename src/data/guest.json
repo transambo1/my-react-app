@@ -1,26 +1,106 @@
 [
   {
-    "slug": "anh-tuan",
-    "name": "Anh Tuấn",
-    "gender": "male",
-    "greeting": "Kính mời Anh",
-    "adult": "1",
-    "customNote": "Rất mong được đón tiếp anh tại buổi lễ."
-  },
-  {
-    "slug": "chi-lan",
-    "name": "Chị Lan",
-    "gender": "female",
-    "greeting": "Kính mời Chị",
-     "adult": "1",
-    "customNote": ""
-  },
-  {
-    "slug": "ban-minh",
-    "name": "Bạn Minh",
-    "gender": "other",
-    "greeting": "Thân mời Bạn",
-     "adult": "0",
-    "customNote": "Tới chụp với tao vài bô ảnh kỷ niệm nha!"
-  }
+  "slug": "gd-bac-huyen",
+  "name": "Gia đình Bác Thành & Bác Huyền",
+  "gender": "female",
+  "greeting": "Kính mời",
+  "adult": "1",
+  "customNote": ""
+},
+{
+  "slug": "co-trang",
+  "name": "Cô Trang",
+  "gender": "female",
+  "greeting": "Kính mời",
+  "adult": "1",
+  "customNote": ""
+},
+{
+  "slug": "ba-noi",
+  "name": "Bà Nội",
+  "gender": "female",
+  "greeting": "Kính mời",
+  "adult": "1",
+  "customNote": ""
+},
+{
+  "slug": "anh-huu-dat",
+  "name": "Anh Hữu Đạt",
+  "gender": "female",
+  "greeting": "Thân mời",
+  "adult": "1",
+  "customNote": ""
+},
+{
+  "slug": "anh-khanh",
+  "name": "Anh Khánh",
+  "gender": "female",
+  "greeting": "Thân mời",
+  "adult": "1",
+  "customNote": ""
+},
+{
+  "slug": "chi-katie",
+  "name": "Chị Katie",
+  "gender": "female",
+  "greeting": "Thân mời",
+  "adult": "1",
+  "customNote": ""
+},
+{
+  "slug": "chi-ngan",
+  "name": "Chị Ngân",
+  "gender": "female",
+  "greeting": "Thân mời",
+  "adult": "1",
+  "customNote": ""
+},
+{
+  "slug": "phuong-nguyen",
+  "name": "Bạn Phương Nguyên",
+  "gender": "female",
+  "greeting": "Thân mời",
+  "adult": "1",
+  "customNote": ""
+},
+{
+  "slug": "ba-nhum",
+  "name": "Bà Nhum Badminton",
+  "gender": "female",
+  "greeting": "Thân mời",
+  "adult": "1",
+  "customNote": ""
+},
+{
+  "slug": "chen-chen",
+  "name": "Anh em Chen Chen",
+  "gender": "female",
+  "greeting": "Thân mời",
+  "adult": "1",
+  "customNote": ""
+},
+{
+  "slug": "minh-anh",
+  "name": "Bạn Minh Anh",
+  "gender": "female",
+  "greeting": "Thân mời",
+  "adult": "1",
+  "customNote": ""
+},
+{
+  "slug": "anh-khoa",
+  "name": "Bạn Khoa",
+  "gender": "female",
+  "greeting": "Thân mời",
+  "adult": "1",
+  "customNote": ""
+},
+{
+  "slug": "tien-dat",
+  "name": "Bạn Đạt",
+  "gender": "female",
+  "greeting": "Thân mời",
+  "adult": "1",
+  "customNote": ""
+}
 ]

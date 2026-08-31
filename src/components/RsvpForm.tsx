@@ -119,12 +119,12 @@ export default function RsvpForm() {
 
   const inputStyle: React.CSSProperties = {
     width: "100%",
-    backgroundColor: "rgba(255, 255, 255, 0.7)",
+    backgroundColor: "#EEE8E2",
     border: "1.2px solid #5a141b",
     borderRadius: "9999px",
     padding: "10px 18px",
     fontSize: "14px",
-    color: "#460817",
+    color: "#0C1E42",
     fontFamily: '"Cormorant Garamond", "Times New Roman", serif',
     outline: "none",
     boxSizing: "border-box",
@@ -135,8 +135,7 @@ export default function RsvpForm() {
       style={{
         position: "relative",
         width: "100%",
-        backgroundColor: "#f7f4f1",
-        padding: "0 8px 30px",
+        backgroundColor: "white",
         boxSizing: "border-box",
       }}
     >
@@ -154,7 +153,7 @@ export default function RsvpForm() {
           width: "100%",
           maxWidth: "420px",
           borderRadius: "20px",
-          backgroundColor: "#f8f5f3",
+          backgroundColor: "#0C1E42",
           boxShadow: "0 18px 40px rgba(86,42,43,0.12)",
           padding: "36px 20px 32px",
           boxSizing: "border-box",
@@ -163,7 +162,7 @@ export default function RsvpForm() {
         <div
           style={{
             textAlign: "center",
-            color: "#4a121a",
+            color: "#EEE8E2",
             marginBottom: "28px",
             fontFamily: '"Cormorant Garamond", "Times New Roman", serif',
             lineHeight: 1.6,
@@ -173,7 +172,7 @@ export default function RsvpForm() {
             Sự hiện diện của “người thương” sẽ là niềm hạnh phúc của mình.
           </p>
           <p
-            style={{ fontSize: "13.5px", margin: "0 0 6px", color: "#5c2028" }}
+            style={{ fontSize: "13.5px", margin: "0 0 6px", color: "#EEE8E2" }}
           >
             Nếu tham dự, “người thương” để lại thông tin để{" "}
             {hostInfo.name ? hostInfo.name.split(" ").slice(-1)[0] : "mình"} có
@@ -234,12 +233,13 @@ export default function RsvpForm() {
                 WebkitAppearance: "none",
                 cursor: "pointer",
                 paddingRight: "36px",
+              
               }}
             >
-              <option value="Chắc chắn tham dự ✨">Chắc chắn tham dự ✨</option>
-              <option value="Có thể sẽ tham dự 🌿">Có thể sẽ tham dự 🌿</option>
-              <option value="Tiếc quá, mình bận mất rồi 💌">
-                Tiếc quá, mình bận mất rồi 💌
+              <option value="Chắc chắn tham dự " >Chắc chắn tham dự </option>
+            
+              <option value="Tiếc quá, mình bận mất rồi ">
+                Tiếc quá, mình bận mất rồi 
               </option>
             </select>
             <span
@@ -249,7 +249,7 @@ export default function RsvpForm() {
                 top: "50%",
                 transform: "translateY(-50%)",
                 pointerEvents: "none",
-                color: "#460817",
+                color: "#0C1E42",
                 fontSize: "10px",
               }}
             >
@@ -296,7 +296,7 @@ export default function RsvpForm() {
                 fontFamily: "serif",
               }}
             >
-              ⚠️ {errorMessage}
+               {errorMessage}
             </div>
           )}
 
@@ -307,12 +307,12 @@ export default function RsvpForm() {
             style={{
               marginTop: "4px",
               width: "100%",
-              backgroundColor: isSubmitting ? "#833e46" : "#520914",
-              color: "#ffffff",
+              backgroundColor: isSubmitting ? "#EEE8E2" : "#EEE8E2",
+              color: "#0C1E42",
               border: "none",
               borderRadius: "9999px",
               padding: "13px 0",
-              fontSize: "18px",
+              fontSize: "20px",
               fontWeight: 600,
               letterSpacing: "0.2em",
               textTransform: "uppercase",
@@ -379,13 +379,13 @@ export default function RsvpForm() {
             >
               ✕
             </button>
-            <div style={{ fontSize: "40px", marginBottom: "8px" }}>💌✨</div>
+            <div style={{ fontSize: "40px", marginBottom: "8px" }}></div>
             <h4
               style={{
                 margin: "0 0 8px",
                 fontSize: "20px",
                 fontWeight: 700,
-                color: "#460817",
+                color: "#0C1E42",
                 fontFamily: "serif",
               }}
             >

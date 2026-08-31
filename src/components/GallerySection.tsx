@@ -21,7 +21,7 @@ export default function GallerySection() {
       style={{
         position: "relative",
         width: "100%",
-        backgroundColor: "#f7f4f1",
+        backgroundColor: "white",
         padding: "0 8px 36px",
         boxSizing: "border-box",
       }}
@@ -49,7 +49,7 @@ export default function GallerySection() {
           width: "100%",
           maxWidth: "420px",
           borderRadius: "20px",
-          backgroundColor: "#ffffff",
+          backgroundColor: "#0C1E42",
           boxShadow: "0 18px 40px rgba(86,42,43,0.12)",
           padding: "32px 14px 28px",
           boxSizing: "border-box",
@@ -64,7 +64,7 @@ export default function GallerySection() {
               fontWeight: 700,
               letterSpacing: "0.28em",
               textTransform: "uppercase",
-              color: "#8a584c",
+              color: "#EEE8E2",
               display: "block",
               marginBottom: "4px",
             }}
@@ -77,7 +77,7 @@ export default function GallerySection() {
               fontSize: "clamp(2rem, 7vw, 2.6rem)",
               fontWeight: 400,
               fontStyle: "italic",
-              color: "#460817",
+              color: "#EEE8E2",
               fontFamily: '"Alex Brush", "Cormorant Garamond", cursive',
               lineHeight: 1.1,
             }}
@@ -109,7 +109,7 @@ export default function GallerySection() {
               style={{
                 fontSize: "12px",
                 fontWeight: 700,
-                color: "#460817",
+                color: "#0C1E42",
                 fontFamily: "serif",
                 textTransform: "uppercase",
                 letterSpacing: "0.08em",
@@ -374,7 +374,7 @@ export default function GallerySection() {
                   fontSize: "14px",
                   fontWeight: 600,
                   fontStyle: "italic",
-                  color: "#460817",
+                  color: "#0C1E42",
                   fontFamily: '"Cormorant Garamond", serif',
                   textAlign: "center",
                 }}

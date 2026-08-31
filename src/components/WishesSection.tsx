@@ -35,15 +35,17 @@ const FALLBACK_WISHES: WishItem[] = [
   },
 ];
 
+const AUTOPLAY_DURATION = 6000; // 6 giây đổi 1 lời chúc khi bật autoplay
+
 export default function WishesSection() {
   const [wishes, setWishes] = useState<WishItem[]>([]);
   const [currentIndex, setCurrentIndex] = useState<number>(0);
+  const [isPlaying, setIsPlaying] = useState<boolean>(true);
+  const [progress, setProgress] = useState<number>(0);
   const [showAllModal, setShowAllModal] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
-  // Xử lý cử chỉ vuốt chạm (Touch gesture)
-  const touchStartX = useRef<number>(0);
-  const touchEndX = useRef<number>(0);
+  const progressTimerRef = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
     async function fetchWishesFromSheet() {
@@ -62,7 +64,7 @@ export default function WishesSection() {
               name: item.name || "Ẩn danh",
               wishes: item.wishes,
               time: item.time || "",
-            }),
+            })
           );
 
           setWishes(formatted);
@@ -95,6 +97,7 @@ export default function WishesSection() {
           return [newEntry, ...prev];
         });
         setCurrentIndex(0);
+        setProgress(0);
       }
 
       setTimeout(() => {
@@ -109,36 +112,44 @@ export default function WishesSection() {
     };
   }, []);
 
+  // Xử lý chạy tiến trình Autoplay
+  useEffect(() => {
+    if (!isPlaying || wishes.length === 0) {
+      if (progressTimerRef.current) clearInterval(progressTimerRef.current);
+      return;
+    }
+
+    const interval = 50; // update mỗi 50ms
+    const step = (interval / AUTOPLAY_DURATION) * 100;
+
+    progressTimerRef.current = setInterval(() => {
+      setProgress((prev) => {
+        if (prev >= 100) {
+          setCurrentIndex((idx) => (idx + 1) % wishes.length);
+          return 0;
+        }
+        return prev + step;
+      });
+    }, interval);
+
+    return () => {
+      if (progressTimerRef.current) clearInterval(progressTimerRef.current);
+    };
+  }, [isPlaying, currentIndex, wishes.length]);
+
   const handleNext = () => {
     if (wishes.length === 0) return;
     setCurrentIndex((prev) => (prev + 1) % wishes.length);
+    setProgress(0);
   };
 
   const handlePrev = () => {
     if (wishes.length === 0) return;
     setCurrentIndex((prev) => (prev - 1 + wishes.length) % wishes.length);
+    setProgress(0);
   };
 
-  const handleTouchStart = (e: React.TouchEvent) => {
-    touchStartX.current = e.targetTouches[0].clientX;
-  };
-
-  const handleTouchMove = (e: React.TouchEvent) => {
-    touchEndX.current = e.targetTouches[0].clientX;
-  };
-
-  const handleTouchEnd = () => {
-    if (!touchStartX.current || !touchEndX.current) return;
-    const distance = touchStartX.current - touchEndX.current;
-    if (distance > 45) {
-      handleNext(); // Vuốt sang trái -> Thẻ tiếp theo
-    } else if (distance < -45) {
-      handlePrev(); // Vuốt sang phải -> Thẻ trước đó
-    }
-    touchStartX.current = 0;
-    touchEndX.current = 0;
-  };
-
+  const activeWish = wishes[currentIndex] || wishes[0];
   const total = wishes.length;
 
   return (
@@ -152,9 +163,17 @@ export default function WishesSection() {
       }}
     >
       <style>{`
-        @keyframes swipeCardIn {
-          from { opacity: 0; transform: scale(0.92) translateY(16px); }
-          to { opacity: 1; transform: scale(1) translateY(0); }
+        @keyframes spinWheel {
+          from { transform: rotate(0deg); }
+          to { transform: rotate(360deg); }
+        }
+        @keyframes soundWave {
+          0%, 100% { height: 6px; }
+          50% { height: 18px; }
+        }
+        @keyframes fadeTapeMessage {
+          from { opacity: 0; transform: translateY(6px); }
+          to { opacity: 1; transform: translateY(0); }
         }
         .custom-scrollbar::-webkit-scrollbar {
           width: 4px;
@@ -175,13 +194,13 @@ export default function WishesSection() {
           borderRadius: "20px",
           backgroundColor: "#ffffff",
           boxShadow: "0 18px 40px rgba(86,42,43,0.12)",
-          padding: "32px 18px 28px",
+          padding: "30px 18px 26px",
           boxSizing: "border-box",
           overflow: "hidden",
         }}
       >
         {/* HEADER */}
-        <div style={{ textAlign: "center", marginBottom: "22px" }}>
+        <div style={{ textAlign: "center", marginBottom: "20px" }}>
           <span
             style={{
               fontSize: "11px",
@@ -193,7 +212,7 @@ export default function WishesSection() {
               marginBottom: "4px",
             }}
           >
-            MESSAGES & LOVE
+            VINTAGE RADIO & TAPE
           </span>
           <h2
             style={{
@@ -206,7 +225,7 @@ export default function WishesSection() {
               lineHeight: 1.15,
             }}
           >
-            Xấp Thư Yêu Thương
+            Đài Phát Yêu Thương
           </h2>
           <div
             style={{
@@ -228,284 +247,325 @@ export default function WishesSection() {
               fontStyle: "italic",
             }}
           >
-            Đang chuẩn bị những tấm thư... ✨
+            Đang tải cuộn băng kỷ niệm... ✨
           </div>
         ) : (
           <>
-            {/* THANH THỐNG KÊ & XEM TẤT CẢ */}
+            {/* THÂN MÁY CASSETTE VINTAGE */}
             <div
               style={{
-                display: "flex",
-                justifyContent: "space-between",
-                alignItems: "center",
-                marginBottom: "16px",
-                padding: "0 4px",
+                backgroundColor: "#2c1216",
+                borderRadius: "20px",
+                padding: "16px 14px",
+                boxShadow: "inset 0 2px 6px rgba(255,255,255,0.15), 0 10px 24px rgba(44,18,22,0.25)",
+                border: "2px solid #4a1d23",
+                marginBottom: "18px",
               }}
             >
-              <span
+              {/* CỬA SỔ BĂNG CASSETTE (CASSETTE WINDOW) */}
+              <div
                 style={{
-                  fontSize: "12px",
-                  fontWeight: 700,
-                  color: "#460817",
-                  fontFamily: "serif",
-                  letterSpacing: "0.04em",
+                  backgroundColor: "#421c22",
+                  borderRadius: "14px",
+                  padding: "12px 14px",
+                  border: "1.5px solid #5a262e",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "space-between",
+                  marginBottom: "14px",
+                  position: "relative",
+                  overflow: "hidden",
                 }}
               >
-                LÁ THƯ {currentIndex + 1} / {total}
-              </span>
-              <button
-                onClick={() => setShowAllModal(true)}
-                style={{
-                  background: "none",
-                  border: "none",
-                  fontSize: "11.5px",
-                  color: "#8a584c",
-                  fontWeight: 600,
-                  cursor: "pointer",
-                  padding: 0,
-                  textDecoration: "underline",
-                }}
-              >
-                Xem tất cả ({total}) ➔
-              </button>
-            </div>
-
-            {/* KHU VỰC XẤP THẺ 3D (SWIPE STACK) */}
-            <div
-              style={{
-                position: "relative",
-                width: "100%",
-                height: "235px",
-                marginBottom: "20px",
-              }}
-              onTouchStart={handleTouchStart}
-              onTouchMove={handleTouchMove}
-              onTouchEnd={handleTouchEnd}
-            >
-              {/* Thẻ nền thứ 3 (Dưới cùng) */}
-              {total > 2 && (
+                {/* Bánh răng xoay bên trái */}
                 <div
                   style={{
-                    position: "absolute",
-                    inset: "0 18px",
-                    top: "16px",
-                    backgroundColor: "#f4ede8",
-                    borderRadius: "20px",
-                    border: "1px solid #ebdcd5",
-                    transform: "rotate(3deg) scale(0.92)",
-                    boxShadow: "0 4px 12px rgba(0,0,0,0.04)",
-                    zIndex: 1,
-                  }}
-                />
-              )}
-
-              {/* Thẻ nền thứ 2 (Ở giữa) */}
-              {total > 1 && (
-                <div
-                  style={{
-                    position: "absolute",
-                    inset: "0 10px",
-                    top: "8px",
-                    backgroundColor: "#fdf8f5",
-                    borderRadius: "20px",
-                    border: "1px solid #ebdcd5",
-                    transform: "rotate(-2deg) scale(0.96)",
-                    boxShadow: "0 6px 14px rgba(0,0,0,0.05)",
-                    zIndex: 2,
-                  }}
-                />
-              )}
-
-              {/* Thẻ chính hiện tại (Ở trên cùng) */}
-              {wishes[currentIndex] && (
-                <div
-                  key={wishes[currentIndex].id || currentIndex}
-                  style={{
-                    position: "absolute",
-                    inset: 0,
-                    backgroundColor: "#ffffff",
-                    borderRadius: "20px",
-                    padding: "20px 18px 16px",
-                    border: "1.5px solid #ebdcd5",
-                    boxShadow: "0 12px 28px rgba(70,8,23,0.1)",
+                    width: "44px",
+                    height: "44px",
+                    borderRadius: "50%",
+                    backgroundColor: "#f7f1eb",
+                    border: "3px dashed #8b555e",
                     display: "flex",
-                    flexDirection: "column",
-                    justifyContent: "space-between",
-                    zIndex: 3,
-                    animation: "swipeCardIn 0.28s ease-out",
-                    boxSizing: "border-box",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    animation: isPlaying ? "spinWheel 4s linear infinite" : "none",
+                    boxShadow: "0 2px 6px rgba(0,0,0,0.3)",
                   }}
                 >
-                  <div>
-                    {/* Header Thẻ */}
-                    <div
-                      style={{
-                        display: "flex",
-                        justifyContent: "space-between",
-                        alignItems: "center",
-                        marginBottom: "12px",
-                        borderBottom: "1px solid #f2e6e3",
-                        paddingBottom: "8px",
-                      }}
-                    >
+                  <div
+                    style={{
+                      width: "16px",
+                      height: "16px",
+                      borderRadius: "50%",
+                      backgroundColor: "#421c22",
+                    }}
+                  />
+                </div>
+
+                {/* Nhãn băng giữa & Sóng âm thanh */}
+                <div style={{ textAlign: "center", flex: 1, padding: "0 10px" }}>
+                  <span
+                    style={{
+                      fontSize: "10px",
+                      color: "#e8c9cf",
+                      fontFamily: "monospace",
+                      letterSpacing: "0.1em",
+                      textTransform: "uppercase",
+                      display: "block",
+                      marginBottom: "4px",
+                    }}
+                  >
+                    TRACK #{currentIndex + 1} OF {total}
+                  </span>
+
+                  {/* Sóng âm thanh mini */}
+                  <div
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      gap: "3px",
+                      height: "20px",
+                    }}
+                  >
+                    {[0.1, 0.4, 0.2, 0.6, 0.3, 0.5, 0.2].map((delay, idx) => (
                       <div
+                        key={idx}
                         style={{
-                          display: "flex",
-                          alignItems: "center",
-                          gap: "8px",
+                          width: "3px",
+                          backgroundColor: isPlaying ? "#f0b6bf" : "#7d424b",
+                          borderRadius: "2px",
+                          animation: isPlaying ? `soundWave 1.2s ease-in-out infinite` : "none",
+                          animationDelay: `${delay}s`,
+                          height: isPlaying ? "14px" : "6px",
+                          transition: "height 0.2s ease",
                         }}
-                      >
-                        <div
-                          style={{
-                            width: "32px",
-                            height: "32px",
-                            borderRadius: "50%",
-                            backgroundColor: "#520914",
-                            color: "#fff",
-                            display: "flex",
-                            alignItems: "center",
-                            justifyContent: "center",
-                            fontWeight: 700,
-                            fontSize: "13px",
-                          }}
-                        >
-                          {wishes[currentIndex].name.charAt(0).toUpperCase()}
-                        </div>
-                        <div>
-                          <h4
-                            style={{
-                              margin: 0,
-                              fontSize: "14px",
-                              fontWeight: 700,
-                              color: "#460817",
-                              fontFamily: "serif",
-                            }}
-                          >
-                            {wishes[currentIndex].name}
-                          </h4>
-                          {wishes[currentIndex].time && (
-                            <span
-                              style={{ fontSize: "11px", color: "#998580" }}
-                            >
-                              {wishes[currentIndex].time}
-                            </span>
-                          )}
-                        </div>
-                      </div>
-
-                      <span style={{ fontSize: "18px" }}>💌</span>
-                    </div>
-
-                    {/* Nội dung lời chúc */}
-                    <p
-                      style={{
-                        margin: 0,
-                        fontSize: "13.5px",
-                        lineHeight: 1.6,
-                        color: "#4a3536",
-                        fontFamily: '"Cormorant Garamond", serif',
-                        fontStyle: "italic",
-                        textAlign: "justify",
-                        maxHeight: "105px",
-                        overflowY: "auto",
-                      }}
-                      className="custom-scrollbar"
-                    >
-                      “{wishes[currentIndex].wishes}”
-                    </p>
+                      />
+                    ))}
                   </div>
+                </div>
 
-                  {/* Chân thẻ: Gợi ý vuốt */}
+                {/* Bánh răng xoay bên phải */}
+                <div
+                  style={{
+                    width: "44px",
+                    height: "44px",
+                    borderRadius: "50%",
+                    backgroundColor: "#f7f1eb",
+                    border: "3px dashed #8b555e",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    animation: isPlaying ? "spinWheel 4s linear infinite" : "none",
+                    boxShadow: "0 2px 6px rgba(0,0,0,0.3)",
+                  }}
+                >
+                  <div
+                    style={{
+                      width: "16px",
+                      height: "16px",
+                      borderRadius: "50%",
+                      backgroundColor: "#421c22",
+                    }}
+                  />
+                </div>
+              </div>
+
+              {/* MÀN HÌNH PHÁT NỘI DUNG LỜI CHÚC (OLED DISPLAY CARD) */}
+              <div
+                key={activeWish?.id || currentIndex}
+                style={{
+                  backgroundColor: "#fffdfa",
+                  borderRadius: "14px",
+                  padding: "16px 14px",
+                  boxShadow: "inset 0 1px 4px rgba(0,0,0,0.06)",
+                  animation: "fadeTapeMessage 0.25s ease-out",
+                  minHeight: "125px",
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "space-between",
+                }}
+              >
+                <div>
                   <div
                     style={{
                       display: "flex",
                       justifyContent: "space-between",
                       alignItems: "center",
-                      borderTop: "1px dashed #f0ded9",
-                      paddingTop: "6px",
-                      fontSize: "11px",
-                      color: "#998580",
+                      marginBottom: "6px",
                     }}
                   >
-                    <span>👈 Vuốt để đổi thư</span>
-                    <span>👉</span>
+                    <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
+                      <span style={{ fontSize: "13px" }}>🎙️</span>
+                      <h4
+                        style={{
+                          margin: 0,
+                          fontSize: "14px",
+                          fontWeight: 700,
+                          color: "#460817",
+                          fontFamily: "serif",
+                        }}
+                      >
+                        {activeWish?.name}
+                      </h4>
+                    </div>
+
+                    <span style={{ fontSize: "11px", color: "#998580" }}>
+                      {activeWish?.time || "Mới gửi"}
+                    </span>
                   </div>
-                </div>
-              )}
-            </div>
 
-            {/* BỘ NÚT BẤM ĐIỀU HƯỚNG DƯỚI THẺ */}
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                gap: "20px",
-              }}
-            >
-              <button
-                onClick={handlePrev}
-                style={{
-                  backgroundColor: "#faf4f0",
-                  color: "#460817",
-                  border: "1.2px solid #ecd8d2",
-                  borderRadius: "50%",
-                  width: "40px",
-                  height: "40px",
-                  fontSize: "16px",
-                  cursor: "pointer",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  boxShadow: "0 3px 8px rgba(70,8,23,0.08)",
-                }}
-              >
-                ◀
-              </button>
-
-              <div
-                style={{ display: "flex", gap: "6px", alignItems: "center" }}
-              >
-                {wishes.slice(0, 6).map((_, dotIdx) => (
-                  <div
-                    key={dotIdx}
+                  <p
                     style={{
-                      width: dotIdx === currentIndex % 6 ? "18px" : "6px",
-                      height: "6px",
-                      borderRadius: "3px",
-                      backgroundColor:
-                        dotIdx === currentIndex % 6 ? "#520914" : "#e0cfcb",
-                      transition: "all 0.25s ease",
+                      margin: 0,
+                      fontSize: "13px",
+                      lineHeight: 1.55,
+                      color: "#4a3536",
+                      fontFamily: '"Cormorant Garamond", serif',
+                      fontStyle: "italic",
+                      textAlign: "justify",
+                      maxHeight: "85px",
+                      overflowY: "auto",
+                    }}
+                    className="custom-scrollbar"
+                  >
+                    “{activeWish?.wishes}”
+                  </p>
+                </div>
+
+                {/* THANH TIẾN TRÌNH AUTOPLAY (PROGRESS BAR) */}
+                <div
+                  style={{
+                    marginTop: "10px",
+                    width: "100%",
+                    height: "3px",
+                    backgroundColor: "#f0e3e0",
+                    borderRadius: "2px",
+                    overflow: "hidden",
+                  }}
+                >
+                  <div
+                    style={{
+                      width: `${progress}%`,
+                      height: "100%",
+                      backgroundColor: "#520914",
+                      transition: "width 0.05s linear",
                     }}
                   />
-                ))}
+                </div>
               </div>
 
-              <button
-                onClick={handleNext}
+              {/* BỘ NÚT ĐIỀU KHIỂN AUDIO PLAYER (CONTROLS) */}
+              <div
                 style={{
-                  backgroundColor: "#520914",
-                  color: "#ffffff",
-                  border: "none",
-                  borderRadius: "50%",
-                  width: "40px",
-                  height: "40px",
-                  fontSize: "16px",
-                  cursor: "pointer",
                   display: "flex",
+                  justifyContent: "space-between",
                   alignItems: "center",
-                  justifyContent: "center",
-                  boxShadow: "0 4px 12px rgba(82,9,20,0.25)",
+                  marginTop: "14px",
+                  padding: "0 6px",
                 }}
               >
-                ▶
-              </button>
+                <button
+                  onClick={() => setShowAllModal(true)}
+                  style={{
+                    background: "rgba(255,255,255,0.12)",
+                    border: "none",
+                    borderRadius: "10px",
+                    padding: "6px 10px",
+                    color: "#f5dcd8",
+                    fontSize: "11.5px",
+                    cursor: "pointer",
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "4px",
+                  }}
+                >
+                  <span>📜</span> Danh bạ ({total})
+                </button>
+
+                {/* Cụm nút Play / Prev / Next */}
+                <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+                  <button
+                    onClick={handlePrev}
+                    style={{
+                      backgroundColor: "rgba(255,255,255,0.15)",
+                      color: "#ffffff",
+                      border: "none",
+                      borderRadius: "50%",
+                      width: "34px",
+                      height: "34px",
+                      fontSize: "13px",
+                      cursor: "pointer",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                    }}
+                  >
+                    ⏮
+                  </button>
+
+                  <button
+                    onClick={() => setIsPlaying(!isPlaying)}
+                    style={{
+                      backgroundColor: "#f7ede8",
+                      color: "#460817",
+                      border: "none",
+                      borderRadius: "50%",
+                      width: "42px",
+                      height: "42px",
+                      fontSize: "15px",
+                      cursor: "pointer",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      boxShadow: "0 4px 10px rgba(0,0,0,0.2)",
+                    }}
+                  >
+                    {isPlaying ? "⏸" : "▶"}
+                  </button>
+
+                  <button
+                    onClick={handleNext}
+                    style={{
+                      backgroundColor: "rgba(255,255,255,0.15)",
+                      color: "#ffffff",
+                      border: "none",
+                      borderRadius: "50%",
+                      width: "34px",
+                      height: "34px",
+                      fontSize: "13px",
+                      cursor: "pointer",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                    }}
+                  >
+                    ⏭
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            {/* CHÚ THÍCH NHỎ */}
+            <div style={{ textAlign: "center" }}>
+              <span
+                style={{
+                  fontSize: "12px",
+                  fontStyle: "italic",
+                  color: "#8c7572",
+                  fontFamily: '"Cormorant Garamond", serif',
+                }}
+              >
+                {isPlaying
+                  ? "Đài đang tự động chuyển tin nhắn sau 6s..."
+                  : "Đã tạm dừng phát, bấm nút ▶ để tiếp tục."}
+              </span>
             </div>
           </>
         )}
       </div>
 
-      {/* MODAL XEM TOÀN BỘ DANH SÁCH LỜI CHÚC */}
+      {/* MODAL XEM TOÀN BỘ DANH BẠ LỜI CHÚC (PLAYLIST) */}
       {showAllModal && (
         <div
           style={{
@@ -536,6 +596,7 @@ export default function WishesSection() {
             }}
             onClick={(e) => e.stopPropagation()}
           >
+            {/* Nút đóng */}
             <button
               onClick={() => setShowAllModal(false)}
               style={{
@@ -558,6 +619,7 @@ export default function WishesSection() {
               ✕
             </button>
 
+            {/* Tiêu đề Modal */}
             <div style={{ textAlign: "center", marginBottom: "16px" }}>
               <h3
                 style={{
@@ -568,13 +630,14 @@ export default function WishesSection() {
                   fontFamily: "serif",
                 }}
               >
-                Sổ Lưu Bút ({wishes.length})
+                Danh Bạ Bản Thu ({wishes.length})
               </h3>
               <p style={{ margin: 0, fontSize: "12px", color: "#888" }}>
-                Tất cả lời chúc gửi đến bạn
+                Chạm vào người gửi để nghe phát lại tin nhắn
               </p>
             </div>
 
+            {/* Danh sách cuộn toàn bộ */}
             <div
               className="custom-scrollbar"
               style={{
@@ -586,57 +649,67 @@ export default function WishesSection() {
                 maxHeight: "55vh",
               }}
             >
-              {wishes.map((item, idx) => (
-                <div
-                  key={item.id}
-                  onClick={() => {
-                    setCurrentIndex(idx);
-                    setShowAllModal(false);
-                  }}
-                  style={{
-                    backgroundColor: "#faf7f5",
-                    borderRadius: "16px",
-                    padding: "12px 14px",
-                    border: "1px solid #ede4df",
-                    cursor: "pointer",
-                  }}
-                >
+              {wishes.map((item, idx) => {
+                const isCurrent = idx === currentIndex;
+                return (
                   <div
+                    key={item.id}
+                    onClick={() => {
+                      setCurrentIndex(idx);
+                      setProgress(0);
+                      setShowAllModal(false);
+                    }}
                     style={{
-                      display: "flex",
-                      justifyContent: "space-between",
-                      alignItems: "center",
-                      marginBottom: "4px",
+                      backgroundColor: isCurrent ? "#520914" : "#faf7f5",
+                      color: isCurrent ? "#ffffff" : "#4a3536",
+                      borderRadius: "16px",
+                      padding: "12px 14px",
+                      border: `1px solid ${isCurrent ? "#520914" : "#ede4df"}`,
+                      cursor: "pointer",
+                      transition: "all 0.2s ease",
                     }}
                   >
-                    <span
+                    <div
                       style={{
-                        fontSize: "13.5px",
-                        fontWeight: 700,
-                        color: "#460817",
-                        fontFamily: "serif",
+                        display: "flex",
+                        justifyContent: "space-between",
+                        alignItems: "center",
+                        marginBottom: "4px",
                       }}
                     >
-                      {item.name}
-                    </span>
-                    <span style={{ fontSize: "11px", color: "#998580" }}>
-                      {item.time || "Mới gửi"}
-                    </span>
+                      <span
+                        style={{
+                          fontSize: "13.5px",
+                          fontWeight: 700,
+                          color: isCurrent ? "#ffffff" : "#460817",
+                          fontFamily: "serif",
+                        }}
+                      >
+                        {isCurrent ? "▶ " : ""}{item.name}
+                      </span>
+                      <span
+                        style={{
+                          fontSize: "11px",
+                          color: isCurrent ? "#f0d5d5" : "#998580",
+                        }}
+                      >
+                        {item.time || "Mới gửi"}
+                      </span>
+                    </div>
+                    <p
+                      style={{
+                        margin: 0,
+                        fontSize: "13px",
+                        lineHeight: 1.45,
+                        fontFamily: '"Cormorant Garamond", serif',
+                        fontStyle: "italic",
+                      }}
+                    >
+                      “{item.wishes}”
+                    </p>
                   </div>
-                  <p
-                    style={{
-                      margin: 0,
-                      fontSize: "13px",
-                      lineHeight: 1.45,
-                      color: "#4a3536",
-                      fontFamily: '"Cormorant Garamond", serif',
-                      fontStyle: "italic",
-                    }}
-                  >
-                    “{item.wishes}”
-                  </p>
-                </div>
-              ))}
+                );
+              })}
             </div>
           </div>
         </div>

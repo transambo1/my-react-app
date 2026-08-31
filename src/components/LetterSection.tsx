@@ -14,7 +14,7 @@ export default function LetterSection() {
       style={{
         position: "relative",
         width: "100%",
-        backgroundColor: "#f7f4f1",
+        backgroundColor: "white",
         padding: "0 8px 30px",
         boxSizing: "border-box",
       }}
@@ -56,7 +56,7 @@ export default function LetterSection() {
               fontSize: "clamp(1.5rem, 5vw, 1.85rem)",
               fontWeight: 500,
               fontStyle: "italic",
-              color: "#460817",
+              color: "#0C1E42",
               fontFamily: '"Cormorant Garamond", "Cinzel", "Georgia", serif',
               letterSpacing: "0.02em",
               lineHeight: 1.25,
@@ -82,7 +82,7 @@ export default function LetterSection() {
             flexDirection: "column",
             gap: "14px",
             textAlign: "justify",
-            color: "#4a3536",
+            color: "#0C1E42",
             fontFamily: '"Cormorant Garamond", "Times New Roman", serif',
             fontSize: "14.5px",
             lineHeight: 1.65,
@@ -116,7 +116,7 @@ export default function LetterSection() {
             style={{
               fontSize: "12px",
               fontStyle: "italic",
-              color: "#8c7572",
+              color: "#0C1E42",
               fontFamily: '"Cormorant Garamond", serif',
               marginBottom: "2px",
             }}
@@ -137,7 +137,7 @@ export default function LetterSection() {
                 fontSize: "clamp(2.4rem, 8vw, 3.2rem)",
                 lineHeight: 1,
                 fontWeight: 400,
-                color: "#460817",
+                color: "#0C1E42",
                 fontFamily:
                   '"Monsieur La Doulaise", "Alex Brush", "Great Vibes", cursive',
                 transform: "rotate(-3deg)", // Xoay nhẹ tạo cảm giác ký tay thật
@@ -149,19 +149,6 @@ export default function LetterSection() {
               {signatureName}
             </span>
 
-            {/* Trái tim nhỏ đính cạnh chữ ký */}
-            <span
-              style={{
-                position: "absolute",
-                top: "-4px",
-                right: "-12px",
-                fontSize: "13px",
-                color: "#ff5e7e",
-                transform: "rotate(12deg)",
-              }}
-            >
-              💕
-            </span>
           </div>
         </div>
       </div>

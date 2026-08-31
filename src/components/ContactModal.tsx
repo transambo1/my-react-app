@@ -83,7 +83,7 @@ export default function ContactModal({
               margin: "0 0 4px",
               fontSize: "18px",
               fontWeight: 700,
-              color: "#460817",
+              color: "#0C1E42",
               fontFamily: "serif",
             }}
           >
@@ -143,7 +143,7 @@ export default function ContactModal({
                   style={{
                     fontSize: "13px",
                     fontWeight: 600,
-                    color: "#460817",
+                    color: "#0C1E42",
                     letterSpacing: "0.02em",
                   }}
                 >
@@ -165,7 +165,7 @@ export default function ContactModal({
                     border: "none",
                     backgroundColor:
                       copiedPhone === person.phone ? "#cfcfcf" : "#ebe4df",
-                    color: copiedPhone === person.phone ? "#fff" : "#460817",
+                    color: copiedPhone === person.phone ? "#fff" : "#0C1E42",
                     padding: "7px 10px",
                     borderRadius: "10px",
                     fontSize: "12px",
@@ -181,7 +181,7 @@ export default function ContactModal({
                 <a
                   href={`tel:${person.phone}`}
                   style={{
-                    backgroundColor: "#460817",
+                    backgroundColor: "#0C1E42",
                     color: "#ffffff",
                     textDecoration: "none",
                     padding: "7px 12px",

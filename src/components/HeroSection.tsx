@@ -52,7 +52,7 @@ export default function HeroSection() {
           overflow: "hidden",
           borderRadius: "16px",
           backgroundColor: "#f8f5f3",
-          boxShadow: "0 18px 40px rgba(86,42,43,0.12)",
+       
         }}
       >
         {/* Background Layers */}
@@ -63,7 +63,7 @@ export default function HeroSection() {
             zIndex: 0,
             opacity: 0.4,
             background:
-              "radial-gradient(circle, rgba(255,255,255,1) 0%, rgba(240,240,245,0.5) 100%)",
+              "#EEE8E2",
           }}
         />
         <div
@@ -207,14 +207,14 @@ export default function HeroSection() {
                 margin: 0,
                 fontWeight: 900,
                 textTransform: "uppercase",
-                color: "#460817",
+                color: "#0C1E42",
                 fontFamily: '"Playlist Script"',
                 fontSize: "30px",
                 letterSpacing: "0.22em",
                 paddingLeft: "0.22em",
                 textShadow: "0 0.5px 1px rgba(70,8,23,0.15)",
                 /* Sử dụng text-stroke cùng màu để "đắp" thêm thịt cho nét chữ to ra */
-                WebkitTextStroke: "0.8px #460817",
+                WebkitTextStroke: "0.8px #0C1E42",
               }}
             >
               Graduation
