@@ -45,7 +45,7 @@ export default function WishesSection() {
   const [showAllModal, setShowAllModal] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
-  const progressTimerRef = useRef<NodeJS.Timeout | null>(null);
+ const progressTimerRef = useRef<number | null>(null);
 
   useEffect(() => {
     async function fetchWishesFromSheet() {
