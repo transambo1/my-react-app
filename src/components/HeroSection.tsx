@@ -1,7 +1,7 @@
 import hostInfo from "../data/hostInfo.json";
 import logoPng from "../assets/logo.png";
 import ribbonPng from "../assets/sash.webp";
-const heroPng = "public/photos/main.jpg";
+const heroPng = "/photos/main.jpg";
 export default function HeroSection() {
   const nameParts = hostInfo.name.split(" ");
 
