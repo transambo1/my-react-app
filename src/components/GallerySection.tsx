@@ -7,20 +7,20 @@ interface PhotoItem {
 
 // BỘ ẢNH LẤY TRỰC TIẾP TỪ PUBLIC/PHOTOS/
 const STATIC_PHOTOS: PhotoItem[] = [
-  { id: 1, url: "/photos/pic1.jpg" },
+ 
   { id: 2, url: "/photos/pic2.jpg" },
   { id: 3, url: "/photos/pic3.jpg" },
   { id: 4, url: "/photos/pic4.jpg" },
   { id: 5, url: "/photos/pic5.jpg" },
-  { id: 6, url: "/photos/pic6.jpg" },
-  { id: 7, url: "/photos/pic7.jpg" },
+  
+  { id: 7, url: "/photos/pic10.jpg" },
   { id: 8, url: "/photos/pic8.jpg" },
   { id: 9, url: "/photos/pic9.jpg" },
-  { id: 10, url: "/photos/pic10.jpg" },
-  { id: 11, url: "/photos/pic11.jpg" },
+  { id: 10, url: "/photos/pic7.jpg" },
+ 
   { id: 12, url: "/photos/pic12.jpg" },
   { id: 13, url: "/photos/pic13.jpg" },
-  { id: 14, url: "/photos/pic14.jpg" },
+
   { id: 15, url: "/photos/pic15.jpg" },
   { id: 16, url: "/photos/pic16.jpg" },
   { id: 17, url: "/photos/pic17.jpg" },
@@ -364,7 +364,7 @@ export default function GallerySection() {
               fontFamily: '"Cormorant Garamond", serif',
             }}
           >
-            “Xuân Nghi's Congratulation” ✨
+            “Xuân Nghi's Graduation” ✨
           </span>
         </div>
       </div>
