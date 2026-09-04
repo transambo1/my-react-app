@@ -16,14 +16,14 @@ const FALLBACK_WISHES: WishItem[] = [
     id: 1,
     name: "Lâm Thành",
     wishes:
-      "Chúc mừng tân cử nhân xuất sắc! Chúc em luôn vững bước và tỏa sáng rực rỡ trên con đường y nghiệp phía trước nhé! 🎓✨",
+      "Chúc mừng tân cử nhân xuất sắc! Chúc em luôn vững bước và tỏa sáng rực rỡ trên con đường y nghiệp phía trước nhé! ",
     time: "Vừa xong",
   },
   {
     id: 2,
     name: "Phương Lan",
     wishes:
-      "Tự hào về cậu rất nhiều. Mong mọi ước mơ và dự định trong tương lai của cậu đều thành hiện thực nhé bạn thân! 💕",
+      "Tự hào về cậu rất nhiều. Mong mọi ước mơ và dự định trong tương lai của cậu đều thành hiện thực nhé bạn thân! ",
     time: "Hôm qua",
   },
   {
@@ -112,14 +112,14 @@ export default function WishesSection() {
     };
   }, []);
 
-  // Xử lý chạy tiến trình Autoplay
+  // XỬ LÝ AUTOPLAY KHÔNG NHẢY CÓC: Bỏ currentIndex khỏi dependencies
   useEffect(() => {
-    if (!isPlaying || wishes.length === 0) {
+    if (!isPlaying || wishes.length <= 1) {
       if (progressTimerRef.current) clearInterval(progressTimerRef.current);
       return;
     }
 
-    const interval = 50; // update mỗi 50ms
+    const interval = 50; // cập nhật mỗi 50ms
     const step = (interval / AUTOPLAY_DURATION) * 100;
 
     progressTimerRef.current = setInterval(() => {
@@ -135,7 +135,7 @@ export default function WishesSection() {
     return () => {
       if (progressTimerRef.current) clearInterval(progressTimerRef.current);
     };
-  }, [isPlaying, currentIndex, wishes.length]);
+  }, [isPlaying, wishes.length]);
 
   const handleNext = () => {
     if (wishes.length === 0) return;
@@ -157,8 +157,7 @@ export default function WishesSection() {
       style={{
         position: "relative",
         width: "100%",
-        backgroundColor: "#f7f4f1",
-        padding: "0 8px 36px",
+        backgroundColor: "#ffffff",
         boxSizing: "border-box",
       }}
     >
@@ -179,7 +178,7 @@ export default function WishesSection() {
           width: 4px;
         }
         .custom-scrollbar::-webkit-scrollbar-thumb {
-          background: #d8c2be;
+          background: rgba(12, 30, 66, 0.2);
           border-radius: 4px;
         }
       `}</style>
@@ -191,9 +190,9 @@ export default function WishesSection() {
           margin: "0 auto",
           width: "100%",
           maxWidth: "420px",
-          borderRadius: "20px",
-          backgroundColor: "#ffffff",
-          boxShadow: "0 18px 40px rgba(86,42,43,0.12)",
+          // borderRadius: "20px",
+          backgroundColor: "#EEE8E2",
+          boxShadow: "0 18px 40px rgba(12, 30, 66, 0.08)",
           padding: "30px 18px 26px",
           boxSizing: "border-box",
           overflow: "hidden",
@@ -207,7 +206,7 @@ export default function WishesSection() {
               fontWeight: 700,
               letterSpacing: "0.26em",
               textTransform: "uppercase",
-              color: "#8a584c",
+              color: "#0C1E42",
               display: "block",
               marginBottom: "4px",
             }}
@@ -220,19 +219,19 @@ export default function WishesSection() {
               fontSize: "clamp(1.9rem, 7vw, 2.5rem)",
               fontWeight: 400,
               fontStyle: "italic",
-              color: "#460817",
+              color: "#0C1E42",
               fontFamily: '"Alex Brush", "Cormorant Garamond", cursive',
               lineHeight: 1.15,
             }}
           >
-            Đài Phát Yêu Thương
+            Những Lời Iu Thương
           </h2>
           <div
             style={{
               margin: "10px auto 0",
               width: "36px",
               height: "1px",
-              backgroundColor: "#d5c2be",
+              backgroundColor: "rgba(12, 30, 66, 0.2)",
             }}
           />
         </div>
@@ -242,33 +241,33 @@ export default function WishesSection() {
             style={{
               textAlign: "center",
               padding: "40px 0",
-              color: "#8a584c",
+              color: "#0C1E42",
               fontSize: "13px",
               fontStyle: "italic",
             }}
           >
-            Đang tải cuộn băng kỷ niệm... ✨
+            Đang tải cuộn băng kỷ niệm... 
           </div>
         ) : (
           <>
             {/* THÂN MÁY CASSETTE VINTAGE */}
             <div
               style={{
-                backgroundColor: "#2c1216",
+                backgroundColor: "#0C1E42",
                 borderRadius: "20px",
                 padding: "16px 14px",
-                boxShadow: "inset 0 2px 6px rgba(255,255,255,0.15), 0 10px 24px rgba(44,18,22,0.25)",
-                border: "2px solid #4a1d23",
+                boxShadow: "inset 0 2px 6px rgba(238, 232, 226, 0.15), 0 10px 24px rgba(12, 30, 66, 0.3)",
+                border: "2px solid #0C1E42",
                 marginBottom: "18px",
               }}
             >
-              {/* CỬA SỔ BĂNG CASSETTE (CASSETTE WINDOW) */}
+              {/* CỬA SỔ BĂNG CASSETTE */}
               <div
                 style={{
-                  backgroundColor: "#421c22",
+                  backgroundColor: "#EEE8E2",
                   borderRadius: "14px",
                   padding: "12px 14px",
-                  border: "1.5px solid #5a262e",
+                  border: "1.5px solid rgba(238, 232, 226, 0.2)",
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "space-between",
@@ -283,13 +282,13 @@ export default function WishesSection() {
                     width: "44px",
                     height: "44px",
                     borderRadius: "50%",
-                    backgroundColor: "#f7f1eb",
-                    border: "3px dashed #8b555e",
+                    backgroundColor: "#EEE8E2",
+                    border: "3px dashed #0C1E42",
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "center",
                     animation: isPlaying ? "spinWheel 4s linear infinite" : "none",
-                    boxShadow: "0 2px 6px rgba(0,0,0,0.3)",
+                    boxShadow: "0 2px 6px rgba(0,0,0,0.25)",
                   }}
                 >
                   <div
@@ -297,7 +296,7 @@ export default function WishesSection() {
                       width: "16px",
                       height: "16px",
                       borderRadius: "50%",
-                      backgroundColor: "#421c22",
+                      backgroundColor: "#0C1E42",
                     }}
                   />
                 </div>
@@ -307,7 +306,7 @@ export default function WishesSection() {
                   <span
                     style={{
                       fontSize: "10px",
-                      color: "#e8c9cf",
+                      color: "#0C1E42",
                       fontFamily: "monospace",
                       letterSpacing: "0.1em",
                       textTransform: "uppercase",
@@ -333,7 +332,7 @@ export default function WishesSection() {
                         key={idx}
                         style={{
                           width: "3px",
-                          backgroundColor: isPlaying ? "#f0b6bf" : "#7d424b",
+                          backgroundColor: "#0C1E42",
                           borderRadius: "2px",
                           animation: isPlaying ? `soundWave 1.2s ease-in-out infinite` : "none",
                           animationDelay: `${delay}s`,
@@ -351,13 +350,13 @@ export default function WishesSection() {
                     width: "44px",
                     height: "44px",
                     borderRadius: "50%",
-                    backgroundColor: "#f7f1eb",
-                    border: "3px dashed #8b555e",
+                    backgroundColor: "#EEE8E2",
+                    border: "3px dashed #0C1E42",
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "center",
                     animation: isPlaying ? "spinWheel 4s linear infinite" : "none",
-                    boxShadow: "0 2px 6px rgba(0,0,0,0.3)",
+                    boxShadow: "0 2px 6px rgba(0,0,0,0.25)",
                   }}
                 >
                   <div
@@ -365,20 +364,20 @@ export default function WishesSection() {
                       width: "16px",
                       height: "16px",
                       borderRadius: "50%",
-                      backgroundColor: "#421c22",
+                      backgroundColor: "#0C1E42",
                     }}
                   />
                 </div>
               </div>
 
-              {/* MÀN HÌNH PHÁT NỘI DUNG LỜI CHÚC (OLED DISPLAY CARD) */}
+              {/* MÀN HÌNH PHÁT NỘI DUNG LỜI CHÚC */}
               <div
                 key={activeWish?.id || currentIndex}
                 style={{
-                  backgroundColor: "#fffdfa",
+                  backgroundColor: "#EEE8E2",
                   borderRadius: "14px",
                   padding: "16px 14px",
-                  boxShadow: "inset 0 1px 4px rgba(0,0,0,0.06)",
+                  boxShadow: "inset 0 1px 4px rgba(12, 30, 66, 0.1)",
                   animation: "fadeTapeMessage 0.25s ease-out",
                   minHeight: "125px",
                   display: "flex",
@@ -396,13 +395,13 @@ export default function WishesSection() {
                     }}
                   >
                     <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
-                      <span style={{ fontSize: "13px" }}>🎙️</span>
+                   
                       <h4
                         style={{
                           margin: 0,
-                          fontSize: "14px",
+                          fontSize: "17px",
                           fontWeight: 700,
-                          color: "#460817",
+                          color: "#0C1E42",
                           fontFamily: "serif",
                         }}
                       >
@@ -410,7 +409,7 @@ export default function WishesSection() {
                       </h4>
                     </div>
 
-                    <span style={{ fontSize: "11px", color: "#998580" }}>
+                    <span style={{ fontSize: "11px", color: "rgba(12, 30, 66, 0.6)" }}>
                       {activeWish?.time || "Mới gửi"}
                     </span>
                   </div>
@@ -420,7 +419,7 @@ export default function WishesSection() {
                       margin: 0,
                       fontSize: "13px",
                       lineHeight: 1.55,
-                      color: "#4a3536",
+                      color: "#0C1E42",
                       fontFamily: '"Cormorant Garamond", serif',
                       fontStyle: "italic",
                       textAlign: "justify",
@@ -433,13 +432,13 @@ export default function WishesSection() {
                   </p>
                 </div>
 
-                {/* THANH TIẾN TRÌNH AUTOPLAY (PROGRESS BAR) */}
+                {/* THANH TIẾN TRÌNH AUTOPLAY */}
                 <div
                   style={{
                     marginTop: "10px",
                     width: "100%",
                     height: "3px",
-                    backgroundColor: "#f0e3e0",
+                    backgroundColor: "rgba(12, 30, 66, 0.15)",
                     borderRadius: "2px",
                     overflow: "hidden",
                   }}
@@ -448,14 +447,14 @@ export default function WishesSection() {
                     style={{
                       width: `${progress}%`,
                       height: "100%",
-                      backgroundColor: "#520914",
+                      backgroundColor: "#0C1E42",
                       transition: "width 0.05s linear",
                     }}
                   />
                 </div>
               </div>
 
-              {/* BỘ NÚT ĐIỀU KHIỂN AUDIO PLAYER (CONTROLS) */}
+              {/* BỘ NÚT ĐIỀU KHIỂN */}
               <div
                 style={{
                   display: "flex",
@@ -468,11 +467,11 @@ export default function WishesSection() {
                 <button
                   onClick={() => setShowAllModal(true)}
                   style={{
-                    background: "rgba(255,255,255,0.12)",
+                    background: "rgba(238, 232, 226, 0.12)",
                     border: "none",
                     borderRadius: "10px",
                     padding: "6px 10px",
-                    color: "#f5dcd8",
+                    color: "#EEE8E2",
                     fontSize: "11.5px",
                     cursor: "pointer",
                     display: "flex",
@@ -480,7 +479,7 @@ export default function WishesSection() {
                     gap: "4px",
                   }}
                 >
-                  <span>📜</span> Danh bạ ({total})
+                   Người thương ({total})
                 </button>
 
                 {/* Cụm nút Play / Prev / Next */}
@@ -488,8 +487,8 @@ export default function WishesSection() {
                   <button
                     onClick={handlePrev}
                     style={{
-                      backgroundColor: "rgba(255,255,255,0.15)",
-                      color: "#ffffff",
+                      backgroundColor: "rgba(238, 232, 226, 0.15)",
+                      color: "#EEE8E2",
                       border: "none",
                       borderRadius: "50%",
                       width: "34px",
@@ -507,8 +506,8 @@ export default function WishesSection() {
                   <button
                     onClick={() => setIsPlaying(!isPlaying)}
                     style={{
-                      backgroundColor: "#f7ede8",
-                      color: "#460817",
+                      backgroundColor: "#EEE8E2",
+                      color: "#0C1E42",
                       border: "none",
                       borderRadius: "50%",
                       width: "42px",
@@ -518,7 +517,7 @@ export default function WishesSection() {
                       display: "flex",
                       alignItems: "center",
                       justifyContent: "center",
-                      boxShadow: "0 4px 10px rgba(0,0,0,0.2)",
+                      boxShadow: "0 4px 10px rgba(0,0,0,0.25)",
                     }}
                   >
                     {isPlaying ? "⏸" : "▶"}
@@ -527,8 +526,8 @@ export default function WishesSection() {
                   <button
                     onClick={handleNext}
                     style={{
-                      backgroundColor: "rgba(255,255,255,0.15)",
-                      color: "#ffffff",
+                      backgroundColor: "rgba(238, 232, 226, 0.15)",
+                      color: "#EEE8E2",
                       border: "none",
                       borderRadius: "50%",
                       width: "34px",
@@ -552,26 +551,26 @@ export default function WishesSection() {
                 style={{
                   fontSize: "12px",
                   fontStyle: "italic",
-                  color: "#8c7572",
+                  color: "rgba(12, 30, 66, 0.75)",
                   fontFamily: '"Cormorant Garamond", serif',
                 }}
               >
                 {isPlaying
                   ? "Đài đang tự động chuyển tin nhắn sau 6s..."
-                  : "Đã tạm dừng phát, bấm nút ▶ để tiếp tục."}
+                  : "Đã tạm dừng phát, bấm nút  ▶  để tiếp tục."}
               </span>
             </div>
           </>
         )}
       </div>
 
-      {/* MODAL XEM TOÀN BỘ DANH BẠ LỜI CHÚC (PLAYLIST) */}
+      {/* MODAL XEM TOÀN BỘ DANH BẠ LỜI CHÚC */}
       {showAllModal && (
         <div
           style={{
             position: "fixed",
             inset: 0,
-            backgroundColor: "rgba(0, 0, 0, 0.65)",
+            backgroundColor: "rgba(12, 30, 66, 0.65)",
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
@@ -589,7 +588,7 @@ export default function WishesSection() {
               backgroundColor: "#ffffff",
               borderRadius: "24px",
               padding: "26px 18px 20px",
-              boxShadow: "0 20px 40px rgba(0,0,0,0.3)",
+              boxShadow: "0 20px 40px rgba(12, 30, 66, 0.25)",
               maxHeight: "80vh",
               display: "flex",
               flexDirection: "column",
@@ -603,13 +602,13 @@ export default function WishesSection() {
                 position: "absolute",
                 top: "14px",
                 right: "14px",
-                background: "#f3eee9",
+                background: "rgba(12, 30, 66, 0.08)",
                 border: "none",
                 borderRadius: "50%",
                 width: "28px",
                 height: "28px",
                 fontSize: "13px",
-                color: "#555",
+                color: "#0C1E42",
                 cursor: "pointer",
                 display: "flex",
                 alignItems: "center",
@@ -626,13 +625,13 @@ export default function WishesSection() {
                   margin: "0 0 4px",
                   fontSize: "18px",
                   fontWeight: 700,
-                  color: "#460817",
+                  color: "#0C1E42",
                   fontFamily: "serif",
                 }}
               >
-                Danh Bạ Bản Thu ({wishes.length})
+                Tổng hợp iu thương ({wishes.length})
               </h3>
-              <p style={{ margin: 0, fontSize: "12px", color: "#888" }}>
+              <p style={{ margin: 0, fontSize: "12px", color: "rgba(12, 30, 66, 0.65)" }}>
                 Chạm vào người gửi để nghe phát lại tin nhắn
               </p>
             </div>
@@ -660,11 +659,11 @@ export default function WishesSection() {
                       setShowAllModal(false);
                     }}
                     style={{
-                      backgroundColor: isCurrent ? "#520914" : "#faf7f5",
-                      color: isCurrent ? "#ffffff" : "#4a3536",
+                      backgroundColor: isCurrent ? "#0C1E42" : "#EEE8E2",
+                      color: isCurrent ? "#EEE8E2" : "#0C1E42",
                       borderRadius: "16px",
                       padding: "12px 14px",
-                      border: `1px solid ${isCurrent ? "#520914" : "#ede4df"}`,
+                      border: `1px solid ${isCurrent ? "#0C1E42" : "rgba(12, 30, 66, 0.08)"}`,
                       cursor: "pointer",
                       transition: "all 0.2s ease",
                     }}
@@ -681,7 +680,7 @@ export default function WishesSection() {
                         style={{
                           fontSize: "13.5px",
                           fontWeight: 700,
-                          color: isCurrent ? "#ffffff" : "#460817",
+                          color: isCurrent ? "#EEE8E2" : "#0C1E42",
                           fontFamily: "serif",
                         }}
                       >
@@ -690,7 +689,7 @@ export default function WishesSection() {
                       <span
                         style={{
                           fontSize: "11px",
-                          color: isCurrent ? "#f0d5d5" : "#998580",
+                          color: isCurrent ? "rgba(238, 232, 226, 0.75)" : "rgba(12, 30, 66, 0.55)",
                         }}
                       >
                         {item.time || "Mới gửi"}

@@ -152,7 +152,7 @@ export default function RsvpForm() {
           margin: "0 auto",
           width: "100%",
           maxWidth: "420px",
-          borderRadius: "20px",
+          // borderRadius: "20px",
           backgroundColor: "#0C1E42",
           boxShadow: "0 18px 40px rgba(86,42,43,0.12)",
           padding: "36px 20px 32px",

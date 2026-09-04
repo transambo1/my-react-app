@@ -1,6 +1,4 @@
 import React, { useState, useEffect } from "react";
-import portraitBottomPng from "../assets/logo.png";
-import topDecorationPng from "../assets/hero.png";
 import { useInvitationData } from "../hooks/useInvitationData";
 import ContactModal from "./ContactModal";
 import invitationPng from "../assets/invi1.jpg";
@@ -24,6 +22,15 @@ export default function InvitationCard() {
     hostInfo,
   } = useInvitationData();
   const [showMapModal, setShowMapModal] = React.useState(false);
+
+  // KHÓA CUỘN NỀN KHI MỞ MODAL BẢN ĐỒ HOẶC LIÊN HỆ
+  useEffect(() => {
+    if (showMapModal) {
+      document.body.style.overflow = "hidden";
+    } else if (!showCallModal) {
+      document.body.style.overflow = "unset";
+    }
+  }, [showMapModal, showCallModal]);
 
   // LOGIC ĐẾM NGƯỢC TỚI NGÀY 09/09/2026
   const [timeLeft, setTimeLeft] = useState({
@@ -63,8 +70,7 @@ export default function InvitationCard() {
       style={{
         position: "relative",
         width: "100%",
-        backgroundColor: "white",
-        padding: "0 8px",
+        backgroundColor: "#0C1E42",
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
@@ -80,10 +86,6 @@ export default function InvitationCard() {
           0%, 100% { transform: rotate(-3deg) scale(1) translateY(0px); }
           50% { transform: rotate(2deg) scale(1.04) translateY(-4px); }
         }
-        @keyframes floatHeart {
-          0%, 100% { transform: translateY(0) scale(1); opacity: 0.85; }
-          50% { transform: translateY(-8px) scale(1.15); opacity: 1; }
-        }
         @keyframes modalFadeIn {
           from { opacity: 0; transform: scale(0.92); }
           to { opacity: 1; transform: scale(1); }
@@ -97,41 +99,15 @@ export default function InvitationCard() {
           margin: "0 auto",
           width: "100%",
           maxWidth: "420px",
-          borderRadius: "20px",
           backgroundColor: "#0C1E42",
           overflow: "hidden",
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
-          paddingBottom: "85px",
+          paddingBottom: "55px",
         }}
       >
-        {/* 1. KHỐI TRANG TRÍ PHÍA TRÊN CÙNG */}
-        {topDecorationPng && (
-          <div
-            style={{
-              position: "absolute",
-              top: 0,
-              left: 0,
-              right: 0,
-              height: "70px",
-              zIndex: 5,
-              pointerEvents: "none",
-              overflow: "hidden",
-            }}
-          >
-            <div
-              style={{
-                width: "100%",
-                height: "100%",
-                background:
-                  "linear-gradient(to bottom, rgba(243,239,235,0.8), transparent)",
-              }}
-            />
-          </div>
-        )}
-
-        {/* 2. KHỐI BỌC THIỆP TRẮNG NẰM NỔI */}
+        {/* KHỐI BỌC THIỆP CHÍNH */}
         <div
           style={{
             position: "relative",
@@ -156,7 +132,7 @@ export default function InvitationCard() {
               width: "100%",
               maxWidth: "350px",
               borderRadius: "28px",
-              padding: "28px 16px 24px",
+              padding: "24px 16px",
               boxSizing: "border-box",
               boxShadow: "0 14px 35px rgba(0,0,0,0.25)",
               textAlign: "center",
@@ -165,28 +141,35 @@ export default function InvitationCard() {
               alignItems: "center",
             }}
           >
-            {/* Lời chào & Tên khách */}
+            {/* LỜI CHÀO & TÊN KHÁCH - CỐ ĐỊNH 1 HÀNG DƯỚI NÓN */}
             <div
               style={{
                 display: "flex",
                 flexDirection: "row",
-                alignItems: "center",
-                paddingTop: "120px",
+                alignItems: "center", 
                 justifyContent: "center",
-                gap: "8px",
-                flexWrap: "wrap",
+                paddingTop: "clamp(118px, 32vw, 134px)", 
+                gap: "10px",
+                flexWrap: "nowrap",
                 width: "100%",
+                maxWidth: "100%",
+                paddingLeft: "12px",
+                paddingRight: "12px",
+                boxSizing: "border-box",
+                overflow: "hidden",
               }}
             >
               <p
                 style={{
                   margin: 0,
-                  fontSize: "13px",
+                  fontSize: "clamp(11px, 3vw, 13px)",
                   fontWeight: 700,
                   color: "#0C1E42",
-                  letterSpacing: "0.22em",
+                  letterSpacing: "0.14em",
                   textTransform: "uppercase",
                   fontFamily: '"Cinzel", serif',
+                  whiteSpace: "nowrap",
+                  flexShrink: 0,
                 }}
               >
                 {greeting}:
@@ -195,11 +178,14 @@ export default function InvitationCard() {
               <h2
                 style={{
                   margin: 0,
-                  fontSize: "clamp(2.3rem, 8vw, 3rem)",
+                  fontSize: "clamp(1.75rem, 15vw, 2.3rem)",
                   fontWeight: 400,
                   color: "#121F49",
                   fontFamily: '"Alex Brush", "Monsieur La Doulaise", cursive',
-                  lineHeight: 1.15,
+                  lineHeight: 1.1,
+                  whiteSpace: "nowrap",
+                  textOverflow: "ellipsis",
+                  overflow: "hidden",
                 }}
               >
                 {guestName}
@@ -209,8 +195,8 @@ export default function InvitationCard() {
             {/* Thời gian */}
             <p
               style={{
-                margin: "4px 0 12px 0",
-                fontSize: "14px",
+                margin: "10px 0 12px 0",
+                fontSize: "13.5px",
                 fontWeight: 700,
                 color: "#0C1E42",
                 letterSpacing: "0.12em",
@@ -237,7 +223,7 @@ export default function InvitationCard() {
                   borderTop: "1.5px solid #0C1E42",
                   borderBottom: "1.5px solid #0C1E42",
                   padding: "4px 6px",
-                  fontSize: "13.5px",
+                  fontSize: "13px",
                   fontWeight: 700,
                   color: "#0C1E42",
                   letterSpacing: "0.08em",
@@ -266,7 +252,7 @@ export default function InvitationCard() {
                   borderTop: "1.5px solid #0C1E42",
                   borderBottom: "1.5px solid #0C1E42",
                   padding: "4px 6px",
-                  fontSize: "13.5px",
+                  fontSize: "13px",
                   fontWeight: 700,
                   color: "#0C1E42",
                   letterSpacing: "0.08em",
@@ -293,7 +279,7 @@ export default function InvitationCard() {
             <h3
               style={{
                 margin: "0 0 2px 0",
-                fontSize: "15px",
+                fontSize: "14.5px",
                 fontWeight: 700,
                 color: "#0C1E42",
                 letterSpacing: "0.05em",
@@ -306,7 +292,7 @@ export default function InvitationCard() {
             <p
               style={{
                 margin: "0 0 4px 0",
-                fontSize: "12.5px",
+                fontSize: "12px",
                 fontWeight: 600,
                 color: "#0C1E42",
                 letterSpacing: "0.05em",
@@ -420,7 +406,7 @@ export default function InvitationCard() {
               </button>
             </div>
 
-            {/* KHỐI ĐẾM NGƯỢC VÀ LỊCH LỄ TỐT NGHIỆP 09/09/2026 */}
+            {/* KHỐI ĐẾM NGƯỢC VÀ LỊCH LỄ TỐT NGHIỆP */}
             <div
               style={{
                 marginTop: "16px",
@@ -446,7 +432,7 @@ export default function InvitationCard() {
                 Until the big day
               </span>
 
-              {/* 1. CÁC Ô ĐẾM NGƯỢC THỜI GIAN (NGÀY - GIỜ - PHÚT - GIÂY) */}
+              {/* Ô ĐẾM NGƯỢC THỜI GIAN */}
               <div
                 style={{
                   display: "flex",
@@ -504,7 +490,7 @@ export default function InvitationCard() {
                 ))}
               </div>
 
-              {/* 2. TỜ LỊCH THÁNG 09/2026 KHOANH TRÒN NGÀY 09/09 */}
+              {/* TỜ LỊCH THÁNG 09/2026 */}
               <div
                 style={{
                   width: "100%",
@@ -517,7 +503,6 @@ export default function InvitationCard() {
                   boxSizing: "border-box",
                 }}
               >
-                {/* Tiêu đề Tháng */}
                 <div
                   style={{
                     textAlign: "center",
@@ -531,10 +516,9 @@ export default function InvitationCard() {
                     paddingBottom: "3px",
                   }}
                 >
-                  THÁNG 09 • 2026
+                  THÁNG 09 - 2026
                 </div>
 
-                {/* Hàng Thứ (T2 -> CN) */}
                 <div
                   style={{
                     display: "grid",
@@ -556,7 +540,6 @@ export default function InvitationCard() {
                   <span style={{ color: "#b91c1c" }}>CN</span>
                 </div>
 
-                {/* Lưới Ngày */}
                 <div
                   style={{
                     display: "grid",
@@ -569,8 +552,7 @@ export default function InvitationCard() {
                     color: "#2c3e50",
                   }}
                 >
-                  <span /> {/* Ô trống T2 trước ngày 01 */}
-
+                  <span />
                   {Array.from({ length: 30 }, (_, i) => i + 1).map((day) => {
                     const isTarget = day === 9;
                     const now = new Date();
@@ -648,7 +630,7 @@ export default function InvitationCard() {
           </div>
         </div>
 
-        {/* 3. NÚT GỌI (CONTACT US) NẰM GÓC DƯỚI */}
+        {/* NÚT GỌI (CONTACT US) */}
         {!showMapModal && (
           <button
             onClick={() => setShowCallModal(true)}
@@ -723,7 +705,7 @@ export default function InvitationCard() {
         )}
       </div>
 
-      {/* MODAL POPUP HIỂN THỊ ẢNH BẢN ĐỒ */}
+      {/* POPUP BẢN ĐỒ */}
       {showMapModal && (
         <div
           style={{
@@ -790,7 +772,7 @@ export default function InvitationCard() {
         </div>
       )}
 
-      {/* 5. POPUP MODAL TÁCH RIÊNG */}
+      {/* POPUP LIÊN HỆ */}
       <ContactModal
         isOpen={showCallModal}
         onClose={() => setShowCallModal(false)}

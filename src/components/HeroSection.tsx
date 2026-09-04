@@ -17,31 +17,63 @@ export default function HeroSection() {
         width: "100%",
         overflow: "hidden",
         boxSizing: "border-box",
+        backgroundColor: "#ffffff",
       }}
     >
-      {/* Keyframe hiệu ứng gió thổi đưa ra ngoài cùng section */}
       <style>{`
-        @keyframes windSwayStrong {
-          0% {
-            transform: rotate(0deg) skewX(0deg);
-          }
-          20% {
-            transform: rotate(5deg) skewX(2.5deg);
-          }
-          45% {
-            transform: rotate(-4.2deg) skewX(-2deg);
-          }
-          70% {
-            transform: rotate(3.5deg) skewX(1.8deg);
-          }
-          85% {
-            transform: rotate(-2deg) skewX(-1deg);
-          }
-          100% {
-            transform: rotate(0deg) skewX(0deg);
-          }
-        }
-      `}</style>
+  /* Khi mới vào: Ruy-băng thả từ trên trần xuống tự nhiên */
+  @keyframes ribbonDropEntrance {
+    0% {
+      opacity: 0;
+      transform: translateY(-30px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  /* Khung ngoài: Đung đưa nhẹ nhàng theo chiều gió */
+  @keyframes windSwaySwing {
+    0% {
+      transform: rotate(0deg) skewX(0deg);
+    }
+    25% {
+      transform: rotate(3.8deg) skewX(2.5deg);
+    }
+    50% {
+      transform: rotate(-3.2deg) skewX(-2deg);
+    }
+    75% {
+      transform: rotate(2.2deg) skewX(1.4deg);
+    }
+    100% {
+      transform: rotate(0deg) skewX(0deg);
+    }
+  }
+
+  /* Thẻ img bên trong: Uốn lượn nếp gấp theo chiều dọc 3D */
+  @keyframes verticalRibbonWave {
+    0% {
+      transform: rotateY(0deg) skewY(0deg) scaleY(1);
+    }
+    20% {
+      transform: rotateY(18deg) skewY(2.2deg) scaleY(1.02);
+    }
+    45% {
+      transform: rotateY(-14deg) skewY(-2deg) scaleY(0.98);
+    }
+    70% {
+      transform: rotateY(12deg) skewY(1.5deg) scaleY(1.01);
+    }
+    85% {
+      transform: rotateY(-8deg) skewY(-1deg) scaleY(0.99);
+    }
+    100% {
+      transform: rotateY(0deg) skewY(0deg) scaleY(1);
+    }
+  }
+`}</style>
 
       <div
         style={{
@@ -50,77 +82,48 @@ export default function HeroSection() {
           width: "100%",
           maxWidth: "420px",
           overflow: "hidden",
-          borderRadius: "16px",
-          backgroundColor: "#f8f5f3",
-       
+          backgroundColor: "#EEE8E2",
         }}
       >
-        {/* Background Layers */}
         <div
           style={{
             position: "absolute",
-            inset: 0,
-            zIndex: 0,
-            opacity: 0.4,
-            background:
-              "#EEE8E2",
-          }}
-        />
-        <div
-          style={{
-            position: "absolute",
-            inset: 0,
-            zIndex: 0,
-            background: "linear-gradient(to bottom, #f9f6f4, #ffffff, #f3f1ee)",
-          }}
-        />
-
-        <div
-          style={{
-            position: "absolute",
-            top: 0,
-            left: "14px", // Bạn có thể chỉnh lại thành "10px" hoặc "5px" nếu muốn nó sát lề trái hơn nữa
-            /* Tăng mạnh độ rộng của thẻ cha để tạo không gian cho ruy-băng béo lên */
-            width: "clamp(35px, 8vw, 55px)",
-            height: "clamp(260px, 68vw, 320px)",
+            top: "-5px",
+            left: "12px",
+            width: "70px",
             zIndex: 30,
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            filter: "drop-shadow(2px 6px 10px rgba(70,8,23,0.35))",
+            pointerEvents: "none",
             transformOrigin: "top center",
-            animation:
-              "windSwayStrong 6.2s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite",
-            margin: 0,
-            padding: 0,
+            perspective: "600px", // Kích hoạt không gian phối cảnh 3D
+            filter: "drop-shadow(3px 8px 14px rgba(12, 30, 66, 0.3))",
+            // Thả xuống trong 0.6s đầu, sau đó đung đưa theo nhịp gió 5.2s
+            animation: "ribbonDropEntrance 0.6s ease-out forwards, windSwaySwing 5.2s ease-in-out 0.6s infinite",
           }}
         >
           <img
             src={ribbonPng}
             alt="Ribbon decoration"
             style={{
-
-              top: 0,
-              left: 0,
-
-              height: "100%",
-              /* ĐỔI THÀNH contain để ảnh tự co giãn theo tỷ lệ gốc, không bị bóp dẹt */
-
-
-              verticalAlign: "top",
+              width: "100%",
+              height: "300px",
+              maxHeight: "640px",
+              objectFit: "cover",
+              objectPosition: "top center",
+              display: "block",
+              transformOrigin: "top center",
+              // Nhịp uốn lượn sóng dọc lệch pha 4.4s tạo độ mềm như lụa bay
+              animation: "verticalRibbonWave 4.4s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite",
             }}
           />
         </div>
-
-
 
         {/* 2. KHU VỰC HEADER & TYPOGRAPHY */}
         <div
           style={{
             position: "relative",
             zIndex: 10,
-            paddingLeft: "clamp(55px, 15vw, 68px)",
-            paddingRight: "8px",
+            paddingLeft: "clamp(64px, 17vw, 80px)", // Tăng nhẹ đệm trái để tránh cấn ruy-băng to
+            paddingRight: "10px",
             paddingTop: "24px",
             paddingBottom: "8px",
             display: "flex",
@@ -135,7 +138,7 @@ export default function HeroSection() {
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
-              gap: "12px", // Tăng nhẹ khoảng cách để bóng đổ không bị đè lên nhau
+              gap: "12px",
             }}
           >
             <img
@@ -145,8 +148,7 @@ export default function HeroSection() {
                 width: "50px",
                 height: "50px",
                 objectFit: "contain",
-                /* Sử dụng drop-shadow để bóng đổ theo viền trong suốt của logo PNG */
-                filter: "drop-shadow(0px 4px 10px rgba(56, 149, 208, 0.35)) drop-shadow(0px 1px 2px rgba(0, 0, 0, 0.1))",
+                filter: "drop-shadow(0px 4px 10px rgba(56, 149, 208, 0.35))",
               }}
             />
             <div
@@ -165,8 +167,7 @@ export default function HeroSection() {
                   letterSpacing: "0.18em",
                   textTransform: "uppercase",
                   paddingBottom: "4px",
-                  /* Hiệu ứng bóng đổ đa tầng giúp chữ nổi bật và mượt mà */
-                  textShadow: "0px 3px 6px rgba(56, 149, 208, 0.3), 0px 1px 2px rgba(0, 0, 0, 0.1)",
+                  textShadow: "0px 3px 6px rgba(56, 149, 208, 0.3)",
                 }}
               >
                 Đại Học Y Dược
@@ -177,17 +178,15 @@ export default function HeroSection() {
                   fontWeight: 700,
                   letterSpacing: "0.22em",
                   textTransform: "uppercase",
-                  /* Bóng nhẹ hơn cho dòng chữ nhỏ để tránh bị nhòe chữ */
                   textShadow: "0px 2px 4px rgba(56, 149, 208, 0.25)",
                 }}
               >
-                Thanh pho Ho Chi Minh
+                Thành phố Hồ Chí Minh
               </span>
             </div>
           </div>
 
-
-          {/* Typography: Graduation + Ceremony */}
+          {/* Typography: Graduation + Invitation */}
           <div
             style={{
               position: "relative",
@@ -212,8 +211,6 @@ export default function HeroSection() {
                 fontSize: "30px",
                 letterSpacing: "0.22em",
                 paddingLeft: "0.22em",
-                textShadow: "0 0.5px 1px rgba(70,8,23,0.15)",
-                /* Sử dụng text-stroke cùng màu để "đắp" thêm thịt cho nét chữ to ra */
                 WebkitTextStroke: "0.8px #0C1E42",
               }}
             >
@@ -240,8 +237,6 @@ export default function HeroSection() {
             >
               Invitation
             </span>
-
-
           </div>
         </div>
 
@@ -262,7 +257,7 @@ export default function HeroSection() {
               overflow: "hidden",
               borderRadius: "24px",
               backgroundColor: "#ffffff",
-              boxShadow: "0 12px 24px rgba(70,8,23,0.14)",
+              boxShadow: "0 12px 24px rgba(12, 30, 66, 0.12)",
             }}
           >
             <img
@@ -284,8 +279,7 @@ export default function HeroSection() {
                 right: 0,
                 bottom: 0,
                 height: "90px",
-                background:
-                  "linear-gradient(to top, rgba(15,8,9,0.5), transparent)",
+                background: "linear-gradient(to top, rgba(12, 30, 66, 0.65), transparent)",
               }}
             />
 
@@ -305,7 +299,7 @@ export default function HeroSection() {
                   lineHeight: 1,
                   fontSize: "clamp(1.8rem, 6vw, 2.4rem)",
                   fontFamily: '"Monsieur La Doulaise", "Segoe Script", cursive',
-                  textShadow: "0 2px 4px rgba(0,0,0,0.7)",
+                  textShadow: "0 2px 6px rgba(0,0,0,0.8)",
                 }}
               >
                 {lastName}
@@ -319,19 +313,19 @@ export default function HeroSection() {
           style={{
             position: "relative",
             zIndex: 10,
-            padding: "16px 8px 24px",
+            padding: "10px 8px 18px",
             textAlign: "center",
-            color: "#6d1115",
+            color: "#0C1E42",
           }}
         >
           <p
             style={{
               margin: 0,
-              fontSize: "clamp(12px, 3.2vw, 14px)", // Tăng kích thước chữ
+              fontSize: "clamp(12px, 3.2vw, 14px)",
               fontWeight: 400,
               textTransform: "uppercase",
               letterSpacing: "0.22em",
-              paddingLeft: "0.32em", // Cân bằng khoảng cách căn giữa
+              paddingLeft: "0.32em",
               lineHeight: 1.4,
             }}
           >
@@ -340,11 +334,11 @@ export default function HeroSection() {
           <p
             style={{
               margin: "6px 0 0 0",
-              fontSize: "clamp(12px, 3.2vw, 14px)", // Tăng kích thước chữ
+              fontSize: "clamp(12px, 3.2vw, 14px)",
               fontWeight: 400,
               textTransform: "uppercase",
               letterSpacing: "0.22em",
-              paddingLeft: "0.32em", // Cân bằng khoảng cách căn giữa
+              paddingLeft: "0.32em",
               lineHeight: 1.4,
             }}
           >

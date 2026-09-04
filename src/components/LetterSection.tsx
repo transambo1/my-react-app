@@ -15,7 +15,7 @@ export default function LetterSection() {
         position: "relative",
         width: "100%",
         backgroundColor: "white",
-        padding: "0 8px 30px",
+  
         boxSizing: "border-box",
       }}
     >
@@ -25,8 +25,8 @@ export default function LetterSection() {
           margin: "0 auto",
           width: "100%",
           maxWidth: "420px",
-          borderRadius: "20px",
-          backgroundColor: "#ffffff",
+          // borderRadius: "20px",
+          backgroundColor: "#EEE8E2",
           boxShadow: "0 18px 40px rgba(86,42,43,0.12)",
           padding: "36px 22px 32px",
           boxSizing: "border-box",

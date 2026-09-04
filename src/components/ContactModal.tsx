@@ -1,4 +1,4 @@
-
+import { useEffect } from "react";
 import type { ContactPerson } from "../hooks/useInvitationData";
 
 interface ContactModalProps {
@@ -18,6 +18,18 @@ export default function ContactModal({
   copiedPhone,
   onCopyPhone,
 }: ContactModalProps) {
+  // KHÓA CUỘN TRANG NGOÀI KHI MODAL MỞ
+  useEffect(() => {
+    if (!isOpen) return;
+
+    const originalOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+
+    return () => {
+      document.body.style.overflow = originalOverflow;
+    };
+  }, [isOpen]);
+
   if (!isOpen) return null;
 
   return (
@@ -77,7 +89,6 @@ export default function ContactModal({
 
         {/* Header Popup */}
         <div style={{ textAlign: "center", marginBottom: "16px" }}>
-          <div style={{ fontSize: "32px", marginBottom: "4px" }}>🎓📞</div>
           <h4
             style={{
               margin: "0 0 4px",
@@ -191,7 +202,7 @@ export default function ContactModal({
                     display: "flex",
                     alignItems: "center",
                     gap: "4px",
-                    boxShadow: "0 2px 6px rgba(70,8,23,0.25)",
+                    boxShadow: "0 2px 6px rgba(12, 30, 66, 0.25)",
                   }}
                 >
                   Gọi

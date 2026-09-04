@@ -12,52 +12,64 @@ export default function GallerySection() {
   const [selectedPhoto, setSelectedPhoto] = useState<PhotoItem | null>(null);
   const photos: PhotoItem[] = galleryData.photos || [];
 
-  // Tách 4 ảnh đầu cho Story Slider ngang, các ảnh còn lại đưa vào Bento Grid
-  const storyPhotos = photos.slice(0, 4);
-  const gridPhotos = photos.slice(4);
+  // Lọc các ảnh hợp lệ có url
+  const validPhotos = photos.filter((p) => p.url && p.url.trim() !== "");
+  const filmPhotos = validPhotos.slice(0, 5);
+  const gridPhotos = validPhotos.slice(5);
+
+  // Nhân đôi để trượt mượt mà vô tận
+  const marqueeList = [...filmPhotos, ...filmPhotos];
 
   return (
     <section
       style={{
         position: "relative",
         width: "100%",
-        backgroundColor: "white",
-        padding: "0 8px 36px",
+        backgroundColor: "#ffffff",
         boxSizing: "border-box",
       }}
     >
       <style>{`
-        /* Ẩn thanh cuộn mặc định nhưng vẫn vuốt mượt */
-        .no-scrollbar::-webkit-scrollbar {
-          display: none;
+        /* Chuyển động cuộn film từ trái qua phải liên tục */
+        @keyframes filmScrollLeftToRight {
+          0% { transform: translateX(-50%); }
+          100% { transform: translateX(0%); }
         }
-        .no-scrollbar {
-          -ms-overflow-style: none;
-          scrollbar-width: none;
+
+        .film-track {
+          display: flex;
+          align-items: center;
+          width: max-content;
+          animation: filmScrollLeftToRight 28s linear infinite;
         }
+
+        .film-track:hover {
+          animation-play-state: paused;
+        }
+
         @keyframes fadeInZoom {
           from { opacity: 0; transform: scale(0.95); }
           to { opacity: 1; transform: scale(1); }
         }
       `}</style>
 
-      {/* KHUNG CARD CHÍNH */}
+      {/* KHUNG CARD CHÍNH - MÀU NAVY #0C1E42 */}
       <div
         style={{
           position: "relative",
           margin: "0 auto",
           width: "100%",
           maxWidth: "420px",
-          borderRadius: "20px",
+          // borderRadius: "20px",
           backgroundColor: "#0C1E42",
-          boxShadow: "0 18px 40px rgba(86,42,43,0.12)",
+          boxShadow: "0 18px 40px rgba(12, 30, 66, 0.28)",
           padding: "32px 14px 28px",
           boxSizing: "border-box",
           overflow: "hidden",
         }}
       >
-        {/* 1. HEADER NGHỆ THUẬT */}
-        <div style={{ textAlign: "center", marginBottom: "24px" }}>
+        {/* HEADER */}
+        <div style={{ textAlign: "center", marginBottom: "22px" }}>
           <span
             style={{
               fontSize: "11px",
@@ -89,114 +101,125 @@ export default function GallerySection() {
               margin: "10px auto 0",
               width: "40px",
               height: "1px",
-              backgroundColor: "#d5c2be",
+              backgroundColor: "rgba(238, 232, 226, 0.4)",
             }}
           />
         </div>
 
-        {/* 2. SLIDER NGANG PHONG CÁCH TẠP CHÍ (HORIZONTAL SNAP CAROUSEL) */}
-        <div style={{ marginBottom: "26px" }}>
+        {/* KHUNG CUỘN PHIM NÂNG SÁNG VỚI TÔNG KEM #EEE8E2 */}
+        <div
+          style={{
+            position: "relative",
+            width: "calc(100% + 28px)",
+            marginLeft: "-14px",
+            marginBottom: "26px",
+            overflow: "hidden",
+            backgroundColor: "#122754", // Xanh navy sáng hơn, không bị đen chìm
+            padding: "10px 0",
+            borderTop: "1.5px solid rgba(238, 232, 226, 0.35)",
+            borderBottom: "1.5px solid rgba(238, 232, 226, 0.35)",
+            boxShadow: "0 8px 24px rgba(0, 0, 0, 0.25)",
+          }}
+        >
+          {/* Lỗ đục cuộn phim hàng trên - Màu #EEE8E2 sắc nét */}
           <div
             style={{
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center",
-              marginBottom: "10px",
-              padding: "0 4px",
+              height: "12px",
+              width: "100%",
+              marginBottom: "8px",
+              backgroundImage:
+                "radial-gradient(ellipse at center, #EEE8E2 45%, transparent 50%)",
+              backgroundSize: "16px 8px",
+              backgroundRepeat: "repeat-x",
+              backgroundPosition: "center",
             }}
-          >
-            <span
-              style={{
-                fontSize: "12px",
-                fontWeight: 700,
-                color: "#0C1E42",
-                fontFamily: "serif",
-                textTransform: "uppercase",
-                letterSpacing: "0.08em",
-              }}
-            >
-              Highlight Stories
-            </span>
-            <span
-              style={{
-                fontSize: "11px",
-                color: "#998580",
-                fontStyle: "italic",
-              }}
-            >
-              Vuốt sang phải ➔
-            </span>
-          </div>
+          />
 
-          <div
-            className="no-scrollbar"
-            style={{
-              display: "flex",
-              gap: "12px",
-              overflowX: "auto",
-              scrollSnapType: "x mandatory",
-              paddingBottom: "6px",
-            }}
-          >
-            {storyPhotos.map((item, idx) => (
+          {/* Dải ảnh trượt */}
+          <div className="film-track">
+            {marqueeList.map((item, idx) => (
               <div
-                key={item.id || idx}
+                key={`${item.id}-${idx}`}
                 onClick={() => setSelectedPhoto(item)}
                 style={{
-                  flex: "0 0 160px",
-                  height: "220px",
-                  borderRadius: "16px",
-                  overflow: "hidden",
                   position: "relative",
-                  scrollSnapAlign: "start",
+                  flex: "0 0 175px",
+                  height: "122px",
+                  margin: "0 8px",
                   cursor: "pointer",
-                  boxShadow: "0 8px 18px rgba(70,8,23,0.12)",
-                  border: "2px solid #fdfbf9",
-                  transform: idx % 2 === 0 ? "rotate(-1deg)" : "rotate(1.5deg)",
+                  backgroundColor: "#EEE8E2", // Khung nền màu kem sáng nổi bật
+                  borderRadius: "8px",
+                  padding: "5px",
+                  boxSizing: "border-box",
+                  boxShadow: "0 6px 14px rgba(0,0,0,0.3)",
                   transition: "transform 0.2s ease",
                 }}
               >
-                <img
-                  src={item.url}
-                  alt={item.caption || "Story"}
-                  style={{
-                    width: "100%",
-                    height: "100%",
-                    objectFit: "cover",
-                    display: "block",
-                  }}
-                />
+                {/* Vùng hiển thị ảnh bên trong */}
                 <div
                   style={{
-                    position: "absolute",
-                    inset: 0,
-                    background:
-                      "linear-gradient(to top, rgba(70,8,23,0.7) 0%, transparent 60%)",
-                    display: "flex",
-                    alignItems: "flex-end",
-                    padding: "10px",
-                    boxSizing: "border-box",
+                    position: "relative",
+                    width: "100%",
+                    height: "100%",
+                    borderRadius: "4px",
+                    overflow: "hidden",
+                    backgroundColor: "#0C1E42",
                   }}
                 >
-                  <p
+                  <img
+                    src={item.url}
+                    alt={item.caption || "Film Frame"}
+                    onError={(e) => {
+                      e.currentTarget.style.display = "none";
+                    }}
                     style={{
-                      margin: 0,
-                      color: "#ffffff",
-                      fontSize: "11.5px",
-                      fontFamily: "serif",
-                      fontWeight: 600,
-                      lineHeight: 1.2,
+                      width: "100%",
+                      height: "100%",
+                      objectFit: "cover",
+                      display: "block",
+                      filter: "brightness(1.03) contrast(1.02)",
+                    }}
+                  />
+
+                  {/* Mã số cuộn phim vintage */}
+                  <span
+                    style={{
+                      position: "absolute",
+                      bottom: "4px",
+                      right: "6px",
+                      backgroundColor: "rgba(12, 30, 66, 0.7)",
+                      color: "#EEE8E2",
+                      padding: "1px 4px",
+                      borderRadius: "3px",
+                      fontSize: "8.5px",
+                      fontFamily: "monospace",
+                      letterSpacing: "0.06em",
+                      pointerEvents: "none",
                     }}
                   >
-                    {item.caption || `Khoảnh khắc #${idx + 1}`}
-                  </p>
+                    #{String((idx % filmPhotos.length) + 1).padStart(2, "0")}🎞️
+                  </span>
                 </div>
               </div>
             ))}
           </div>
+
+          {/* Lỗ đục cuộn phim hàng dưới - Màu #EEE8E2 sắc nét */}
+          <div
+            style={{
+              height: "12px",
+              width: "100%",
+              marginTop: "8px",
+              backgroundImage:
+                "radial-gradient(ellipse at center, #EEE8E2 45%, transparent 50%)",
+              backgroundSize: "16px 8px",
+              backgroundRepeat: "repeat-x",
+              backgroundPosition: "center",
+            }}
+          />
         </div>
 
-        {/* 3. BENTO MOSAIC GRID ĐAN XEN BẤT ĐỐI XỨNG */}
+        {/* BENTO MOSAIC GRID ĐAN XEN */}
         <div
           style={{
             display: "grid",
@@ -206,9 +229,8 @@ export default function GallerySection() {
           }}
         >
           {gridPhotos.map((item, index) => {
-            // Tạo kiểu dáng bất đối xứng theo chu kỳ
-            const isTall = index % 5 === 0; // Chiếm 2 hàng dọc
-            const isWide = index % 5 === 3; // Chiếm 2 cột ngang
+            const isTall = index % 5 === 0;
+            const isWide = index % 5 === 3;
 
             return (
               <div
@@ -221,9 +243,9 @@ export default function GallerySection() {
                   overflow: "hidden",
                   position: "relative",
                   cursor: "pointer",
-                  backgroundColor: "#f5f0eb",
-                  boxShadow: "0 4px 12px rgba(0,0,0,0.06)",
-                  border: "1.5px solid #ffffff",
+                  backgroundColor: "rgba(238, 232, 226, 0.12)",
+                  boxShadow: "0 4px 12px rgba(0,0,0,0.2)",
+                  border: "1.5px solid rgba(238, 232, 226, 0.25)",
                 }}
               >
                 <img
@@ -244,7 +266,6 @@ export default function GallerySection() {
                   }
                 />
 
-                {/* Badge đính kèm caption mờ góc dưới */}
                 {item.caption && (
                   <div
                     style={{
@@ -254,17 +275,18 @@ export default function GallerySection() {
                       right: 0,
                       padding: "6px 8px",
                       background:
-                        "linear-gradient(to top, rgba(0,0,0,0.6), transparent)",
+                        "linear-gradient(to top, rgba(12, 30, 66, 0.9), transparent)",
                     }}
                   >
                     <span
                       style={{
-                        color: "#fff",
+                        color: "#EEE8E2",
                         fontSize: "10px",
                         whiteSpace: "nowrap",
                         overflow: "hidden",
                         textOverflow: "ellipsis",
                         display: "block",
+                        fontFamily: "serif",
                       }}
                     >
                       {item.caption}
@@ -276,7 +298,7 @@ export default function GallerySection() {
           })}
         </div>
 
-        {/* 4. TEM TRANG TRÍ POLAROID DƯỚI CÙNG */}
+        {/* CHÚ THÍCH TRANG TRÍ */}
         <div
           style={{
             marginTop: "20px",
@@ -288,22 +310,23 @@ export default function GallerySection() {
             style={{
               fontSize: "12px",
               fontStyle: "italic",
-              color: "#8c7572",
+              color: "#EEE8E2",
+              opacity: 0.85,
               fontFamily: '"Cormorant Garamond", serif',
             }}
           >
-            “Chạm vào từng bức ảnh để xem trọn vẹn nhé!” ✨
+            “Chạm vào từng khung hình để xem trọn vẹn kỷ niệm!” ✨
           </span>
         </div>
       </div>
 
-      {/* 5. LIGHTBOX MODAL PHÓNG TO ẢNH CAO CẤP */}
+      {/* LIGHTBOX MODAL PHÓNG TO ẢNH (BLUR BACKDROP GIỮ NGUYÊN) */}
       {selectedPhoto && (
         <div
           style={{
             position: "fixed",
             inset: 0,
-            backgroundColor: "rgba(0, 0, 0, 0.85)",
+            backgroundColor: "rgba(12, 30, 66, 0.75)",
             backdropFilter: "blur(6px)",
             display: "flex",
             flexDirection: "column",
@@ -315,20 +338,19 @@ export default function GallerySection() {
           }}
           onClick={() => setSelectedPhoto(null)}
         >
-          {/* Nút đóng */}
           <button
             onClick={() => setSelectedPhoto(null)}
             style={{
               position: "absolute",
               top: "20px",
               right: "20px",
-              background: "rgba(255, 255, 255, 0.2)",
-              border: "none",
+              background: "rgba(238, 232, 226, 0.2)",
+              border: "1px solid rgba(238, 232, 226, 0.4)",
               borderRadius: "50%",
               width: "36px",
               height: "36px",
-              color: "#ffffff",
-              fontSize: "18px",
+              color: "#EEE8E2",
+              fontSize: "16px",
               cursor: "pointer",
               display: "flex",
               alignItems: "center",
@@ -338,13 +360,12 @@ export default function GallerySection() {
             ✕
           </button>
 
-          {/* Khung ảnh Polaroid phóng to */}
           <div
             style={{
               position: "relative",
               maxWidth: "92vw",
               maxHeight: "80vh",
-              backgroundColor: "#ffffff",
+              backgroundColor: "#EEE8E2",
               padding: "10px 10px 18px",
               borderRadius: "18px",
               boxShadow: "0 24px 50px rgba(0,0,0,0.5)",
