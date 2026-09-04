@@ -1,10 +1,10 @@
 import hostInfo from "../data/hostInfo.json";
 import logoPng from "../assets/logo.png";
-import heroPng from "../../public/photos/main.jpg";
 import ribbonPng from "../assets/sash.webp";
-
+const heroPng = "public/photos/main.jpg";
 export default function HeroSection() {
   const nameParts = hostInfo.name.split(" ");
+
   const lastName =
     nameParts.length > 1
       ? `${nameParts[nameParts.length - 2]} ${nameParts[nameParts.length - 1]}`
