@@ -1,6 +1,6 @@
 import hostInfo from "../data/hostInfo.json";
 import logoPng from "../assets/logo.png";
-import heroPng from "../assets/main.jpg";
+import heroPng from "../../public/photos/main.jpg";
 import ribbonPng from "../assets/sash.webp";
 
 export default function HeroSection() {
