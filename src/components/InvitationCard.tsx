@@ -144,51 +144,48 @@ export default function InvitationCard() {
             {/* LỜI CHÀO & TÊN KHÁCH - CỐ ĐỊNH 1 HÀNG DƯỚI NÓN */}
             <div
               style={{
-                display: "flex",
-                flexDirection: "row",
-                alignItems: "center", 
-                justifyContent: "center",
-                paddingTop: "clamp(118px, 32vw, 134px)", 
-                gap: "10px",
-                flexWrap: "nowrap",
+                paddingTop: "clamp(118px, 32vw, 134px)",
+                paddingLeft: "16px",
+                paddingRight: "16px",
                 width: "100%",
                 maxWidth: "100%",
-                paddingLeft: "12px",
-                paddingRight: "12px",
                 boxSizing: "border-box",
-                overflow: "hidden",
+                textAlign: "center",
               }}
             >
-              <p
-                style={{
-                  margin: 0,
-                  fontSize: "clamp(11px, 3vw, 13px)",
-                  fontWeight: 700,
-                  color: "#0C1E42",
-                  letterSpacing: "0.14em",
-                  textTransform: "uppercase",
-                  fontFamily: '"Cinzel", serif',
-                  whiteSpace: "nowrap",
-                  flexShrink: 0,
-                }}
-              >
-                {greeting}:
-              </p>
-
               <h2
                 style={{
                   margin: 0,
-                  fontSize: "clamp(1.75rem, 15vw, 2.3rem)",
+                  fontSize: "clamp(1.5rem, 6vw, 2.1rem)",
                   fontWeight: 400,
                   color: "#121F49",
                   fontFamily: '"Alex Brush", "Monsieur La Doulaise", cursive',
-                  lineHeight: 1.1,
-                  whiteSpace: "nowrap",
-                  textOverflow: "ellipsis",
-                  overflow: "hidden",
+                  lineHeight: 1.3,
+                  wordBreak: "keep-all",
+                  overflowWrap: "break-word",
+                  textAlign: "center",
                 }}
               >
-                {guestName}
+                {/* LỜI CHÀO NẰM NGAY ĐẦU DÒNG CÙNG HÀNG */}
+                <span
+                  style={{
+                    display: "inline-block",
+                    fontSize: "clamp(10.5px, 2.8vw, 12.5px)",
+                    fontWeight: 700,
+                    color: "#0C1E42",
+                    letterSpacing: "0.14em",
+                    textTransform: "uppercase",
+                    fontFamily: '"Cinzel", serif',
+                    verticalAlign: "middle",
+                    marginRight: "8px",
+                    transform: "translateY(-2px)", // Cân quang học trục ngang với font chữ viết tay
+                  }}
+                >
+                  {greeting}:
+                </span>
+
+                {/* TÊN KHÁCH MỜI NỐI TIẾP LIỀN MẠCH, DÀI SẼ TỰ XUỐNG DÒNG DƯỚI */}
+                <span>{guestName}</span>
               </h2>
             </div>
 
