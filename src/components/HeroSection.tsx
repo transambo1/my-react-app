@@ -118,7 +118,7 @@ export default function HeroSection() {
           />
         </div>
 
-        {/* 2. KHU VỰC HEADER & TYPOGRAPHY */}
+        {/* 2. KHU VỰC HEADER & TYPOGRAPHYY */}
         <div
           style={{
             position: "relative",
@@ -132,7 +132,7 @@ export default function HeroSection() {
             alignItems: "center",
           }}
         >
-          {/* Logo Trường */}
+          {/* Logo Trườngg */}
           <div
             style={{
               marginBottom: "6px",

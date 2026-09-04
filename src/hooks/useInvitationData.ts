@@ -17,7 +17,7 @@ export function useInvitationData() {
   const guestSlug = searchParams.get("to");
   const matchedGuest = guests.find((g) => g.slug === guestSlug);
   const guestName =
-    matchedGuest?.name || searchParams.get("name") || "Lâm Thành";
+    matchedGuest?.name || searchParams.get("name") || "Người thương";
   const greeting = matchedGuest?.greeting || "THÂN MỜI";
 
   // 2. Format thời gian sự kiện

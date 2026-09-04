@@ -102,5 +102,21 @@
   "greeting": "Thân mời",
   "adult": "1",
   "customNote": ""
+},
+{
+  "slug": "tuong-vy",
+  "name": "Bạn Tường Vy",
+  "gender": "female",
+  "greeting": "Thân mời",
+  "adult": "1",
+  "customNote": ""
+},
+{
+  "slug": "quoc-an",
+  "name": "Bạn Quốc An",
+  "gender": "male",
+  "greeting": "Thân mời",
+  "adult": "1",
+  "customNote": ""
 }
 ]
