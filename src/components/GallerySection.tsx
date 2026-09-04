@@ -7,20 +7,16 @@ interface PhotoItem {
 
 // BỘ ẢNH LẤY TRỰC TIẾP TỪ PUBLIC/PHOTOS/
 const STATIC_PHOTOS: PhotoItem[] = [
- 
   { id: 2, url: "/photos/pic2.jpg" },
   { id: 3, url: "/photos/pic3.jpg" },
   { id: 4, url: "/photos/pic4.jpg" },
   { id: 5, url: "/photos/pic5.jpg" },
-  
   { id: 7, url: "/photos/pic10.jpg" },
   { id: 8, url: "/photos/pic8.jpg" },
   { id: 9, url: "/photos/pic9.jpg" },
   { id: 10, url: "/photos/pic7.jpg" },
- 
   { id: 12, url: "/photos/pic12.jpg" },
   { id: 13, url: "/photos/pic13.jpg" },
-
   { id: 15, url: "/photos/pic15.jpg" },
   { id: 16, url: "/photos/pic16.jpg" },
   { id: 17, url: "/photos/pic17.jpg" },
@@ -28,6 +24,7 @@ const STATIC_PHOTOS: PhotoItem[] = [
   { id: 19, url: "/photos/pic19.jpg" },
   { id: 20, url: "/photos/pic20.jpg" },
 ];
+
 export default function GallerySection() {
   const [currentIndex, setCurrentIndex] = useState<number>(0);
   const [selectedPhoto, setSelectedPhoto] = useState<PhotoItem | null>(null);
@@ -46,19 +43,25 @@ export default function GallerySection() {
     };
   }, [selectedPhoto]);
 
-  // Tự động cuộn dải thumbnail để ô ảnh đang chọn luôn nằm chính giữa
+  // Tự động cuộn dải thumbnail nội bộ, KHÔNG làm trôi màn hình chính
   useEffect(() => {
-    if (thumbnailContainerRef.current) {
-      const activeThumb = thumbnailContainerRef.current.querySelector(
-        `[data-index="${currentIndex}"]`
-      ) as HTMLElement | null;
-      if (activeThumb) {
-        activeThumb.scrollIntoView({
-          behavior: "smooth",
-          inline: "center",
-          block: "nearest",
-        });
-      }
+    const container = thumbnailContainerRef.current;
+    if (!container) return;
+
+    const activeThumb = container.querySelector(
+      `[data-index="${currentIndex}"]`
+    ) as HTMLElement | null;
+
+    if (activeThumb) {
+      const targetScroll =
+        activeThumb.offsetLeft -
+        container.clientWidth / 2 +
+        activeThumb.clientWidth / 2;
+
+      container.scrollTo({
+        left: targetScroll,
+        behavior: "smooth",
+      });
     }
   }, [currentIndex]);
 
@@ -97,14 +100,38 @@ export default function GallerySection() {
           scrollbar-width: none;
         }
 
-        /* Hiệu ứng rê chuột nút mũi tên */
-        .nav-arrow-minimal {
-          opacity: 0.6;
-          transition: all 0.25s ease;
+        /* Nút tối giản chỉ hiện ký tự, diện tích chạm dọc lớn */
+        .nav-tap-area {
+          position: absolute;
+          top: 50%;
+          transform: translateY(-50%);
+          width: 54px;
+          height: 120px;
+          background: transparent;
+          border: none;
+          outline: none;
+          cursor: pointer;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          color: #EEE8E2;
+          font-size: 44px;
+          font-weight: 300;
+          line-height: 1;
+          opacity: 0.75;
+          transition: all 0.2s ease;
+          text-shadow: 0 2px 10px rgba(0, 0, 0, 0.85);
+          user-select: none;
+          -webkit-tap-highlight-color: transparent;
+          z-index: 25;
         }
-        .nav-arrow-minimal:hover {
+        .nav-tap-area:hover {
           opacity: 1;
-          transform: translateY(-50%) scale(1.18);
+          transform: translateY(-50%) scale(1.15);
+        }
+        .nav-tap-area:active {
+          transform: translateY(-50%) scale(0.95);
+          opacity: 0.9;
         }
 
         @keyframes fadeInZoom {
@@ -181,7 +208,6 @@ export default function GallerySection() {
             const offset = getOffset(idx);
             const isCenter = offset === 0;
             const isPrev = offset === -1;
-       
 
             if (Math.abs(offset) > 1) return null;
 
@@ -221,59 +247,29 @@ export default function GallerySection() {
                   }}
                 />
 
-                {/* NÚT MŨI TÊN TỐI GIẢN TRONG LÒNG ẢNH CHÍNH */}
+                {/* VÙNG NHẬN CHẠM MŨI TÊN DÀI VÀ NHẠY */}
                 {isCenter && (
                   <>
                     <button
-                      className="nav-arrow-minimal"
+                      className="nav-tap-area"
+                      aria-label="Previous Photo"
                       onClick={(e) => {
                         e.stopPropagation();
                         handlePrev();
                       }}
-                      style={{
-                        position: "absolute",
-                        left: "12px",
-                        top: "50%",
-                        transform: "translateY(-50%)",
-                        zIndex: 15,
-                        background: "none",
-                        border: "none",
-                        color: "#EEE8E2",
-                        fontSize: "38px",
-                        fontWeight: 300,
-                        lineHeight: 1,
-                        cursor: "pointer",
-                        outline: "none",
-                        padding: "8px",
-                        textShadow: "0 2px 8px rgba(0,0,0,0.75)",
-                      }}
+                      style={{ left: "2px" }}
                     >
                       ‹
                     </button>
 
                     <button
-                      className="nav-arrow-minimal"
+                      className="nav-tap-area"
+                      aria-label="Next Photo"
                       onClick={(e) => {
                         e.stopPropagation();
                         handleNext();
                       }}
-                      style={{
-                        position: "absolute",
-                        right: "12px",
-                        top: "50%",
-                        transform: "translateY(-50%)",
-                        zIndex: 15,
-                        background: "none",
-                        border: "none",
-                        color: "#EEE8E2",
-                        fontSize: "38px",
-                        fontWeight: 300,
-                        lineHeight: 1,
-                        cursor: "pointer",
-                        outline: "none",
-                        padding: "8px",
-                        textShadow: "0 2px 8px rgba(0,0,0,0.75)",
-                      }}
+                      style={{ right: "2px" }}
                     >
                       ›
                     </button>
@@ -286,7 +282,6 @@ export default function GallerySection() {
 
         {/* 3. CHỈ SỐ BỨC ẢNH & DẢI THUMBNAIL AUTO-FOCUS */}
         <div style={{ marginTop: "12px", width: "100%" }}>
-          {/* Badge tiến trình ảnh */}
           <div
             style={{
               textAlign: "center",
@@ -301,7 +296,6 @@ export default function GallerySection() {
             {String(currentIndex + 1).padStart(2, "0")} / {String(total).padStart(2, "0")}
           </div>
 
-          {/* Dải cuộn ảnh thu nhỏ tự căn giữa */}
           <div
             ref={thumbnailContainerRef}
             className="thumb-scroll"
