@@ -1,53 +1,32 @@
 import { useState, useEffect, useRef } from "react";
 
-// 1. IMPORT CÁC ẢNH TỪ ASSETS
-import img1 from "../assets/pic1.jpg";
-import img2 from "../assets/pic2.jpg";
-import img3 from "../assets/pic3.jpg";
-import img4 from "../assets/pic4.jpg";
-import img5 from "../assets/pic5.jpg";
-// import img6 from "../assets/pic6.jpg";
-import img8 from "../assets/pic8.jpg";
-import img9 from "../assets/pic9.jpg";
-import img10 from "../assets/pic10.jpg";
-import img11 from "../assets/pic11.jpg";
-import img12 from "../assets/pic12.jpg";
-import img13 from "../assets/pic13.jpg";
-import img14 from "../assets/pic14.jpg";
-import img15 from "../assets/pic15.jpg";
-import img16 from "../assets/pic16.jpg";
-import img17 from "../assets/pic17.jpg";
-import img18 from "../assets/pic18.jpg";
-import img19 from "../assets/pic19.jpg";
-import img20 from "../assets/pic20.jpg";
-
 interface PhotoItem {
   id: number;
   url: string;
 }
 
+// BỘ ẢNH LẤY TRỰC TIẾP TỪ PUBLIC/PHOTOS/
 const STATIC_PHOTOS: PhotoItem[] = [
-  { id: 1, url: img1 },
-  { id: 2, url: img2 },
-  { id: 3, url: img3 },
-  { id: 4, url: img4 },
-  { id: 5, url: img5 },
-  // { id: 6, url: img6 },
-  { id: 8, url: img8 },
-  { id: 9, url: img9 },
-  { id: 10, url: img10 },
-  { id: 11, url: img11 },
-  { id: 12, url: img12 },
-  { id: 13, url: img13 },
-  { id: 14, url: img14 },
-  { id: 15, url: img15 },
-  { id: 16, url: img16 },
-  { id: 17, url: img17 },
-  { id: 18, url: img18 },
-  { id: 19, url: img19 },
-  { id: 20, url: img20 },
+  { id: 1, url: "public/photos/pic1.jpg" },
+  { id: 2, url: "public/photos/pic2.jpg" },
+  { id: 3, url: "public/photos/pic3.jpg" },
+  { id: 4, url: "public/photos/pic4.jpg" },
+  { id: 5, url: "public/photos/pic5.jpg" },
+  { id: 7, url: "public/photos/pic7.jpg" },
+  { id: 8, url: "public/photos/pic8.jpg" },
+  { id: 9, url: "public/photos/pic9.jpg" },
+  { id: 10, url: "public/photos/pic10.jpg" },
+  { id: 11, url: "public/photos/pic11.jpg" },
+  { id: 12, url: "public/photos/pic12.jpg" },
+  { id: 13, url: "public/photos/pic13.jpg" },
+  { id: 14, url: "public/photos/pic14.jpg" },
+  { id: 15, url: "public/photos/pic15.jpg" },
+  { id: 16, url: "public/photos/pic16.jpg" },
+  { id: 17, url: "public/photos/pic17.jpg" },
+  { id: 18, url: "public/photos/pic18.jpg" },
+  { id: 19, url: "public/photos/pic19.jpg" },
+  { id: 20, url: "public/photos/pic20.jpg" },
 ];
-
 export default function GallerySection() {
   const [currentIndex, setCurrentIndex] = useState<number>(0);
   const [selectedPhoto, setSelectedPhoto] = useState<PhotoItem | null>(null);
