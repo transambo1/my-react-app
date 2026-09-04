@@ -10,8 +10,8 @@
     "phonePlaceholder": "09xxxxxxxx",
     "attendanceLabel": "Bạn sẽ đến chung vui chứ? *",
     "options": [
-      { "value": "attending", "label": "Chắc chắn tham dự ✨" },
-      { "value": "declined", "label": "Tiếc quá, mình bận mất rồi 🥺" }
+      { "value": "attending", "label": "Chắc chắn tham dự " },
+      { "value": "declined", "label": "Tiếc quá, mình bận mất rồi " }
     ],
     "wishesLabel": "Lời chúc gửi đến tân cử nhân",
     "wishesPlaceholder": "Gửi vài lời nhắn nhủ yêu thương..."

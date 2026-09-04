@@ -1,24 +1,102 @@
-import { useState } from "react";
-import galleryData from "../data/gallery.json";
+import { useState, useEffect, useRef } from "react";
+
+// 1. IMPORT CÁC ẢNH TỪ ASSETS
+import img1 from "../assets/pic1.jpg";
+import img2 from "../assets/pic2.jpg";
+import img3 from "../assets/pic3.jpg";
+import img4 from "../assets/pic4.jpg";
+import img5 from "../assets/pic5.jpg";
+// import img6 from "../assets/pic6.jpg";
+import img8 from "../assets/pic8.jpg";
+import img9 from "../assets/pic9.jpg";
+import img10 from "../assets/pic10.jpg";
+import img11 from "../assets/pic11.jpg";
+import img12 from "../assets/pic12.jpg";
+import img13 from "../assets/pic13.jpg";
+import img14 from "../assets/pic14.jpg";
+import img15 from "../assets/pic15.jpg";
+import img16 from "../assets/pic16.jpg";
+import img17 from "../assets/pic17.jpg";
+import img18 from "../assets/pic18.jpg";
+import img19 from "../assets/pic19.jpg";
+import img20 from "../assets/pic20.jpg";
 
 interface PhotoItem {
   id: number;
   url: string;
-  caption: string;
-  layout?: string;
 }
 
+const STATIC_PHOTOS: PhotoItem[] = [
+  { id: 1, url: img1 },
+  { id: 2, url: img2 },
+  { id: 3, url: img3 },
+  { id: 4, url: img4 },
+  { id: 5, url: img5 },
+  // { id: 6, url: img6 },
+  { id: 8, url: img8 },
+  { id: 9, url: img9 },
+  { id: 10, url: img10 },
+  { id: 11, url: img11 },
+  { id: 12, url: img12 },
+  { id: 13, url: img13 },
+  { id: 14, url: img14 },
+  { id: 15, url: img15 },
+  { id: 16, url: img16 },
+  { id: 17, url: img17 },
+  { id: 18, url: img18 },
+  { id: 19, url: img19 },
+  { id: 20, url: img20 },
+];
+
 export default function GallerySection() {
+  const [currentIndex, setCurrentIndex] = useState<number>(0);
   const [selectedPhoto, setSelectedPhoto] = useState<PhotoItem | null>(null);
-  const photos: PhotoItem[] = galleryData.photos || [];
+  const total = STATIC_PHOTOS.length;
+  const thumbnailContainerRef = useRef<HTMLDivElement | null>(null);
 
-  // Lọc các ảnh hợp lệ có url
-  const validPhotos = photos.filter((p) => p.url && p.url.trim() !== "");
-  const filmPhotos = validPhotos.slice(0, 5);
-  const gridPhotos = validPhotos.slice(5);
+  // Khóa cuộn trang bên ngoài khi mở xem chi tiết ảnh
+  useEffect(() => {
+    if (selectedPhoto) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "unset";
+    }
+    return () => {
+      document.body.style.overflow = "unset";
+    };
+  }, [selectedPhoto]);
 
-  // Nhân đôi để trượt mượt mà vô tận
-  const marqueeList = [...filmPhotos, ...filmPhotos];
+  // Tự động cuộn dải thumbnail để ô ảnh đang chọn luôn nằm chính giữa
+  useEffect(() => {
+    if (thumbnailContainerRef.current) {
+      const activeThumb = thumbnailContainerRef.current.querySelector(
+        `[data-index="${currentIndex}"]`
+      ) as HTMLElement | null;
+      if (activeThumb) {
+        activeThumb.scrollIntoView({
+          behavior: "smooth",
+          inline: "center",
+          block: "nearest",
+        });
+      }
+    }
+  }, [currentIndex]);
+
+  const handleNext = () => {
+    setCurrentIndex((prev) => (prev + 1) % total);
+  };
+
+  const handlePrev = () => {
+    setCurrentIndex((prev) => (prev - 1 + total) % total);
+  };
+
+  // Tính khoảng cách tương đối (-1: trước, 0: chính giữa, 1: sau)
+  const getOffset = (index: number) => {
+    let diff = index - currentIndex;
+    if (diff > total / 2) diff -= total;
+    if (diff < -total / 2) diff += total;
+    return diff;
+  };
 
   return (
     <section
@@ -30,21 +108,23 @@ export default function GallerySection() {
       }}
     >
       <style>{`
-        /* Chuyển động cuộn film từ trái qua phải liên tục */
-        @keyframes filmScrollLeftToRight {
-          0% { transform: translateX(-50%); }
-          100% { transform: translateX(0%); }
+        /* Ẩn thanh cuộn mặc định của thumbnail */
+        .thumb-scroll::-webkit-scrollbar {
+          display: none;
+        }
+        .thumb-scroll {
+          -ms-overflow-style: none;
+          scrollbar-width: none;
         }
 
-        .film-track {
-          display: flex;
-          align-items: center;
-          width: max-content;
-          animation: filmScrollLeftToRight 28s linear infinite;
+        /* Hiệu ứng rê chuột nút mũi tên */
+        .nav-arrow-minimal {
+          opacity: 0.6;
+          transition: all 0.25s ease;
         }
-
-        .film-track:hover {
-          animation-play-state: paused;
+        .nav-arrow-minimal:hover {
+          opacity: 1;
+          transform: translateY(-50%) scale(1.18);
         }
 
         @keyframes fadeInZoom {
@@ -60,19 +140,18 @@ export default function GallerySection() {
           margin: "0 auto",
           width: "100%",
           maxWidth: "420px",
-          // borderRadius: "20px",
           backgroundColor: "#0C1E42",
           boxShadow: "0 18px 40px rgba(12, 30, 66, 0.28)",
-          padding: "32px 14px 28px",
+          padding: "32px 0 28px",
           boxSizing: "border-box",
           overflow: "hidden",
         }}
       >
-        {/* HEADER */}
-        <div style={{ textAlign: "center", marginBottom: "22px" }}>
+        {/* 1. HEADER NGHỆ THUẬT */}
+        <div style={{ textAlign: "center", marginBottom: "20px", padding: "0 14px" }}>
           <span
             style={{
-              fontSize: "11px",
+              fontSize: "13px",
               fontWeight: 700,
               letterSpacing: "0.28em",
               textTransform: "uppercase",
@@ -86,7 +165,7 @@ export default function GallerySection() {
           <h2
             style={{
               margin: 0,
-              fontSize: "clamp(2rem, 7vw, 2.6rem)",
+              fontSize: "40px",
               fontWeight: 400,
               fontStyle: "italic",
               color: "#EEE8E2",
@@ -106,227 +185,217 @@ export default function GallerySection() {
           />
         </div>
 
-        {/* KHUNG CUỘN PHIM NÂNG SÁNG VỚI TÔNG KEM #EEE8E2 */}
+        {/* 2. KHU VỰC SLIDER CHÍNH */}
         <div
           style={{
             position: "relative",
-            width: "calc(100% + 28px)",
-            marginLeft: "-14px",
-            marginBottom: "26px",
+            width: "100%",
+            height: "480px",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
             overflow: "hidden",
-            backgroundColor: "#122754", // Xanh navy sáng hơn, không bị đen chìm
-            padding: "10px 0",
-            borderTop: "1.5px solid rgba(238, 232, 226, 0.35)",
-            borderBottom: "1.5px solid rgba(238, 232, 226, 0.35)",
-            boxShadow: "0 8px 24px rgba(0, 0, 0, 0.25)",
           }}
         >
-          {/* Lỗ đục cuộn phim hàng trên - Màu #EEE8E2 sắc nét */}
-          <div
-            style={{
-              height: "12px",
-              width: "100%",
-              marginBottom: "8px",
-              backgroundImage:
-                "radial-gradient(ellipse at center, #EEE8E2 45%, transparent 50%)",
-              backgroundSize: "16px 8px",
-              backgroundRepeat: "repeat-x",
-              backgroundPosition: "center",
-            }}
-          />
+          {STATIC_PHOTOS.map((item, idx) => {
+            const offset = getOffset(idx);
+            const isCenter = offset === 0;
+            const isPrev = offset === -1;
+       
 
-          {/* Dải ảnh trượt */}
-          <div className="film-track">
-            {marqueeList.map((item, idx) => (
-              <div
-                key={`${item.id}-${idx}`}
-                onClick={() => setSelectedPhoto(item)}
-                style={{
-                  position: "relative",
-                  flex: "0 0 175px",
-                  height: "122px",
-                  margin: "0 8px",
-                  cursor: "pointer",
-                  backgroundColor: "#EEE8E2", // Khung nền màu kem sáng nổi bật
-                  borderRadius: "8px",
-                  padding: "5px",
-                  boxSizing: "border-box",
-                  boxShadow: "0 6px 14px rgba(0,0,0,0.3)",
-                  transition: "transform 0.2s ease",
-                }}
-              >
-                {/* Vùng hiển thị ảnh bên trong */}
-                <div
-                  style={{
-                    position: "relative",
-                    width: "100%",
-                    height: "100%",
-                    borderRadius: "4px",
-                    overflow: "hidden",
-                    backgroundColor: "#0C1E42",
-                  }}
-                >
-                  <img
-                    src={item.url}
-                    alt={item.caption || "Film Frame"}
-                    onError={(e) => {
-                      e.currentTarget.style.display = "none";
-                    }}
-                    style={{
-                      width: "100%",
-                      height: "100%",
-                      objectFit: "cover",
-                      display: "block",
-                      filter: "brightness(1.03) contrast(1.02)",
-                    }}
-                  />
-
-                  {/* Mã số cuộn phim vintage */}
-                  <span
-                    style={{
-                      position: "absolute",
-                      bottom: "4px",
-                      right: "6px",
-                      backgroundColor: "rgba(12, 30, 66, 0.7)",
-                      color: "#EEE8E2",
-                      padding: "1px 4px",
-                      borderRadius: "3px",
-                      fontSize: "8.5px",
-                      fontFamily: "monospace",
-                      letterSpacing: "0.06em",
-                      pointerEvents: "none",
-                    }}
-                  >
-                    #{String((idx % filmPhotos.length) + 1).padStart(2, "0")}🎞️
-                  </span>
-                </div>
-              </div>
-            ))}
-          </div>
-
-          {/* Lỗ đục cuộn phim hàng dưới - Màu #EEE8E2 sắc nét */}
-          <div
-            style={{
-              height: "12px",
-              width: "100%",
-              marginTop: "8px",
-              backgroundImage:
-                "radial-gradient(ellipse at center, #EEE8E2 45%, transparent 50%)",
-              backgroundSize: "16px 8px",
-              backgroundRepeat: "repeat-x",
-              backgroundPosition: "center",
-            }}
-          />
-        </div>
-
-        {/* BENTO MOSAIC GRID ĐAN XEN */}
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(3, 1fr)",
-            gridAutoRows: "105px",
-            gap: "8px",
-          }}
-        >
-          {gridPhotos.map((item, index) => {
-            const isTall = index % 5 === 0;
-            const isWide = index % 5 === 3;
+            if (Math.abs(offset) > 1) return null;
 
             return (
               <div
-                key={item.id || index}
-                onClick={() => setSelectedPhoto(item)}
+                key={item.id}
+                onClick={() => (isCenter ? setSelectedPhoto(item) : setCurrentIndex(idx))}
                 style={{
-                  gridColumn: isWide ? "span 2" : "span 1",
-                  gridRow: isTall ? "span 2" : "span 1",
-                  borderRadius: "14px",
+                  position: "absolute",
+                  width: "315px",
+                  height: "460px",
+                  borderRadius: "18px",
                   overflow: "hidden",
-                  position: "relative",
                   cursor: "pointer",
-                  backgroundColor: "rgba(238, 232, 226, 0.12)",
-                  boxShadow: "0 4px 12px rgba(0,0,0,0.2)",
-                  border: "1.5px solid rgba(238, 232, 226, 0.25)",
+                  transition: "all 0.5s cubic-bezier(0.25, 1, 0.5, 1)",
+                  zIndex: isCenter ? 10 : 2,
+                  transform: isCenter
+                    ? "translateX(0%) scale(1)"
+                    : isPrev
+                    ? "translateX(-78%) scale(0.88)"
+                    : "translateX(78%) scale(0.88)",
+                  opacity: isCenter ? 1 : 0.45,
+                  filter: isCenter ? "none" : "blur(3px) brightness(0.6)",
+                  boxShadow: isCenter
+                    ? "0 22px 42px rgba(0,0,0,0.55), 0 0 0 1px rgba(238,232,226,0.25)"
+                    : "0 8px 18px rgba(0,0,0,0.3)",
                 }}
               >
                 <img
                   src={item.url}
-                  alt={item.caption || "Gallery"}
+                  alt="Graduation photo"
                   style={{
                     width: "100%",
                     height: "100%",
                     objectFit: "cover",
                     display: "block",
-                    transition: "transform 0.3s ease",
                   }}
-                  onMouseEnter={(e) =>
-                    (e.currentTarget.style.transform = "scale(1.05)")
-                  }
-                  onMouseLeave={(e) =>
-                    (e.currentTarget.style.transform = "scale(1)")
-                  }
                 />
 
-                {item.caption && (
-                  <div
-                    style={{
-                      position: "absolute",
-                      bottom: 0,
-                      left: 0,
-                      right: 0,
-                      padding: "6px 8px",
-                      background:
-                        "linear-gradient(to top, rgba(12, 30, 66, 0.9), transparent)",
-                    }}
-                  >
-                    <span
+                {/* NÚT MŨI TÊN TỐI GIẢN TRONG LÒNG ẢNH CHÍNH */}
+                {isCenter && (
+                  <>
+                    <button
+                      className="nav-arrow-minimal"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handlePrev();
+                      }}
                       style={{
+                        position: "absolute",
+                        left: "12px",
+                        top: "50%",
+                        transform: "translateY(-50%)",
+                        zIndex: 15,
+                        background: "none",
+                        border: "none",
                         color: "#EEE8E2",
-                        fontSize: "10px",
-                        whiteSpace: "nowrap",
-                        overflow: "hidden",
-                        textOverflow: "ellipsis",
-                        display: "block",
-                        fontFamily: "serif",
+                        fontSize: "38px",
+                        fontWeight: 300,
+                        lineHeight: 1,
+                        cursor: "pointer",
+                        outline: "none",
+                        padding: "8px",
+                        textShadow: "0 2px 8px rgba(0,0,0,0.75)",
                       }}
                     >
-                      {item.caption}
-                    </span>
-                  </div>
+                      ‹
+                    </button>
+
+                    <button
+                      className="nav-arrow-minimal"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleNext();
+                      }}
+                      style={{
+                        position: "absolute",
+                        right: "12px",
+                        top: "50%",
+                        transform: "translateY(-50%)",
+                        zIndex: 15,
+                        background: "none",
+                        border: "none",
+                        color: "#EEE8E2",
+                        fontSize: "38px",
+                        fontWeight: 300,
+                        lineHeight: 1,
+                        cursor: "pointer",
+                        outline: "none",
+                        padding: "8px",
+                        textShadow: "0 2px 8px rgba(0,0,0,0.75)",
+                      }}
+                    >
+                      ›
+                    </button>
+                  </>
                 )}
               </div>
             );
           })}
         </div>
 
-        {/* CHÚ THÍCH TRANG TRÍ */}
-        <div
-          style={{
-            marginTop: "20px",
-            textAlign: "center",
-            padding: "8px 0 0",
-          }}
-        >
+        {/* 3. CHỈ SỐ BỨC ẢNH & DẢI THUMBNAIL AUTO-FOCUS */}
+        <div style={{ marginTop: "12px", width: "100%" }}>
+          {/* Badge tiến trình ảnh */}
+          <div
+            style={{
+              textAlign: "center",
+              marginBottom: "8px",
+              fontSize: "14px",
+              letterSpacing: "0.2em",
+              color: "rgba(238, 232, 226, 0.7)",
+              fontFamily: "monospace",
+              textTransform: "uppercase",
+            }}
+          >
+            {String(currentIndex + 1).padStart(2, "0")} / {String(total).padStart(2, "0")}
+          </div>
+
+          {/* Dải cuộn ảnh thu nhỏ tự căn giữa */}
+          <div
+            ref={thumbnailContainerRef}
+            className="thumb-scroll"
+            style={{
+              display: "flex",
+              gap: "8px",
+              overflowX: "auto",
+              padding: "8px 24px",
+              scrollBehavior: "smooth",
+              WebkitOverflowScrolling: "touch",
+            }}
+          >
+            {STATIC_PHOTOS.map((item, index) => {
+              const isActive = index === currentIndex;
+              return (
+                <div
+                  key={item.id}
+                  data-index={index}
+                  onClick={() => setCurrentIndex(index)}
+                  style={{
+                    flex: "0 0 52px",
+                    height: "52px",
+                    borderRadius: "10px",
+                    overflow: "hidden",
+                    cursor: "pointer",
+                    border: isActive
+                      ? "2px solid #EEE8E2"
+                      : "1.5px solid rgba(238, 232, 226, 0.15)",
+                    opacity: isActive ? 1 : 0.35,
+                    transform: isActive ? "scale(1.12)" : "scale(0.95)",
+                    transition: "all 0.3s cubic-bezier(0.25, 1, 0.5, 1)",
+                    boxSizing: "border-box",
+                    boxShadow: isActive ? "0 4px 12px rgba(0,0,0,0.4)" : "none",
+                  }}
+                >
+                  <img
+                    src={item.url}
+                    alt={`Thumbnail ${index + 1}`}
+                    style={{
+                      width: "100%",
+                      height: "100%",
+                      objectFit: "cover",
+                      display: "block",
+                    }}
+                  />
+                </div>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* Chú thích trang trí */}
+        <div style={{ textAlign: "center", marginTop: "14px", padding: "0 14px" }}>
           <span
             style={{
-              fontSize: "12px",
+              fontSize: "16.5px",
               fontStyle: "italic",
               color: "#EEE8E2",
-              opacity: 0.85,
+              opacity: 0.75,
               fontFamily: '"Cormorant Garamond", serif',
             }}
           >
-            “Chạm vào từng khung hình để xem trọn vẹn kỷ niệm!” ✨
+            “Xuân Nghi's Congratulation” ✨
           </span>
         </div>
       </div>
 
-      {/* LIGHTBOX MODAL PHÓNG TO ẢNH (BLUR BACKDROP GIỮ NGUYÊN) */}
+      {/* 4. MODAL PHÓNG TO ẢNH (LIGHTBOX) */}
       {selectedPhoto && (
         <div
           style={{
             position: "fixed",
             inset: 0,
-            backgroundColor: "rgba(12, 30, 66, 0.75)",
+            backgroundColor: "rgba(12, 30, 66, 0.8)",
             backdropFilter: "blur(6px)",
             display: "flex",
             flexDirection: "column",
@@ -335,6 +404,7 @@ export default function GallerySection() {
             zIndex: 99999,
             padding: "16px",
             boxSizing: "border-box",
+            touchAction: "none",
           }}
           onClick={() => setSelectedPhoto(null)}
         >
@@ -364,9 +434,9 @@ export default function GallerySection() {
             style={{
               position: "relative",
               maxWidth: "92vw",
-              maxHeight: "80vh",
+              maxHeight: "82vh",
               backgroundColor: "#EEE8E2",
-              padding: "10px 10px 18px",
+              padding: "10px",
               borderRadius: "18px",
               boxShadow: "0 24px 50px rgba(0,0,0,0.5)",
               animation: "fadeInZoom 0.25s ease-out",
@@ -378,31 +448,15 @@ export default function GallerySection() {
           >
             <img
               src={selectedPhoto.url}
-              alt={selectedPhoto.caption || "Preview"}
+              alt="Preview"
               style={{
                 maxWidth: "100%",
-                maxHeight: "68vh",
+                maxHeight: "75vh",
                 objectFit: "contain",
                 borderRadius: "12px",
                 display: "block",
               }}
             />
-
-            {selectedPhoto.caption && (
-              <p
-                style={{
-                  margin: "12px 0 0",
-                  fontSize: "14px",
-                  fontWeight: 600,
-                  fontStyle: "italic",
-                  color: "#0C1E42",
-                  fontFamily: '"Cormorant Garamond", serif',
-                  textAlign: "center",
-                }}
-              >
-                {selectedPhoto.caption}
-              </p>
-            )}
           </div>
         </div>
       )}

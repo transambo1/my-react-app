@@ -35,7 +35,7 @@ const FALLBACK_WISHES: WishItem[] = [
   },
 ];
 
-const AUTOPLAY_DURATION = 6000; // 6 giây đổi 1 lời chúc khi bật autoplay
+const AUTOPLAY_DURATION = 6000;
 
 export default function WishesSection() {
   const [wishes, setWishes] = useState<WishItem[]>([]);
@@ -45,7 +45,19 @@ export default function WishesSection() {
   const [showAllModal, setShowAllModal] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
- const progressTimerRef = useRef<number | null>(null);
+  const progressTimerRef = useRef<number | null>(null);
+
+  // KHÓA CUỘN NỀN KHI MỞ MODAL XEM TOÀN BỘ
+  useEffect(() => {
+    if (showAllModal) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "unset";
+    }
+    return () => {
+      document.body.style.overflow = "unset";
+    };
+  }, [showAllModal]);
 
   useEffect(() => {
     async function fetchWishesFromSheet() {
@@ -112,14 +124,13 @@ export default function WishesSection() {
     };
   }, []);
 
-  // XỬ LÝ AUTOPLAY KHÔNG NHẢY CÓC: Bỏ currentIndex khỏi dependencies
   useEffect(() => {
     if (!isPlaying || wishes.length <= 1) {
       if (progressTimerRef.current) clearInterval(progressTimerRef.current);
       return;
     }
 
-    const interval = 50; // cập nhật mỗi 50ms
+    const interval = 50;
     const step = (interval / AUTOPLAY_DURATION) * 100;
 
     progressTimerRef.current = setInterval(() => {
@@ -190,7 +201,6 @@ export default function WishesSection() {
           margin: "0 auto",
           width: "100%",
           maxWidth: "420px",
-          // borderRadius: "20px",
           backgroundColor: "#EEE8E2",
           boxShadow: "0 18px 40px rgba(12, 30, 66, 0.08)",
           padding: "30px 18px 26px",
@@ -224,7 +234,7 @@ export default function WishesSection() {
               lineHeight: 1.15,
             }}
           >
-            Những Lời Iu Thương
+            Những Lời Yêu Thương
           </h2>
           <div
             style={{
@@ -246,7 +256,7 @@ export default function WishesSection() {
               fontStyle: "italic",
             }}
           >
-            Đang tải cuộn băng kỷ niệm... 
+            Đang tải cuộn băng kỷ niệm...
           </div>
         ) : (
           <>
@@ -256,7 +266,8 @@ export default function WishesSection() {
                 backgroundColor: "#0C1E42",
                 borderRadius: "20px",
                 padding: "16px 14px",
-                boxShadow: "inset 0 2px 6px rgba(238, 232, 226, 0.15), 0 10px 24px rgba(12, 30, 66, 0.3)",
+                boxShadow:
+                  "inset 0 2px 6px rgba(238, 232, 226, 0.15), 0 10px 24px rgba(12, 30, 66, 0.3)",
                 border: "2px solid #0C1E42",
                 marginBottom: "18px",
               }}
@@ -287,7 +298,9 @@ export default function WishesSection() {
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "center",
-                    animation: isPlaying ? "spinWheel 4s linear infinite" : "none",
+                    animation: isPlaying
+                      ? "spinWheel 4s linear infinite"
+                      : "none",
                     boxShadow: "0 2px 6px rgba(0,0,0,0.25)",
                   }}
                 >
@@ -317,7 +330,7 @@ export default function WishesSection() {
                     TRACK #{currentIndex + 1} OF {total}
                   </span>
 
-                  {/* Sóng âm thanh mini */}
+                  {/* Sóng âm thanh */}
                   <div
                     style={{
                       display: "flex",
@@ -334,7 +347,9 @@ export default function WishesSection() {
                           width: "3px",
                           backgroundColor: "#0C1E42",
                           borderRadius: "2px",
-                          animation: isPlaying ? `soundWave 1.2s ease-in-out infinite` : "none",
+                          animation: isPlaying
+                            ? `soundWave 1.2s ease-in-out infinite`
+                            : "none",
                           animationDelay: `${delay}s`,
                           height: isPlaying ? "14px" : "6px",
                           transition: "height 0.2s ease",
@@ -355,7 +370,9 @@ export default function WishesSection() {
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "center",
-                    animation: isPlaying ? "spinWheel 4s linear infinite" : "none",
+                    animation: isPlaying
+                      ? "spinWheel 4s linear infinite"
+                      : "none",
                     boxShadow: "0 2px 6px rgba(0,0,0,0.25)",
                   }}
                 >
@@ -370,7 +387,7 @@ export default function WishesSection() {
                 </div>
               </div>
 
-              {/* MÀN HÌNH PHÁT NỘI DUNG LỜI CHÚC */}
+              {/* MÀN HÌNH NỘI DUNG LỜI CHÚC */}
               <div
                 key={activeWish?.id || currentIndex}
                 style={{
@@ -395,7 +412,6 @@ export default function WishesSection() {
                     }}
                   >
                     <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
-                   
                       <h4
                         style={{
                           margin: 0,
@@ -432,7 +448,7 @@ export default function WishesSection() {
                   </p>
                 </div>
 
-                {/* THANH TIẾN TRÌNH AUTOPLAY */}
+                {/* THANH TIẾN TRÌNH */}
                 <div
                   style={{
                     marginTop: "10px",
@@ -479,73 +495,97 @@ export default function WishesSection() {
                     gap: "4px",
                   }}
                 >
-                   Người thương ({total})
+                  Người thương ({total})
                 </button>
 
-                {/* Cụm nút Play / Prev / Next */}
+                {/* Cụm nút Play / Prev / Next Vector */}
                 <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
                   <button
                     onClick={handlePrev}
+                    title="Lời chúc trước"
                     style={{
                       backgroundColor: "rgba(238, 232, 226, 0.15)",
-                      color: "#EEE8E2",
-                      border: "none",
+                      border: "1px solid rgba(238, 232, 226, 0.25)",
                       borderRadius: "50%",
-                      width: "34px",
-                      height: "34px",
-                      fontSize: "13px",
+                      width: "32px",
+                      height: "32px",
                       cursor: "pointer",
                       display: "flex",
                       alignItems: "center",
                       justifyContent: "center",
+                      padding: 0,
+                      outline: "none",
+                      transition: "all 0.2s ease",
                     }}
                   >
-                    ⏮
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="#EEE8E2">
+                      <path d="M6 6h2v12H6zm3.5 6l8.5 6V6z" />
+                    </svg>
                   </button>
 
                   <button
                     onClick={() => setIsPlaying(!isPlaying)}
+                    title={isPlaying ? "Tạm dừng" : "Tiếp tục phát"}
                     style={{
                       backgroundColor: "#EEE8E2",
-                      color: "#0C1E42",
                       border: "none",
                       borderRadius: "50%",
-                      width: "42px",
-                      height: "42px",
-                      fontSize: "15px",
+                      width: "38px",
+                      height: "38px",
                       cursor: "pointer",
                       display: "flex",
                       alignItems: "center",
                       justifyContent: "center",
-                      boxShadow: "0 4px 10px rgba(0,0,0,0.25)",
+                      padding: 0,
+                      outline: "none",
+                      boxShadow: "0 4px 12px rgba(0, 0, 0, 0.25)",
+                      transition: "all 0.2s ease",
                     }}
                   >
-                    {isPlaying ? "⏸" : "▶"}
+                    {isPlaying ? (
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="#0C1E42">
+                        <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z" />
+                      </svg>
+                    ) : (
+                      <svg
+                        width="14"
+                        height="14"
+                        viewBox="0 0 24 24"
+                        fill="#0C1E42"
+                        style={{ marginLeft: "2px" }}
+                      >
+                        <path d="M8 5v14l11-7z" />
+                      </svg>
+                    )}
                   </button>
 
                   <button
                     onClick={handleNext}
+                    title="Lời chúc tiếp theo"
                     style={{
                       backgroundColor: "rgba(238, 232, 226, 0.15)",
-                      color: "#EEE8E2",
-                      border: "none",
+                      border: "1px solid rgba(238, 232, 226, 0.25)",
                       borderRadius: "50%",
-                      width: "34px",
-                      height: "34px",
-                      fontSize: "13px",
+                      width: "32px",
+                      height: "32px",
                       cursor: "pointer",
                       display: "flex",
                       alignItems: "center",
                       justifyContent: "center",
+                      padding: 0,
+                      outline: "none",
+                      transition: "all 0.2s ease",
                     }}
                   >
-                    ⏭
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="#EEE8E2">
+                      <path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z" />
+                    </svg>
                   </button>
                 </div>
               </div>
             </div>
 
-            {/* CHÚ THÍCH NHỎ */}
+            {/* CHÚ THÍCH */}
             <div style={{ textAlign: "center" }}>
               <span
                 style={{
@@ -564,7 +604,7 @@ export default function WishesSection() {
         )}
       </div>
 
-      {/* MODAL XEM TOÀN BỘ DANH BẠ LỜI CHÚC */}
+      {/* MODAL XEM TOÀN BỘ DANH BẠ LỜI CHÚC (ĐÃ KHÓA CUỘN NỀN NGOÀI) */}
       {showAllModal && (
         <div
           style={{
@@ -577,6 +617,7 @@ export default function WishesSection() {
             zIndex: 9999,
             padding: "16px",
             backdropFilter: "blur(4px)",
+            touchAction: "none", // Ngăn chặn sự kiện cuộn từ cử chỉ tay trên mobile
           }}
           onClick={() => setShowAllModal(false)}
         >
@@ -592,6 +633,7 @@ export default function WishesSection() {
               maxHeight: "80vh",
               display: "flex",
               flexDirection: "column",
+              touchAction: "auto", // Cho phép vuốt cuộn riêng trong nội dung modal
             }}
             onClick={(e) => e.stopPropagation()}
           >
@@ -644,6 +686,7 @@ export default function WishesSection() {
                 flexDirection: "column",
                 gap: "10px",
                 overflowY: "auto",
+                overscrollBehavior: "contain", // Chặn cuộn lan truyền ra trang nền ngoài
                 paddingRight: "4px",
                 maxHeight: "55vh",
               }}
@@ -689,7 +732,9 @@ export default function WishesSection() {
                       <span
                         style={{
                           fontSize: "11px",
-                          color: isCurrent ? "rgba(238, 232, 226, 0.75)" : "rgba(12, 30, 66, 0.55)",
+                          color: isCurrent
+                            ? "rgba(238, 232, 226, 0.75)"
+                            : "rgba(12, 30, 66, 0.55)",
                         }}
                       >
                         {item.time || "Mới gửi"}

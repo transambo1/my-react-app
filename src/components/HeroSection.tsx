@@ -1,6 +1,6 @@
 import hostInfo from "../data/hostInfo.json";
 import logoPng from "../assets/logo.png";
-import heroPng from "../assets/hero.png";
+import heroPng from "../assets/main.jpg";
 import ribbonPng from "../assets/sash.webp";
 
 export default function HeroSection() {
@@ -21,59 +21,59 @@ export default function HeroSection() {
       }}
     >
       <style>{`
-  /* Khi mới vào: Ruy-băng thả từ trên trần xuống tự nhiên */
-  @keyframes ribbonDropEntrance {
-    0% {
-      opacity: 0;
-      transform: translateY(-30px);
-    }
-    100% {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
+        /* Khi mới vào: Ruy-băng thả từ trên trần xuống tự nhiên */
+        @keyframes ribbonDropEntrance {
+          0% {
+            opacity: 0;
+            transform: translateY(-30px);
+          }
+          100% {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
 
-  /* Khung ngoài: Đung đưa nhẹ nhàng theo chiều gió */
-  @keyframes windSwaySwing {
-    0% {
-      transform: rotate(0deg) skewX(0deg);
-    }
-    25% {
-      transform: rotate(3.8deg) skewX(2.5deg);
-    }
-    50% {
-      transform: rotate(-3.2deg) skewX(-2deg);
-    }
-    75% {
-      transform: rotate(2.2deg) skewX(1.4deg);
-    }
-    100% {
-      transform: rotate(0deg) skewX(0deg);
-    }
-  }
+        /* Khung ngoài: Đung đưa nhẹ nhàng theo chiều gió */
+        @keyframes windSwaySwing {
+          0% {
+            transform: rotate(0deg) skewX(0deg);
+          }
+          25% {
+            transform: rotate(3.8deg) skewX(2.5deg);
+          }
+          50% {
+            transform: rotate(-3.2deg) skewX(-2deg);
+          }
+          75% {
+            transform: rotate(2.2deg) skewX(1.4deg);
+          }
+          100% {
+            transform: rotate(0deg) skewX(0deg);
+          }
+        }
 
-  /* Thẻ img bên trong: Uốn lượn nếp gấp theo chiều dọc 3D */
-  @keyframes verticalRibbonWave {
-    0% {
-      transform: rotateY(0deg) skewY(0deg) scaleY(1);
-    }
-    20% {
-      transform: rotateY(18deg) skewY(2.2deg) scaleY(1.02);
-    }
-    45% {
-      transform: rotateY(-14deg) skewY(-2deg) scaleY(0.98);
-    }
-    70% {
-      transform: rotateY(12deg) skewY(1.5deg) scaleY(1.01);
-    }
-    85% {
-      transform: rotateY(-8deg) skewY(-1deg) scaleY(0.99);
-    }
-    100% {
-      transform: rotateY(0deg) skewY(0deg) scaleY(1);
-    }
-  }
-`}</style>
+        /* Thẻ img bên trong: Uốn lượn nếp gấp theo chiều dọc 3D */
+        @keyframes verticalRibbonWave {
+          0% {
+            transform: rotateY(0deg) skewY(0deg) scaleY(1);
+          }
+          20% {
+            transform: rotateY(18deg) skewY(2.2deg) scaleY(1.02);
+          }
+          45% {
+            transform: rotateY(-14deg) skewY(-2deg) scaleY(0.98);
+          }
+          70% {
+            transform: rotateY(12deg) skewY(1.5deg) scaleY(1.01);
+          }
+          85% {
+            transform: rotateY(-8deg) skewY(-1deg) scaleY(0.99);
+          }
+          100% {
+            transform: rotateY(0deg) skewY(0deg) scaleY(1);
+          }
+        }
+      `}</style>
 
       <div
         style={{
@@ -85,6 +85,7 @@ export default function HeroSection() {
           backgroundColor: "#EEE8E2",
         }}
       >
+        {/* 1. DẢI RUY-BĂNG TRANG TRÍ GÓC TRÁI */}
         <div
           style={{
             position: "absolute",
@@ -94,10 +95,10 @@ export default function HeroSection() {
             zIndex: 30,
             pointerEvents: "none",
             transformOrigin: "top center",
-            perspective: "600px", // Kích hoạt không gian phối cảnh 3D
+            perspective: "600px",
             filter: "drop-shadow(3px 8px 14px rgba(12, 30, 66, 0.3))",
-            // Thả xuống trong 0.6s đầu, sau đó đung đưa theo nhịp gió 5.2s
-            animation: "ribbonDropEntrance 0.6s ease-out forwards, windSwaySwing 5.2s ease-in-out 0.6s infinite",
+            animation:
+              "ribbonDropEntrance 0.6s ease-out forwards, windSwaySwing 5.2s ease-in-out 0.6s infinite",
           }}
         >
           <img
@@ -111,8 +112,8 @@ export default function HeroSection() {
               objectPosition: "top center",
               display: "block",
               transformOrigin: "top center",
-              // Nhịp uốn lượn sóng dọc lệch pha 4.4s tạo độ mềm như lụa bay
-              animation: "verticalRibbonWave 4.4s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite",
+              animation:
+                "verticalRibbonWave 4.4s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite",
             }}
           />
         </div>
@@ -122,7 +123,7 @@ export default function HeroSection() {
           style={{
             position: "relative",
             zIndex: 10,
-            paddingLeft: "clamp(64px, 17vw, 80px)", // Tăng nhẹ đệm trái để tránh cấn ruy-băng to
+            paddingLeft: "clamp(64px, 17vw, 80px)",
             paddingRight: "10px",
             paddingTop: "24px",
             paddingBottom: "8px",
@@ -196,7 +197,7 @@ export default function HeroSection() {
               alignItems: "center",
               justifyContent: "center",
               textAlign: "center",
-              padding: "14px 0 20px",
+              padding: "14px 0 16px",
             }}
           >
             <h1
@@ -240,13 +241,13 @@ export default function HeroSection() {
           </div>
         </div>
 
-        {/* 3. KHUNG ẢNH CHÂN DUNG */}
+        {/* 3. KHUNG ẢNH CHÂN DUNG CHUẨN TỶ LỆ GỐC (CHỨA TÊN VÀ THÔNG ĐIỆP) */}
         <div
           style={{
             position: "relative",
             zIndex: 10,
-            marginTop: "20px",
-            padding: "0 24px 10px",
+            marginTop: "16px",
+            padding: "0 20px 28px",
           }}
         >
           <div
@@ -257,93 +258,101 @@ export default function HeroSection() {
               overflow: "hidden",
               borderRadius: "24px",
               backgroundColor: "#ffffff",
-              boxShadow: "0 12px 24px rgba(12, 30, 66, 0.12)",
+              boxShadow: "0 14px 30px rgba(12, 30, 66, 0.16)",
             }}
           >
+            {/* Ảnh hiển thị chuẩn 100% kích thước tỷ lệ thật */}
             <img
               src={heroPng}
               alt="Graduation portrait"
               style={{
                 width: "100%",
-                height: "clamp(400px, 100vw, 500px)",
-                objectFit: "cover",
-                objectPosition: "center top",
+                height: "auto",
                 display: "block",
               }}
             />
 
+            {/* Chữ Xuân Nghi (Nằm phía trên bên phải khung ảnh) */}
             <div
               style={{
                 position: "absolute",
-                left: 0,
-                right: 0,
-                bottom: 0,
-                height: "90px",
-                background: "linear-gradient(to top, rgba(12, 30, 66, 0.65), transparent)",
-              }}
-            />
-
-            <div
-              style={{
-                position: "absolute",
-                left: 0,
-                right: 0,
-                bottom: "30px",
-                display: "flex",
-                justifyContent: "center",
+                top: "22px",
+                right: "22px",
+                zIndex: 4,
               }}
             >
               <span
                 style={{
                   color: "#ffffff",
                   lineHeight: 1,
-                  fontSize: "clamp(1.8rem, 6vw, 2.4rem)",
-                  fontFamily: '"Monsieur La Doulaise", "Segoe Script", cursive',
-                  textShadow: "0 2px 6px rgba(0,0,0,0.8)",
+                  fontSize: "clamp(2.1rem, 7vw, 2.7rem)",
+                  fontFamily: '"Monsieur La Doulaise", "Alex Brush", cursive',
+                  textShadow:
+                    "0 2px 8px rgba(12, 30, 66, 0.85), 0 1px 3px rgba(0,0,0,0.9)",
+                  letterSpacing: "0.02em",
                 }}
               >
                 {lastName}
               </span>
             </div>
-          </div>
-        </div>
 
-        {/* 4. FOOTER */}
-        <div
-          style={{
-            position: "relative",
-            zIndex: 10,
-            padding: "10px 8px 18px",
-            textAlign: "center",
-            color: "#0C1E42",
-          }}
-        >
-          <p
-            style={{
-              margin: 0,
-              fontSize: "clamp(12px, 3.2vw, 14px)",
-              fontWeight: 400,
-              textTransform: "uppercase",
-              letterSpacing: "0.22em",
-              paddingLeft: "0.32em",
-              lineHeight: 1.4,
-            }}
-          >
-            Every end is
-          </p>
-          <p
-            style={{
-              margin: "6px 0 0 0",
-              fontSize: "clamp(12px, 3.2vw, 14px)",
-              fontWeight: 400,
-              textTransform: "uppercase",
-              letterSpacing: "0.22em",
-              paddingLeft: "0.32em",
-              lineHeight: 1.4,
-            }}
-          >
-            A new beginning...
-          </p>
+            {/* Dải gradient che nhẹ chân ảnh để tôn thông điệp */}
+            <div
+              style={{
+                position: "absolute",
+                left: 0,
+                right: 0,
+                bottom: 0,
+                height: "100px",
+                background:
+                  "linear-gradient(to top, rgba(12, 30, 66, 0.82) 0%, rgba(12, 30, 66, 0.4) 55%, transparent 100%)",
+                zIndex: 3,
+              }}
+            />
+
+            {/* Câu thông điệp hiển thị thay thế vị trí chân ảnh */}
+            <div
+              style={{
+                position: "absolute",
+                left: 0,
+                right: 0,
+                bottom: "16px",
+                zIndex: 4,
+                textAlign: "center",
+                color: "#EEE8E2",
+                padding: "0 12px",
+              }}
+            >
+              <p
+                style={{
+                  margin: 0,
+                  fontSize: "clamp(11.5px, 3vw, 13px)",
+                  fontWeight: 600,
+                  textTransform: "uppercase",
+                  letterSpacing: "0.22em",
+                  paddingLeft: "0.22em",
+                  lineHeight: 1.4,
+                  textShadow: "0 2px 6px rgba(0, 0, 0, 0.8)",
+                }}
+              >
+                Every end is
+              </p>
+              <p
+                style={{
+                  margin: "4px 0 0 0",
+                  fontSize: "clamp(11.5px, 3vw, 13px)",
+                  fontWeight: 600,
+                  textTransform: "uppercase",
+                  letterSpacing: "0.22em",
+                  paddingLeft: "0.22em",
+                  lineHeight: 1.4,
+                  textShadow: "0 2px 6px rgba(0, 0, 0, 0.8)",
+                }}
+              >
+                A new beginning...
+              </p>
+            </div>
+          </div>
         </div>
       </div>
     </section>
