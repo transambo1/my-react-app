@@ -81,7 +81,7 @@
 },
 {
   "slug": "minh-anh",
-  "name": "Bạn Minh Anh",
+  "name": "Minh Anh",
   "gender": "female",
   "greeting": "Thân mời",
   "adult": "1",
@@ -105,7 +105,7 @@
 },
 {
   "slug": "tuong-vy",
-  "name": "Bạn Tường Vy",
+  "name": "Tường Vy",
   "gender": "female",
   "greeting": "Thân mời",
   "adult": "1",
@@ -113,7 +113,7 @@
 },
 {
   "slug": "quoc-an",
-  "name": "Bạn Quốc An",
+  "name": "Quốc An",
   "gender": "male",
   "greeting": "Thân mời",
   "adult": "1",
@@ -129,7 +129,7 @@
 },
 {
   "slug": "my-duyen",
-  "name": "Bạn Mỹ Duyên",
+  "name": "Mỹ Duyên",
   "gender": "female",
   "greeting": "Thân mời",
   "adult": "1",
