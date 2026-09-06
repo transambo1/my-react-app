@@ -13,16 +13,16 @@ const STATIC_PHOTOS: PhotoItem[] = [
   { id: 5, url: "/photos/pic5.jpg" },
   { id: 7, url: "/photos/pic10.jpg" },
   { id: 8, url: "/photos/pic8.jpg" },
-  { id: 9, url: "/photos/pic9.jpg" },
+
   { id: 10, url: "/photos/pic7.jpg" },
-  { id: 12, url: "/photos/pic12.jpg" },
-  { id: 13, url: "/photos/pic13.jpg" },
-  { id: 15, url: "/photos/pic15.jpg" },
-  { id: 16, url: "/photos/pic16.jpg" },
-  { id: 17, url: "/photos/pic17.jpg" },
-  { id: 18, url: "/photos/pic18.jpg" },
+  { id: 12, url: "/photos/pic13.jpg" },
+  { id: 13, url: "/photos/pic12.jpg" },
+
+  { id: 16, url: "/photos/pic17.jpg" },
+  { id: 17, url: "/photos/pic16.jpg" },
+ 
   { id: 19, url: "/photos/pic19.jpg" },
-  { id: 20, url: "/photos/pic20.jpg" },
+
 ];
 
 export default function GallerySection() {

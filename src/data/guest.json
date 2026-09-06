@@ -118,5 +118,29 @@
   "greeting": "Thân mời",
   "adult": "1",
   "customNote": ""
+},
+{
+  "slug": "chi-nhi",
+  "name": "Chị Nhi",
+  "gender": "female",
+  "greeting": "Thân mời",
+  "adult": "1",
+  "customNote": ""
+},
+{
+  "slug": "my-duyen",
+  "name": "Bạn Mỹ Duyên",
+  "gender": "female",
+  "greeting": "Thân mời",
+  "adult": "1",
+  "customNote": ""
+},
+{
+  "slug": "chi-phuong",
+  "name": "Chị Phương",
+  "gender": "female",
+  "greeting": "Thân mời",
+  "adult": "1",
+  "customNote": ""
 }
 ]
